@@ -1,0 +1,93 @@
+﻿@model TNT.Models.Empresas
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Empresas</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre_empresa)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre_empresa)
+            @Html.ValidationMessageFor(model => model.nombre_empresa)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nit)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nit)
+            @Html.ValidationMessageFor(model => model.nit)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.direccion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.direccion)
+            @Html.ValidationMessageFor(model => model.direccion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.representante_legal)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.representante_legal)
+            @Html.ValidationMessageFor(model => model.representante_legal)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.telefono)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.telefono)
+            @Html.ValidationMessageFor(model => model.telefono)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.dosificacion_codigo_autorizacion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.dosificacion_codigo_autorizacion)
+            @Html.ValidationMessageFor(model => model.dosificacion_codigo_autorizacion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.dosificacion_actividad_comercial)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.dosificacion_actividad_comercial)
+            @Html.ValidationMessageFor(model => model.dosificacion_actividad_comercial)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.departamento)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.departamento)
+            @Html.ValidationMessageFor(model => model.departamento)
+        </div>
+
+        <p>
+            <input type="submit" value="Crear" class="btn btn-primary" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<publishData>
+  <publishProfile
+ publishUrl="https://lquenta-001-site1.atempurl.com:8172/msdeploy.axd"
+ msdeploySite="lquenta-001-site1"
+ destinationAppUrl="http://lquenta-001-site1.atempurl.com/"
+ profileName="Default Settings"
+ publishMethod="MSDeploy"
+ userName="ifc\lquenta-001" />
+</publishData>

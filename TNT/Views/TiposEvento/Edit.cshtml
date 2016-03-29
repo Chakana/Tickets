@@ -1,0 +1,73 @@
+﻿@model TNT.Models.Tipos_evento
+
+@{
+    ViewBag.Title = "Editar";
+}
+<script>
+    jQuery(window).load(function(){
+        $("#Upload").click(function () {
+            var formData = new FormData();
+            var totalFiles = document.getElementById("FileUpload").files.length;
+            for (var i = 0; i < totalFiles; i++) {
+                var file = document.getElementById("FileUpload").files[i];
+
+                formData.append("FileUpload", file);
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Home/Upload',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $('#img_url').val(response);
+                },
+                error: function (error) {
+                    alert("errror");
+                }
+            });
+        });
+    });
+
+</script>
+<h2>Editar Tipo de Evento</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Tipos_evento</legend>
+
+        @Html.HiddenFor(model => model.id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.descripcion)
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.img_url, "Banner")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.img_url)
+            @Html.ValidationMessageFor(model => model.img_url)
+            <input type="file" id="FileUpload" />
+            <input type="button" id="Upload" value="Subir Archivo" />
+        </div>
+        <p>
+            <input type="submit" value="Grabar" class="btn btn-primary" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

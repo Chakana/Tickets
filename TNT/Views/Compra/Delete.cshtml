@@ -1,0 +1,68 @@
+﻿@model TNT.Models.Compra
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Compra</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.fecha_compra)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fecha_compra)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Usuarios.email)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Usuarios.email)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.codigo_recaudacion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.codigo_recaudacion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.pagado)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.pagado)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.fecha_pago)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fecha_pago)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.monto_cobrar)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.monto_cobrar)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.numero_factura)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.numero_factura)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Volver a la lista", "Index")
+    </p>
+}

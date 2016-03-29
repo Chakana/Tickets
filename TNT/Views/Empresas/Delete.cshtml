@@ -1,0 +1,90 @@
+﻿@model TNT.Models.Empresas
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Borrar Empresa</h2>
+
+<h3>Esta seguro de borrar?</h3>
+<fieldset>
+    <legend>Empresa</legend>
+
+    <div class="display-label">
+        Nombre Empresa
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nombre_empresa)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nit)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nit)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.direccion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.direccion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.representante_legal)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.representante_legal)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.telefono)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.telefono)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.fecha_registro)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fecha_registro)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Usuarios.email)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Usuarios.email)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.dosificacion_codigo_autorizacion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dosificacion_codigo_autorizacion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.dosificacion_actividad_comercial)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dosificacion_actividad_comercial)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.departamento)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.departamento)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Borrar" class="btn btn-danger"/> |
+        @Html.ActionLink("Volver a la lista", "Index")
+    </p>
+}

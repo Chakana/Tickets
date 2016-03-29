@@ -1,0 +1,52 @@
+﻿@model TNT.Models.Ticket
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Ticket</legend>
+
+         <div class="editor-label">
+            @Html.LabelFor(model => model.butaca)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.butaca)
+            @Html.ValidationMessageFor(model => model.butaca)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.id_evento, "Eventos")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("id_evento", String.Empty)
+            @Html.ValidationMessageFor(model => model.id_evento)
+        </div>
+               
+        <div class="editor-label">
+            @Html.LabelFor(model => model.id_sector, "sectores")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("id_sector", String.Empty)
+            @Html.ValidationMessageFor(model => model.id_sector)
+        </div>
+               
+        <p>
+            <input type="submit" value="Comprar Ticket" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

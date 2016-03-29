@@ -1,0 +1,163 @@
+﻿@model TNT.Models.Eventos
+
+@{
+    ViewBag.Title = "Editar";
+}
+
+<script>
+    jQuery(window).load(function(){
+        $("#Upload").click(function () {
+            var formData = new FormData();
+            var totalFiles = document.getElementById("FileUpload").files.length;
+            for (var i = 0; i < totalFiles; i++) {
+                var file = document.getElementById("FileUpload").files[i];
+
+                formData.append("FileUpload", file);
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Home/Upload',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $('#img_url').val(response);
+                },
+                error: function (error) {
+                    alert("errror");
+                }
+            });
+        });
+    });
+
+</script>
+<h2>Editar Evento </h2>
+
+<div class="col-xs-6">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <fieldset>
+            <legend>Eventos</legend>
+
+            @Html.HiddenFor(model => model.id)
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.nombre_evento, "Nombre Evento")
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.nombre_evento)
+                @Html.ValidationMessageFor(model => model.nombre_evento)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.habilitado, "Habilitar Evento")
+            </div>
+            <div class="editor-field">
+                @Html.CheckBoxFor(model => model.habilitado)
+                @Html.ValidationMessageFor(model => model.nombre_evento)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.id_lugar, "Lugares")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownList("id_lugar", String.Empty)
+                @Html.ValidationMessageFor(model => model.id_lugar)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.fecha_evento, "Fecha")
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.fecha_evento, Model.fecha_evento.ToString("yyyy-MM-dd"), new { type = "date" })
+                @Html.ValidationMessageFor(model => model.fecha_evento)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.hora_evento, "Hora")
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.hora_evento, new DateTime(Model.hora_evento.Ticks).ToString("HH:mm"), new { type = "time" })
+                @Html.ValidationMessageFor(model => model.hora_evento)
+            </div>
+            @if (User.IsInRole("admin"))
+            {
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.id_empresa, "Empresas")
+                </div>
+                <div class="editor-field">
+                    @Html.DropDownList("id_empresa", String.Empty)
+                    @Html.ValidationMessageFor(model => model.id_empresa)
+                </div>
+            }
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.id_tipo_evento, "Tipos evento")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownList("id_tipo_evento", String.Empty)
+                @Html.ValidationMessageFor(model => model.id_tipo_evento)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.img_url, "Banner")
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.img_url)
+                @Html.ValidationMessageFor(model => model.img_url)
+                <input type="file" id="FileUpload" />
+                <input type="button" id="Upload" value="Subir Archivo" class="btn btn-info" />
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.descripcion)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.descripcion)
+                @Html.ValidationMessageFor(model => model.descripcion)
+            </div>
+
+            <p>
+                <input type="submit" value="Grabar" class="btn btn-danger" />
+            </p>
+        </fieldset>
+    }
+    </div>
+    <div class="col-xs-6">
+        <div class="row">
+            <h2>Sectores</h2>
+            <table class="table table-hover">
+                <tr>
+                    <td>Descripcion</td>
+                    <td>Precio Unitario</td>
+                    <td>Asientos Disponibles</td>
+                    <td></td>
+                </tr>
+                
+                @foreach (var item in Model.sectores)
+                {<tr>
+                    <td>
+                        @item.descripcion
+                    </td>
+                    <td>
+                        @item.precio_unitario
+                    </td>
+                    <td>
+                        @item.asientos_disponibles
+                    </td>
+                    <td>
+                        <a href=@Url.Action("Edit","Sector", new { id = item.id }) data-toggle="tooltip" title="Editar">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                </tr>
+                }
+            </table>
+        </div>
+    </div>    
+    <div>
+        @Html.ActionLink("Volver a la lista", "Index")
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

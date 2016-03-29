@@ -1,0 +1,107 @@
+﻿@model TNT.Models.Puntos_pago
+
+@{
+    ViewBag.Title = "Edit";
+}
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script>
+    var marker = null;
+    function initialize() {
+
+        var mapProp = {
+            center: new google.maps.LatLng($('#latitud').val(), $('#longitud').val()),
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        var latitud = Number($('#latitud').val());
+        var longitud = Number($('#longitud').val());
+        var myLatLng = { lat: latitud, lng: longitud };
+        var marker = new google.maps.Marker({ position: myLatLng, map: map });
+        google.maps.event.addListener(map, 'click', function (event) {
+            //call function to create marker
+            var lat = event.latLng.lat();
+            var lng = event.latLng.lng();
+            $('#latitud').val(lat);
+            $('#longitud').val(lng);
+
+            //delete the old marker
+            if (marker) { marker.setMap(null); }
+
+            //creer à la nouvelle emplacement
+            marker = new google.maps.Marker({ position: event.latLng, map: map });
+            //alert("Lat=" + lat + "; Lng=" + lng);
+        });
+
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+
+    }
+</script>
+<h2>Editar Punto de pago</h2>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Punto de Pago</legend>
+
+        @Html.HiddenFor(model => model.id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre)
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.direccion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.direccion)
+            @Html.ValidationMessageFor(model => model.direccion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.departamento)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.departamento)
+            @Html.ValidationMessageFor(model => model.departamento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.latitud)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.latitud)
+            @Html.ValidationMessageFor(model => model.latitud)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.longitud)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.longitud)
+            @Html.ValidationMessageFor(model => model.longitud)
+        </div>
+
+        <p>
+            <input type="submit" value="Grabar" class="btn btn-danger" />
+        </p>
+    </fieldset>
+}
+
+<div id="googleMap" style="width:500px;height:380px;"></div>
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

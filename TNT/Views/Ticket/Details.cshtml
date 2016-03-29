@@ -1,0 +1,71 @@
+﻿@model TNT.Models.Ticket
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Ticket</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.codigo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.codigo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.butaca)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.butaca)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Eventos.nombre_evento)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Eventos.nombre_evento)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.valida)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.valida)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.utilizada)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.utilizada)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.sectores.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.sectores.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.codigo_recaudacion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.codigo_recaudacion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.fecha_uso)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fecha_uso)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) |
+    @Html.ActionLink("Volver a la lista", "Index")
+</p>

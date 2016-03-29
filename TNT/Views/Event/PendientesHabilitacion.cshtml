@@ -1,0 +1,186 @@
+﻿@model IEnumerable<TNT.Models.Eventos>
+
+@{
+    ViewBag.Title = "PendientesHabilitacion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1>EVENTOS <small>Listado de eventos pendientes de habilitacion</small></h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <br />
+        <br />
+        <input id="search" placeholder="Buscar..." />
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    Id Evento
+                </th>
+                <th>
+                    Nombre Evento
+                </th>
+                <th>
+                    Lugar
+                </th>
+                <th>
+                    Fecha Evento
+                </th>
+                <th>
+                    Hora Evento
+                </th>
+                <th>
+                    Empresa
+                </th>
+                <th>
+                    Tipo de Evento
+                </th>
+                <th>Habilitar</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr data-state="eventos">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nombre_evento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Lugares.nombre_lugar)
+                    </td>
+                    <td>
+                        @item.fecha_evento.ToString("yyyy-MM-dd")
+                    </td>
+                    <td>
+                        @item.hora_evento
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Empresas.nombre_empresa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipos_evento.descripcion)
+                    </td>
+                    <td>
+                        <input class="form-control Habilitar" type="checkbox" id="Habilitar" xidrow="@item.id" />
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+
+<script>
+    $("input#search").keyup(function () {
+        var filter = $(this).val();
+        var regExPattern = "gi";
+        var regEx = new RegExp(filter, regExPattern);
+        $("table tr").each(function () {
+            if ($(this).data('state'))
+                if (
+                    $(this).text().search(new RegExp(filter, "i")) < 0
+                    && $(this).data('state').search(regEx) < 0
+                ) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+        });
+    });
+    $('.Habilitar').click(function (event) {
+        var data = {
+            id: $(this).attr('xidrow')
+        }
+        console.log('data');
+        $.ajax({
+            url: '/Event/HabilitarEvento',
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "JSON",
+            contentType: "application/json",
+            beforeSend: function () {
+                $('#modalback').modal('toggle');
+            },
+            complete: function () {
+                $('#modalback').modal('toggle');
+            },
+            success: function (d) {
+                //check is successfully save to database
+                if (d.status == true) {
+                    //will send status from server side
+                   
+                    //clear form
+                    window.location.href = "/Event/PendientesHabilitacion";
+
+                    $('#modalGrabadoOK').modal('show');
+                }
+                else {
+                    $('#modalGrabadoFail').modal('show');
+                }
+
+            },
+            error: function () {
+                $('#modalGrabadoFail').modal('show');
+            }
+        });
+
+    });
+</script>
+
+<div class="modal fade" id="modalGrabadoOK" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Grabado exitosamente</h4>
+            </div>
+            <div class="modal-body">
+                El evento ha sido Habilitado
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalGrabadoFail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">ERROR</h4>
+            </div>
+            <div class="modal-body">
+                Hubo un error al grabar, por favor reintente.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalback" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Grabando...</h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        <span class="sr-only">100% Complete</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

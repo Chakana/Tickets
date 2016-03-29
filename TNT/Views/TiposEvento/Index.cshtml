@@ -1,0 +1,38 @@
+﻿@model IEnumerable<TNT.Models.Tipos_evento>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Lista de Categorias</h2>
+
+<div class="container">
+    <div class="row">
+        <p>
+            @Html.ActionLink("Crear categoria", "Create", new { id = 1 }, htmlAttributes: new { @class = "btn btn-success" })
+        </p>
+        <table class="table table-hover">
+            <tr >
+                <th>
+                    @Html.DisplayNameFor(model => model.descripcion)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.descripcion)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.id }) |
+                        @Html.ActionLink("Borrar", "Delete", new { id = item.id })
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+</div>

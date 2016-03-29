@@ -1,0 +1,52 @@
+﻿@model IEnumerable<TNT.Models.comisiones>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Comisiones</h2>
+
+<p>
+    @Html.ActionLink("Crear comision", "Create", new { id = 1 }, htmlAttributes: new { @class = "btn btn-success" })
+</p>
+<table class="table table-hover">
+    <tr>
+        <th>
+            empresa
+        </th>
+        <th>
+            Rango inferior
+        </th>
+        <th>
+            Rango superior
+        </th>
+        <th>
+            Monto Comision
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresas.nombre_empresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.rango_inferior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.rango_superior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.monto_comision)
+            </td>
+            
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.id },htmlAttributes: new { @class = "btn btn-success" }) |
+                @Html.ActionLink("Borrar", "Delete", new { id = item.id },htmlAttributes: new { @class = "btn btn-danger" })
+            </td>
+        </tr>
+    }
+
+</table>

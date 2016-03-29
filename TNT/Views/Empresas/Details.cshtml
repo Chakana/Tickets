@@ -1,0 +1,86 @@
+﻿@model TNT.Models.Empresas
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Empresas</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nombre_empresa)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nombre_empresa)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nit)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nit)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.direccion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.direccion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.representante_legal)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.representante_legal)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.telefono)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.telefono)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.fecha_registro)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fecha_registro)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Usuarios.email)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Usuarios.email)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.dosificacion_codigo_autorizacion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dosificacion_codigo_autorizacion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.dosificacion_actividad_comercial)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dosificacion_actividad_comercial)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.departamento)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.departamento)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Volver a la lista", "Index")
+</p>

@@ -1,0 +1,60 @@
+﻿@model TNT.Models.comisiones
+
+@{
+    ViewBag.Title = "Crear comision";
+}
+
+<h2>Crear Comision</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>comisiones</legend>
+
+        <div class="editor-label">
+            Empresa
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.id_empresa)
+            @Html.ValidationMessageFor(model => model.id_empresa)
+        </div>
+
+        <div class="editor-label">
+            Rango inferior
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.rango_inferior)
+            @Html.ValidationMessageFor(model => model.rango_inferior)
+        </div>
+
+        <div class="editor-label">
+            Rango Superior
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.rango_superior)
+            @Html.ValidationMessageFor(model => model.rango_superior)
+        </div>
+
+        <div class="editor-label">
+            Monto de Comision
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.monto_comision)
+            @Html.ValidationMessageFor(model => model.monto_comision)
+        </div>
+
+        <p>
+            <input type="submit" value="Crear Comision" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<TNT.Models.sectores>
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="page-header">
+    <h1>SECTORES <small>Listado general</small></h1>
+</div>
+<div class="container">
+    <div class="row">
+        <p>
+            @Html.ActionLink("Crear", "Create", new { id = 1 }, htmlAttributes: new { @class = "btn btn-success" })
+        </p>
+        <input id="search" placeholder="Buscar..." />
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Precio Unitario
+                </th>
+                <th>
+                    Nombre Evento
+                </th>
+                <th>
+                    Asientos disponibles
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr data-state="ticket">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.descripcion)
+                    </td>
+                    <td>
+                        @item.precio_unitario.ToString("0.00 Bs.", System.Globalization.CultureInfo.InvariantCulture)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Eventos.nombre_evento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.asientos_disponibles)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.id }, htmlAttributes: new { @class = "btn btn-success" })
+                        @Html.ActionLink("Borrar", "Delete", new { id = item.id }, htmlAttributes: new { @class = "btn btn-danger" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+</div>
+
+<script>
+    $("input#search").keyup(function () {
+        var filter = $(this).val();
+        var regExPattern = "gi";
+        var regEx = new RegExp(filter, regExPattern);
+        $("table tr").each(function () {
+            if ($(this).data('state'))
+                if (
+                    $(this).text().search(new RegExp(filter, "i")) < 0
+                    && $(this).data('state').search(regEx) < 0
+                ) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+        });
+    });
+</script>
