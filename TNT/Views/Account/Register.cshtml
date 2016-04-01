@@ -1,0 +1,44 @@
+﻿@model  TNT.Models.Nuevo_Usuario
+@{
+    ViewBag.Title = "Registrarse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>Cree una cuenta nueva.</h2>
+</hgroup>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <fieldset>
+        <legend>Formulario de registro</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.email )
+                @Html.TextBoxFor(m => m.email)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.password)
+                @Html.PasswordFor(m => m.password)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.nit)
+                @Html.TextBoxFor(m => m.nit)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.numero_celular)
+                @Html.TextBoxFor(m => m.numero_celular)
+            </li>
+        </ol>
+        <input type="submit" value="Registrarse" />
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

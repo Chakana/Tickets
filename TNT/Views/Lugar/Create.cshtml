@@ -1,0 +1,119 @@
+﻿@model TNT.Models.Lugares
+
+@{
+    ViewBag.Title = "Create";
+}
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script>
+    var marker = null;
+    function initialize() {
+        var mapProp = {
+            center: new google.maps.LatLng(-16.3412, -67.98339),
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                map.setCenter(pos);
+            }, function () {
+                handleLocationError(true, infoWindow, map.getCenter());
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+        }
+        google.maps.event.addListener(map, 'click', function (event) {
+            //call function to create marker
+            var lat = event.latLng.lat();
+            var lng = event.latLng.lng();
+            $('#latitud').val(lat);
+            $('#longitud').val(lng);
+
+            //delete the old marker
+            if (marker) { marker.setMap(null); }
+
+            //creer à la nouvelle emplacement
+            marker = new google.maps.Marker({ position: event.latLng, map: map });
+            //alert("Lat=" + lat + "; Lng=" + lng);
+        });
+
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      
+    }
+</script>
+
+
+<h2>Crear Lugar</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Lugares</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre_lugar)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre_lugar)
+            @Html.ValidationMessageFor(model => model.nombre_lugar)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.direccion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.direccion)
+            @Html.ValidationMessageFor(model => model.direccion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.capacidad_maxima)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.capacidad_maxima,"Capacidad maxima")
+            @Html.ValidationMessageFor(model => model.capacidad_maxima)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.latitud)
+        </div>
+        <div class="editor-field">
+            @{ Html.EnableClientValidation(false); }
+            @Html.EditorFor(model => model.latitud)
+            @Html.ValidationMessageFor(model => model.latitud)
+
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.longitud)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.longitud)
+            @Html.ValidationMessageFor(model => model.longitud)
+            @{ Html.EnableClientValidation(true); }
+        </div>
+
+        <p>
+            <input type="submit" value="Crear" class="btn btn-primary" />
+        </p>
+    </fieldset>
+}
+<div id="googleMap" style="width:500px;height:380px;"></div>
+
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

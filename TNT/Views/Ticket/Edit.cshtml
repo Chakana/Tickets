@@ -1,0 +1,96 @@
+﻿@model TNT.Models.Ticket
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Ticket</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.codigo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.codigo)
+            @Html.ValidationMessageFor(model => model.codigo)
+        </div>
+@{
+               
+        var QR_generado = "http://api.qrserver.com/v1/create-qr-code/?data=" + this.Model.codigo;
+}
+        <img src="@QR_generado">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.butaca)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.butaca)
+            @Html.ValidationMessageFor(model => model.butaca)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.id_evento, "Eventos")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("id_evento", String.Empty)
+            @Html.ValidationMessageFor(model => model.id_evento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.valida)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.valida)
+            @Html.ValidationMessageFor(model => model.valida)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.utilizada)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.utilizada)
+            @Html.ValidationMessageFor(model => model.utilizada)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.id_sector, "sectores")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("id_sector", String.Empty)
+            @Html.ValidationMessageFor(model => model.id_sector)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.codigo_recaudacion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.codigo_recaudacion)
+            @Html.ValidationMessageFor(model => model.codigo_recaudacion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.fecha_uso)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.fecha_uso)
+            @Html.ValidationMessageFor(model => model.fecha_uso)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

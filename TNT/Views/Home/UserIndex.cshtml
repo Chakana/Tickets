@@ -1,0 +1,58 @@
+﻿@model IEnumerable<TNT.Models.Eventos>
+@{
+    ViewBag.Title = "Landing Empresas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                @{
+                    var i = 0;
+                    var index = 0;
+                    foreach (var item in Model)
+                    {
+                        index = i;
+                        var itemClass = i++ == 0 ? "active" : " ";
+                        <li data-target="#myCarousel" data-slide-to="@index" class="@itemClass"></li>
+                    }
+                }
+            </ol>
+            <!-- Images-->
+            <div class="carousel-inner" role="listbox">
+                                @{
+                                    i = 0;
+                                    foreach (var item in Model)
+                                    {
+                                        var itemClass = i++ == 0 ? "item active" : "item";
+                                        <div class="@itemClass" >
+                                            <img src="@item.img_url" style="height:300px;max-width:1300px;width: expression(this.width > 1300 ? 1300: true);"/>
+                                            <div class="container" style="text-align:center">
+                                                <div class="jumbotron">
+                                                    <h1>@item.nombre_evento</h1>
+                                                    <p>@item.fecha_evento </p>
+                                                    <p>@item.hora_evento </p>
+                                                    <p>
+                                                        @Html.ActionLink("Comprar Ticket", "ComprarTicketsUsuario", "Ticket", new { id = @item.id }, htmlAttributes: new { @class = "btn btn-xs btn-primary" }) |
+                                                    </p>
+                                                </div>
+                                            </div> <!-- /container -->
+                                    </div>
+                    }
+                }
+            </div>
+
+            <!-- Left Right Arrows -->
+            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "BuscarTicket";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <div class="row">
+        <h2>BuscarTicket</h2>
+        <div class="col-sm-12">
+            <input id="id_ticket" type="text" maxlength="50" />
+            <br/>
+            <div class="alert alert-success" role="alert" id="valido" hidden="hidden"><h2>VALIDO</h2></div>
+            <div class="alert alert-danger" role="alert" id="invalido" hidden="hidden"><h2>INVALIDO</h2></div>
+        </div>
+    </div>
+    <div class="row">
+        <h2><label>Sector: </label><span class="label-info" id="sector"></span></h2>
+    </div>
+    <div class="row">
+        <h2><label>Nombre Cliente: </label><span class="label-info" id="nombre"></span></h2>
+    </div>
+    <div class="row">
+        <h2><label>Cedula Identidad: </label><span class="label-info" id="cedula_identidad"></span></h2>
+    </div>
+    <div class="row">
+        <h2><label>Codigo Recaudacion: </label><span class="label-info" id="codigo_recaudacion"></span></h2>
+    </div>
+    <div class="row">
+        <h2><label>Fecha Reserva: </label><span class="label-info" id="fecha_hora_reserva"></span></h2>
+    </div>
+    <div class="row">
+        <h2><label>Fecha Pago: </label><span class="label-info" id="fecha_hora_pago"></span></h2>
+    </div>
+</div>
+<script>
+    $('#id_ticket').on('input', function (e) {
+        
+        if ($('#id_ticket').val().length != 50) {
+            return;
+        }
+        $('#valido').hide();
+        $('#invalido').hide();
+        $('#nombre').html('');
+        $('#sector').html('');
+        $('#cedula_identidad').html('');
+        $('#codigo_recaudacion').html('');
+        $('#fecha_hora_reserva').html('');
+        $('#fecha_hora_pago').html('');
+        event.preventDefault();
+        var formData = new FormData();
+        formData.append("id_ticket", $('#id_ticket').val());
+        formData.append('imei', '000000000000001');
+        $.ajax({
+            type: "POST",
+            url: '/Ticket/VerificadorTicket',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response == true) {
+                    formData = new FormData();
+                    formData.append("id_ticket", $('#id_ticket').val());
+                    $.ajax({
+                        type: "POST",
+                        url: '/Ticket/ObtieneTicket',
+                        data: formData,
+                        dataType: 'json',
+                        contentType: false,
+                        processData: false,
+                        beforeSubmit: function () {
+                            $('#id_ticket').prop('disabled', true);
+                        },
+                        success: function (response) {
+                            $('#nombre').html(response.nombre_cliente);
+                            $('#sector').html(response.sector);
+                            $('#cedula_identidad').html(response.cedula_identidad);
+                            $('#codigo_recaudacion').html(response.codigo_recaudacion);
+                            $('#fecha_hora_reserva').html(response.fecha_hora_reserva);
+                            $('#fecha_hora_pago').html(response.fecha_hora_pago);
+                            console.log(response);
+                        },
+                        error: function (error) {
+                            alert('hubo un error en la conexion, por favor reintente');
+                        }
+                    });
+                    $('#valido').show();
+                    $('#invalido').hide();
+                } else {
+                    $('#invalido').show();
+                    $('#valido').hide();
+                }
+                $('#id_ticket').prop('disabled', false);
+                $('#id_ticket').val('')
+                $('#id_ticket').focus();
+            },
+            error: function (error) {
+                alert('hubo un error en la conexion, por favor reintente');
+            }
+        });
+        $('#id_ticket').disabled = false
+    });
+</script>
+

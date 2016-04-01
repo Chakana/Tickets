@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:cw="http://www.openuri.org/2002/04/wsdl/conversation/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s0="http://www.openuri.org/" xmlns:jms="http://www.openuri.org/2002/04/wsdl/jms/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:conv="http://www.openuri.org/2002/04/soap/conversation/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://www.openuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema xmlns:ope="http://www.openuri.org/" elementFormDefault="qualified" targetNamespace="http://www.openuri.org/">
+      <s:element name="cmeRegistroItem">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="datos" type="ope:DatosItem" />
+            <s:element minOccurs="0" name="cuenta" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cmeRegistroItemResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="cmeRegistroItemResult" type="ope:RespItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cmeRegistroPlan">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="datos" type="ope:DatosPlanilla" />
+            <s:element minOccurs="0" name="cuenta" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cmeRegistroPlanResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="cmeRegistroPlanResult" type="ope:RespPlanilla" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DatosItem">
+        <s:sequence>
+          <s:element minOccurs="0" name="transaccion" type="s:string" />
+          <s:element minOccurs="0" name="idTransaccion" type="s:string" />
+          <s:element name="numeroPago" type="s:int" />
+          <s:element minOccurs="0" name="items" type="ope:ArrayOfDItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DItem" nillable="true" type="ope:DItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DItem">
+        <s:sequence>
+          <s:element name="numeroItem" type="s:int" />
+          <s:element minOccurs="0" name="descripcion" type="s:string" />
+          <s:element name="precioUnitario" type="s:double" />
+          <s:element name="cantidad" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RespItem">
+        <s:sequence>
+          <s:element name="codError" type="s:int" />
+          <s:element minOccurs="0" name="descripcionError" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DatosPlanilla">
+        <s:sequence>
+          <s:element minOccurs="0" name="transaccion" type="s:string" />
+          <s:element minOccurs="0" name="nombre" type="s:string" />
+          <s:element minOccurs="0" name="nit_CI_cliente" type="s:string" />
+          <s:element minOccurs="0" name="codigoCliente" type="s:string" />
+          <s:element name="codigoEmpresa" type="s:int" />
+          <s:element name="fecha" type="s:int" />
+          <s:element name="hora" type="s:int" />
+          <s:element minOccurs="0" name="correoElectronico" type="s:string" />
+          <s:element minOccurs="0" name="moneda" type="s:string" />
+          <s:element minOccurs="0" name="codigoRecaudacion" type="s:string" />
+          <s:element minOccurs="0" name="descripcionRecaudacion" type="s:string" />
+          <s:element name="fechaVencimiento" type="s:int" />
+          <s:element name="horaVencimiento" type="s:int" />
+          <s:element minOccurs="0" name="codigoProducto" type="s:string" />
+          <s:element minOccurs="0" name="planillas" type="ope:ArrayOfDPlanilla" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDPlanilla">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DPlanilla" nillable="true" type="ope:DPlanilla" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DPlanilla">
+        <s:sequence>
+          <s:element name="numeroPago" type="s:int" />
+          <s:element name="montoPago" type="s:double" />
+          <s:element minOccurs="0" name="descripcion" type="s:string" />
+          <s:element name="montoCreditoFiscal" type="s:double" />
+          <s:element minOccurs="0" name="nombreFactura" type="s:string" />
+          <s:element minOccurs="0" name="nitFactura" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RespPlanilla">
+        <s:sequence>
+          <s:element minOccurs="0" name="idTransaccion" type="s:string" />
+          <s:element name="codError" type="s:int" />
+          <s:element minOccurs="0" name="descripcionError" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="cmeRegistroItemSoapIn">
+    <wsdl:part name="parameters" element="s0:cmeRegistroItem" />
+  </wsdl:message>
+  <wsdl:message name="cmeRegistroItemSoapOut">
+    <wsdl:part name="parameters" element="s0:cmeRegistroItemResponse" />
+  </wsdl:message>
+  <wsdl:message name="cmeRegistroPlanSoapIn">
+    <wsdl:part name="parameters" element="s0:cmeRegistroPlan" />
+  </wsdl:message>
+  <wsdl:message name="cmeRegistroPlanSoapOut">
+    <wsdl:part name="parameters" element="s0:cmeRegistroPlanResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ComelecSoap">
+    <wsdl:operation name="cmeRegistroItem">
+      <wsdl:input message="s0:cmeRegistroItemSoapIn" />
+      <wsdl:output message="s0:cmeRegistroItemSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cmeRegistroPlan">
+      <wsdl:input message="s0:cmeRegistroPlanSoapIn" />
+      <wsdl:output message="s0:cmeRegistroPlanSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ComelecSoap" type="s0:ComelecSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="cmeRegistroItem">
+      <soap:operation soapAction="http://www.openuri.org/cmeRegistroItem" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cmeRegistroPlan">
+      <soap:operation soapAction="http://www.openuri.org/cmeRegistroPlan" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Comelec">
+    <wsdl:port name="ComelecSoap" binding="s0:ComelecSoap">
+      <soap:address location="http://test.sintesis.com.bo:80/wsComelec/service/Comelec.jws" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

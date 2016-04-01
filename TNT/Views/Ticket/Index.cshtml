@@ -1,0 +1,93 @@
+﻿@model IEnumerable<TNT.Models.Ticket>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Lista de Tickets</h2>
+<br/>
+
+<br />
+<input id="search" placeholder="Buscar..." />
+<table class="table table-hover">
+    <tr class="info">
+        <th>
+            @Html.DisplayNameFor(model => model.codigo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.butaca)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Eventos.nombre_evento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.valida)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.utilizada)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sectores.descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.codigo_recaudacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fecha_uso)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr data-state="ticket">
+        <td>
+            @Html.DisplayFor(modelItem => item.codigo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.butaca)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Eventos.nombre_evento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.valida)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.utilizada)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sectores.descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.codigo_recaudacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fecha_uso)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new {  id=item.codigo }) |
+            @Html.ActionLink("Detalles", "Details", new { id = item.codigo }) |
+            @Html.ActionLink("Borrar", "Delete", new { id = item.codigo })
+        </td>
+    </tr>
+}
+
+</table>
+<script>
+    $("input#search").keyup(function () {
+        var filter = $(this).val();
+        var regExPattern = "gi";
+        var regEx = new RegExp(filter, regExPattern);
+        $("table tr").each(function () {
+            if ($(this).data('state'))
+                if (
+                    $(this).text().search(new RegExp(filter, "i")) < 0
+                    && $(this).data('state').search(regEx) < 0
+                ) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+        });
+    });
+</script>

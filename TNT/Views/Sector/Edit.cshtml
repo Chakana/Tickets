@@ -1,0 +1,62 @@
+﻿@model TNT.Models.sectores
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Editar Sector</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>sectores</legend>
+
+        @Html.HiddenFor(model => model.id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.descripcion)
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.precio_unitario)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.precio_unitario, new { type = "number" })
+            @Html.ValidationMessageFor(model => model.precio_unitario)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.id_evento, "Eventos")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("id_evento", String.Empty)
+            @Html.ValidationMessageFor(model => model.id_evento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.asientos_disponibles)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.asientos_disponibles)
+            @Html.ValidationMessageFor(model => model.asientos_disponibles)
+        </div>
+
+        <p>
+            <input type="submit" value="Grabar" class="btn btn-danger" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1a0a38e0cf774e89901fd9c9596ee4e5" Name="Diagram1" ZoomLevel="81">
+        <EntityTypeShape EntityType="TNTModel.Compra" Width="1.5" PointX="3" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.Empresas" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.Eventos" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.Lugares" Width="1.5" PointX="3" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.Personas" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.sectores" Width="1.5" PointX="7.5" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.Suscripcion" Width="1.5" PointX="5.25" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.Ticket" Width="1.5" PointX="9.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.Tipos_evento" Width="1.5" PointX="3" PointY="19" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.token_usuario" Width="1.5" PointX="3" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.Usuarios" Width="1.5" PointX="0.75" PointY="6.875" IsExpanded="true" />
+        <AssociationConnector Association="TNTModel.FK_Compra_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_Empresas_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_Eventos_Empresas" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_Eventos_Lugares" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_Eventos_Tipos_evento" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_sectores_Eventos" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_Ticket_Eventos" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_Personas_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_Suscripcion_Personas" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_Ticket_sectores" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_Suscripcion_Tipos_evento" ManuallyRouted="false" />
+        <AssociationConnector Association="TNTModel.FK_token_usuario_Usuarios" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="TNTModel.comisiones" Width="1.5" PointX="3" PointY="22" />
+        <EntityTypeShape EntityType="TNTModel.Puntos_pago" Width="1.5" PointX="8.375" PointY="0.75" />
+        <AssociationConnector Association="TNTModel.FK_comisiones_comisiones" />
+        <EntityTypeShape EntityType="TNTModel.imei_validos" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="TNTModel.EnviosRelegadosSINTESIS" Width="1.5" PointX="10.375" PointY="0.75" />
+        <AssociationConnector Association="TNTModel.fk_empresa" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

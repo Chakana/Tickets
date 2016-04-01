@@ -1,0 +1,81 @@
+﻿@model TNT.Models.Personas
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar datos de usuario</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Datos personales</legend>
+
+        @Html.HiddenFor(model => model.id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre)
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.apellidos)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.apellidos)
+            @Html.ValidationMessageFor(model => model.apellidos)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.cedula_identidad)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.cedula_identidad)
+            @Html.ValidationMessageFor(model => model.cedula_identidad)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.fecha_nacimiento)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.fecha_nacimiento, Model.fecha_nacimiento.Value.ToString("yyyy-MM-dd"), new { type = "date" })
+            @Html.ValidationMessageFor(model => model.fecha_nacimiento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.direccion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.direccion)
+            @Html.ValidationMessageFor(model => model.direccion)
+        </div>
+                      
+        <div class="editor-label">
+            @Html.LabelFor(model => model.numero_celular)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.numero_celular)
+            @Html.ValidationMessageFor(model => model.numero_celular)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.id_usuario, "Usuarios")
+        </div>
+        @Html.HiddenFor(model => model.id_usuario)
+       
+        <p>
+            <input type="submit" value="Grabar" class="btn btn-danger" />
+        </p>
+    </fieldset>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

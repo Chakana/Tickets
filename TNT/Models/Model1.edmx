@@ -1,0 +1,1115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TNTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="comisiones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_empresa" Type="int" Nullable="false" />
+          <Property Name="rango_inferior" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="rango_superior" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="monto_comision" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="fecha_modificacion" Type="datetime" />
+          <Property Name="usuario_modificacion" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Compra">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fecha_compra" Type="datetime" />
+          <Property Name="id_usuario_compra" Type="int" Nullable="false" />
+          <Property Name="codigo_recaudacion" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="pagado" Type="tinyint" Nullable="false" />
+          <Property Name="fecha_pago" Type="datetime" />
+          <Property Name="monto_cobrar" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="numero_factura" Type="varchar" MaxLength="20" />
+          <Property Name="monto_comision" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="monto_parcial" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Empresas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_empresa" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="nit" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="direccion" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="representante_legal" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="telefono" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fecha_registro" Type="datetime" />
+          <Property Name="id_usuario" Type="int" Nullable="false" />
+          <Property Name="dosificacion_codigo_autorizacion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dosificacion_actividad_comercial" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="departamento" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EnviosRelegadosSINTESIS">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="codigo_recaudacion" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="email_usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="nombre_usuario" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="nit_usuario" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="nombre_evento" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="nombre_empresa" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="nit_empresa" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="costo_total" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="total_comision" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="fecha_hora" Type="datetime" Nullable="false" />
+          <Property Name="pendiente" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Eventos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_evento" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="id_lugar" Type="int" Nullable="false" />
+          <Property Name="id_empresa" Type="int" Nullable="false" />
+          <Property Name="id_tipo_evento" Type="int" Nullable="false" />
+          <Property Name="img_url" Type="varchar" MaxLength="200" />
+          <Property Name="descripcion" Type="varchar" MaxLength="2000" />
+          <Property Name="habilitado" Type="bit" Nullable="false" />
+          <Property Name="fecha_evento" Type="date" Nullable="false" />
+          <Property Name="hora_evento" Type="time" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="imei_validos">
+          <Key>
+            <PropertyRef Name="imei" />
+          </Key>
+          <Property Name="imei" Type="varchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lugares">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_lugar" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="direccion" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="capacidad_maxima" Type="int" Nullable="false" />
+          <Property Name="longitud" Type="decimal" Precision="20" Scale="15" />
+          <Property Name="latitud" Type="decimal" Precision="20" Scale="15" />
+        </EntityType>
+        <EntityType Name="Personas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="apellidos" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="cedula_identidad" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="fecha_nacimiento" Type="date" />
+          <Property Name="direccion" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="fecha_registro" Type="datetime" Nullable="false" />
+          <Property Name="fecha_modificacion" Type="datetime" Nullable="false" />
+          <Property Name="numero_celular" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="id_usuario" Type="int" />
+        </EntityType>
+        <EntityType Name="Puntos_pago">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="direccion" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="departamento" Type="varchar" MaxLength="100" />
+          <Property Name="latitud" Type="decimal" Precision="18" Scale="6" Nullable="false" />
+          <Property Name="longitud" Type="decimal" Precision="18" Scale="6" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sectores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="precio_unitario" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="id_evento" Type="int" Nullable="false" />
+          <Property Name="asientos_disponibles" Type="int" Nullable="false" />
+          <Property Name="img_url" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Suscripcion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_persona" Type="int" Nullable="false" />
+          <Property Name="id_tipo_evento" Type="int" Nullable="false" />
+          <Property Name="fecha_suscripcion" Type="datetime" Nullable="false" />
+          <Property Name="activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="butaca" Type="varchar" MaxLength="10" />
+          <Property Name="id_evento" Type="int" Nullable="false" />
+          <Property Name="valida" Type="tinyint" />
+          <Property Name="utilizada" Type="bit" Nullable="false" />
+          <Property Name="id_sector" Type="int" />
+          <Property Name="codigo_recaudacion" Type="nchar" MaxLength="20" />
+          <Property Name="fecha_uso" Type="datetime" />
+          <Property Name="nombre_usuario" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="nit_usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fecha_modificacion" Type="datetime2" Precision="7" />
+          <Property Name="costo_sin_comision" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tipos_evento">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="img_url" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="token_usuario">
+          <Key>
+            <PropertyRef Name="token" />
+          </Key>
+          <Property Name="token" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="id_usuario" Type="int" Nullable="false" />
+          <Property Name="fecha_generacion" Type="datetime" Nullable="false" />
+          <Property Name="fecha_expiracion" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="rol" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_comisiones_comisiones">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="comisiones" Type="Self.comisiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comisiones">
+              <PropertyRef Name="usuario_modificacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Compra_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Compra" Type="Self.Compra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Compra">
+              <PropertyRef Name="id_usuario_compra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_empresa">
+          <End Role="Empresas" Type="Self.Empresas" Multiplicity="1" />
+          <End Role="comisiones" Type="Self.comisiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comisiones">
+              <PropertyRef Name="id_empresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Empresas_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Empresas" Type="Self.Empresas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Empresas">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Eventos_Empresas">
+          <End Role="Empresas" Type="Self.Empresas" Multiplicity="1" />
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Eventos">
+              <PropertyRef Name="id_empresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Eventos_Lugares">
+          <End Role="Lugares" Type="Self.Lugares" Multiplicity="1" />
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lugares">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Eventos">
+              <PropertyRef Name="id_lugar" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Eventos_Tipos_evento">
+          <End Role="Tipos_evento" Type="Self.Tipos_evento" Multiplicity="1" />
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipos_evento">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Eventos">
+              <PropertyRef Name="id_tipo_evento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Personas_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+          <End Role="Personas" Type="Self.Personas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Personas">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sectores_Eventos">
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="1" />
+          <End Role="sectores" Type="Self.sectores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Eventos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="sectores">
+              <PropertyRef Name="id_evento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Suscripcion_Personas">
+          <End Role="Personas" Type="Self.Personas" Multiplicity="1" />
+          <End Role="Suscripcion" Type="Self.Suscripcion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Suscripcion">
+              <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Suscripcion_Tipos_evento">
+          <End Role="Tipos_evento" Type="Self.Tipos_evento" Multiplicity="1" />
+          <End Role="Suscripcion" Type="Self.Suscripcion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipos_evento">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Suscripcion">
+              <PropertyRef Name="id_tipo_evento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_Eventos">
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Eventos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="id_evento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_sectores">
+          <End Role="sectores" Type="Self.sectores" Multiplicity="0..1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sectores">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="id_sector" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_token_usuario_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="token_usuario" Type="Self.token_usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="token_usuario">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TNTModelStoreContainer">
+          <EntitySet Name="comisiones" EntityType="Self.comisiones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Compra" EntityType="Self.Compra" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Empresas" EntityType="Self.Empresas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnviosRelegadosSINTESIS" EntityType="Self.EnviosRelegadosSINTESIS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Eventos" EntityType="Self.Eventos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="imei_validos" EntityType="Self.imei_validos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lugares" EntityType="Self.Lugares" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Personas" EntityType="Self.Personas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Puntos_pago" EntityType="Self.Puntos_pago" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sectores" EntityType="Self.sectores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Suscripcion" EntityType="Self.Suscripcion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tipos_evento" EntityType="Self.Tipos_evento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="token_usuario" EntityType="Self.token_usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_comisiones_comisiones" Association="Self.FK_comisiones_comisiones">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="comisiones" EntitySet="comisiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Compra_Usuarios" Association="Self.FK_Compra_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Compra" EntitySet="Compra" />
+          </AssociationSet>
+          <AssociationSet Name="fk_empresa" Association="Self.fk_empresa">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="comisiones" EntitySet="comisiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Empresas_Usuarios" Association="Self.FK_Empresas_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Empresas" EntitySet="Empresas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Eventos_Empresas" Association="Self.FK_Eventos_Empresas">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="Eventos" EntitySet="Eventos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Eventos_Lugares" Association="Self.FK_Eventos_Lugares">
+            <End Role="Lugares" EntitySet="Lugares" />
+            <End Role="Eventos" EntitySet="Eventos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Eventos_Tipos_evento" Association="Self.FK_Eventos_Tipos_evento">
+            <End Role="Tipos_evento" EntitySet="Tipos_evento" />
+            <End Role="Eventos" EntitySet="Eventos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Personas_Usuarios" Association="Self.FK_Personas_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Personas" EntitySet="Personas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sectores_Eventos" Association="Self.FK_sectores_Eventos">
+            <End Role="Eventos" EntitySet="Eventos" />
+            <End Role="sectores" EntitySet="sectores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Suscripcion_Personas" Association="Self.FK_Suscripcion_Personas">
+            <End Role="Personas" EntitySet="Personas" />
+            <End Role="Suscripcion" EntitySet="Suscripcion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Suscripcion_Tipos_evento" Association="Self.FK_Suscripcion_Tipos_evento">
+            <End Role="Tipos_evento" EntitySet="Tipos_evento" />
+            <End Role="Suscripcion" EntitySet="Suscripcion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_Eventos" Association="Self.FK_Ticket_Eventos">
+            <End Role="Eventos" EntitySet="Eventos" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_sectores" Association="Self.FK_Ticket_sectores">
+            <End Role="sectores" EntitySet="sectores" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <AssociationSet Name="FK_token_usuario_Usuarios" Association="Self.FK_token_usuario_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="token_usuario" EntitySet="token_usuario" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TNTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Compra">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario_compra" Type="Int32" Nullable="false" />
+          <Property Name="codigo_recaudacion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="pagado" Type="Byte" Nullable="false" />
+          <Property Name="fecha_pago" Type="DateTime" Precision="3" />
+          <Property Name="monto_cobrar" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="numero_factura" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Compra_Usuarios" FromRole="Compra" ToRole="Usuarios" />
+          <Property Name="monto_comision" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="monto_parcial" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="fecha_compra" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Empresas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_empresa" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="direccion" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="representante_legal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha_registro" Type="DateTime" Precision="3" />
+          <Property Name="id_usuario" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Empresas_Usuarios" FromRole="Empresas" ToRole="Usuarios" />
+          <NavigationProperty Name="Eventos" Relationship="Self.FK_Eventos_Empresas" FromRole="Empresas" ToRole="Eventos" />
+          <Property Name="dosificacion_codigo_autorizacion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dosificacion_actividad_comercial" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="departamento" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="comisiones" Relationship="TNTModel.fk_empresa" FromRole="Empresas" ToRole="comisiones" />
+        </EntityType>
+        <EntityType Name="Eventos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_evento" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_lugar" Type="Int32" Nullable="false" />
+          <Property Name="id_empresa" Type="Int32" Nullable="false" />
+          <Property Name="id_tipo_evento" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Empresas" Relationship="Self.FK_Eventos_Empresas" FromRole="Eventos" ToRole="Empresas" />
+          <NavigationProperty Name="Lugares" Relationship="Self.FK_Eventos_Lugares" FromRole="Eventos" ToRole="Lugares" />
+          <NavigationProperty Name="Tipos_evento" Relationship="Self.FK_Eventos_Tipos_evento" FromRole="Eventos" ToRole="Tipos_evento" />
+          <NavigationProperty Name="sectores" Relationship="Self.FK_sectores_Eventos" FromRole="Eventos" ToRole="sectores" />
+          <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_Eventos" FromRole="Eventos" ToRole="Ticket" />
+          <Property Name="img_url" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_evento" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="descripcion" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="habilitado" Type="Boolean" Nullable="false" />
+          <Property Name="hora_evento" Type="Time" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="Lugares">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_lugar" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="direccion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="capacidad_maxima" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Eventos" Relationship="Self.FK_Eventos_Lugares" FromRole="Lugares" ToRole="Eventos" />
+          <Property Name="latitud" Type="Decimal" Precision="20" Scale="15" />
+          <Property Name="longitud" Type="Decimal" Precision="20" Scale="15" />
+        </EntityType>
+        <EntityType Name="Personas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellidos" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cedula_identidad" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="fecha_nacimiento" Type="DateTime" Precision="0" />
+          <Property Name="direccion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fecha_modificacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="numero_celular" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_usuario" Type="Int32" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Personas_Usuarios" FromRole="Personas" ToRole="Usuarios" />
+          <NavigationProperty Name="Suscripcion" Relationship="Self.FK_Suscripcion_Personas" FromRole="Personas" ToRole="Suscripcion" />
+        </EntityType>
+        <EntityType Name="sectores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="precio_unitario" Type="Decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="id_evento" Type="Int32" Nullable="false" />
+          <Property Name="asientos_disponibles" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Eventos" Relationship="Self.FK_sectores_Eventos" FromRole="sectores" ToRole="Eventos" />
+          <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_sectores" FromRole="sectores" ToRole="Ticket" />
+          <Property Name="img_url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Suscripcion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_persona" Type="Int32" Nullable="false" />
+          <Property Name="id_tipo_evento" Type="Int32" Nullable="false" />
+          <Property Name="fecha_suscripcion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Personas" Relationship="Self.FK_Suscripcion_Personas" FromRole="Suscripcion" ToRole="Personas" />
+          <NavigationProperty Name="Tipos_evento" Relationship="Self.FK_Suscripcion_Tipos_evento" FromRole="Suscripcion" ToRole="Tipos_evento" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="codigo" />
+          </Key>
+          <Property Name="codigo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="butaca" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="id_evento" Type="Int32" Nullable="false" />
+          <Property Name="valida" Type="Byte" />
+          <Property Name="utilizada" Type="Boolean" Nullable="false" />
+          <Property Name="id_sector" Type="Int32" />
+          <Property Name="codigo_recaudacion" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="fecha_uso" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Eventos" Relationship="Self.FK_Ticket_Eventos" FromRole="Ticket" ToRole="Eventos" />
+          <NavigationProperty Name="sectores" Relationship="Self.FK_Ticket_sectores" FromRole="Ticket" ToRole="sectores" />
+          <Property Name="nombre_usuario" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="nit_usuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha_modificacion" Type="DateTime" Precision="7" />
+          <Property Name="costo_sin_comision" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+        </EntityType>
+        <EntityType Name="Tipos_evento">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Eventos" Relationship="Self.FK_Eventos_Tipos_evento" FromRole="Tipos_evento" ToRole="Eventos" />
+          <NavigationProperty Name="Suscripcion" Relationship="Self.FK_Suscripcion_Tipos_evento" FromRole="Tipos_evento" ToRole="Suscripcion" />
+          <Property Name="img_url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="token_usuario">
+          <Key>
+            <PropertyRef Name="token" />
+          </Key>
+          <Property Name="token" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_usuario" Type="Int32" Nullable="false" />
+          <Property Name="fecha_generacion" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_token_usuario_Usuarios" FromRole="token_usuario" ToRole="Usuarios" />
+          <Property Name="fecha_expiracion" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="rol" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Compra" Relationship="Self.FK_Compra_Usuarios" FromRole="Usuarios" ToRole="Compra" />
+          <NavigationProperty Name="Empresas" Relationship="Self.FK_Empresas_Usuarios" FromRole="Usuarios" ToRole="Empresas" />
+          <NavigationProperty Name="Personas" Relationship="Self.FK_Personas_Usuarios" FromRole="Usuarios" ToRole="Personas" />
+          <NavigationProperty Name="token_usuario" Relationship="Self.FK_token_usuario_Usuarios" FromRole="Usuarios" ToRole="token_usuario" />
+          <NavigationProperty Name="comisiones" Relationship="TNTModel.FK_comisiones_comisiones" FromRole="Usuarios" ToRole="comisiones" />
+        </EntityType>
+        <Association Name="FK_Compra_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Compra" Type="Self.Compra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Compra">
+              <PropertyRef Name="id_usuario_compra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Empresas_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Empresas" Type="Self.Empresas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Empresas">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Eventos_Empresas">
+          <End Role="Empresas" Type="Self.Empresas" Multiplicity="1" />
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Eventos">
+              <PropertyRef Name="id_empresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Eventos_Lugares">
+          <End Role="Lugares" Type="Self.Lugares" Multiplicity="1" />
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lugares">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Eventos">
+              <PropertyRef Name="id_lugar" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Eventos_Tipos_evento">
+          <End Role="Tipos_evento" Type="Self.Tipos_evento" Multiplicity="1" />
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipos_evento">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Eventos">
+              <PropertyRef Name="id_tipo_evento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sectores_Eventos">
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="1" />
+          <End Role="sectores" Type="Self.sectores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Eventos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="sectores">
+              <PropertyRef Name="id_evento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_Eventos">
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Eventos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="id_evento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Personas_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+          <End Role="Personas" Type="Self.Personas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Personas">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Suscripcion_Personas">
+          <End Role="Personas" Type="Self.Personas" Multiplicity="1" />
+          <End Role="Suscripcion" Type="Self.Suscripcion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Suscripcion">
+              <PropertyRef Name="id_persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_sectores">
+          <End Role="sectores" Type="Self.sectores" Multiplicity="0..1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sectores">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="id_sector" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Suscripcion_Tipos_evento">
+          <End Role="Tipos_evento" Type="Self.Tipos_evento" Multiplicity="1" />
+          <End Role="Suscripcion" Type="Self.Suscripcion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipos_evento">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Suscripcion">
+              <PropertyRef Name="id_tipo_evento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_token_usuario_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="token_usuario" Type="Self.token_usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="token_usuario">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TNTEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Compra" EntityType="Self.Compra" />
+          <EntitySet Name="Empresas" EntityType="Self.Empresas" />
+          <EntitySet Name="Eventos" EntityType="Self.Eventos" />
+          <EntitySet Name="Lugares" EntityType="Self.Lugares" />
+          <EntitySet Name="Personas" EntityType="Self.Personas" />
+          <EntitySet Name="sectores" EntityType="Self.sectores" />
+          <EntitySet Name="Suscripcion" EntityType="Self.Suscripcion" />
+          <EntitySet Name="Ticket" EntityType="Self.Ticket" />
+          <EntitySet Name="Tipos_evento" EntityType="Self.Tipos_evento" />
+          <EntitySet Name="token_usuario" EntityType="Self.token_usuario" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+          <AssociationSet Name="FK_Compra_Usuarios" Association="Self.FK_Compra_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Compra" EntitySet="Compra" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Empresas_Usuarios" Association="Self.FK_Empresas_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Empresas" EntitySet="Empresas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Eventos_Empresas" Association="Self.FK_Eventos_Empresas">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="Eventos" EntitySet="Eventos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Eventos_Lugares" Association="Self.FK_Eventos_Lugares">
+            <End Role="Lugares" EntitySet="Lugares" />
+            <End Role="Eventos" EntitySet="Eventos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Eventos_Tipos_evento" Association="Self.FK_Eventos_Tipos_evento">
+            <End Role="Tipos_evento" EntitySet="Tipos_evento" />
+            <End Role="Eventos" EntitySet="Eventos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sectores_Eventos" Association="Self.FK_sectores_Eventos">
+            <End Role="Eventos" EntitySet="Eventos" />
+            <End Role="sectores" EntitySet="sectores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_Eventos" Association="Self.FK_Ticket_Eventos">
+            <End Role="Eventos" EntitySet="Eventos" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Personas_Usuarios" Association="Self.FK_Personas_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Personas" EntitySet="Personas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Suscripcion_Personas" Association="Self.FK_Suscripcion_Personas">
+            <End Role="Personas" EntitySet="Personas" />
+            <End Role="Suscripcion" EntitySet="Suscripcion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_sectores" Association="Self.FK_Ticket_sectores">
+            <End Role="sectores" EntitySet="sectores" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Suscripcion_Tipos_evento" Association="Self.FK_Suscripcion_Tipos_evento">
+            <End Role="Tipos_evento" EntitySet="Tipos_evento" />
+            <End Role="Suscripcion" EntitySet="Suscripcion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_token_usuario_Usuarios" Association="Self.FK_token_usuario_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="token_usuario" EntitySet="token_usuario" />
+          </AssociationSet>
+          <EntitySet Name="comisiones" EntityType="TNTModel.comisiones" />
+          <EntitySet Name="Puntos_pago" EntityType="TNTModel.Puntos_pago" />
+          <AssociationSet Name="FK_comisiones_comisiones" Association="TNTModel.FK_comisiones_comisiones">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="comisiones" EntitySet="comisiones" />
+          </AssociationSet>
+          <EntitySet Name="imei_validos" EntityType="TNTModel.imei_validos" />
+          <EntitySet Name="EnviosRelegadosSINTESIS" EntityType="TNTModel.EnviosRelegadosSINTESIS" />
+          <AssociationSet Name="fk_empresa" Association="TNTModel.fk_empresa">
+            <End Role="Empresas" EntitySet="Empresas" />
+            <End Role="comisiones" EntitySet="comisiones" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="comisiones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_empresa" Type="Int32" Nullable="false" />
+          <Property Name="rango_inferior" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="rango_superior" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="monto_comision" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="fecha_modificacion" Type="DateTime" Precision="3" />
+          <Property Name="usuario_modificacion" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Usuarios" Relationship="TNTModel.FK_comisiones_comisiones" FromRole="comisiones" ToRole="Usuarios" />
+          <NavigationProperty Name="Empresas" Relationship="TNTModel.fk_empresa" FromRole="comisiones" ToRole="Empresas" />
+        </EntityType>
+        <EntityType Name="Puntos_pago">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="direccion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="departamento" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="latitud" Type="Decimal" Nullable="false" Precision="18" Scale="6" />
+          <Property Name="longitud" Type="Decimal" Nullable="false" Precision="18" Scale="6" />
+        </EntityType>
+        <Association Name="FK_comisiones_comisiones">
+          <End Type="TNTModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="TNTModel.comisiones" Role="comisiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comisiones">
+              <PropertyRef Name="usuario_modificacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="imei_validos">
+          <Key>
+            <PropertyRef Name="imei" />
+          </Key>
+          <Property Name="imei" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="EnviosRelegadosSINTESIS">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="codigo_recaudacion" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="email_usuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nombre_usuario" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="nit_usuario" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="nombre_evento" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="nombre_empresa" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="nit_empresa" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="costo_total" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="total_comision" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="fecha_hora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="pendiente" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_empresa">
+          <End Type="TNTModel.Empresas" Role="Empresas" Multiplicity="1" />
+          <End Type="TNTModel.comisiones" Role="comisiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empresas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comisiones">
+              <PropertyRef Name="id_empresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TNTModelStoreContainer" CdmEntityContainer="TNTEntities">
+          <EntitySetMapping Name="Compra">
+            <EntityTypeMapping TypeName="TNTModel.Compra">
+              <MappingFragment StoreEntitySet="Compra">
+                <ScalarProperty Name="fecha_compra" ColumnName="fecha_compra" />
+                <ScalarProperty Name="monto_parcial" ColumnName="monto_parcial" />
+                <ScalarProperty Name="monto_comision" ColumnName="monto_comision" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_usuario_compra" ColumnName="id_usuario_compra" />
+                <ScalarProperty Name="codigo_recaudacion" ColumnName="codigo_recaudacion" />
+                <ScalarProperty Name="pagado" ColumnName="pagado" />
+                <ScalarProperty Name="fecha_pago" ColumnName="fecha_pago" />
+                <ScalarProperty Name="monto_cobrar" ColumnName="monto_cobrar" />
+                <ScalarProperty Name="numero_factura" ColumnName="numero_factura" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Empresas">
+            <EntityTypeMapping TypeName="TNTModel.Empresas">
+              <MappingFragment StoreEntitySet="Empresas">
+                <ScalarProperty Name="departamento" ColumnName="departamento" />
+                <ScalarProperty Name="dosificacion_actividad_comercial" ColumnName="dosificacion_actividad_comercial" />
+                <ScalarProperty Name="dosificacion_codigo_autorizacion" ColumnName="dosificacion_codigo_autorizacion" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre_empresa" ColumnName="nombre_empresa" />
+                <ScalarProperty Name="nit" ColumnName="nit" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="representante_legal" ColumnName="representante_legal" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Eventos">
+            <EntityTypeMapping TypeName="TNTModel.Eventos">
+              <MappingFragment StoreEntitySet="Eventos">
+                <ScalarProperty Name="hora_evento" ColumnName="hora_evento" />
+                <ScalarProperty Name="habilitado" ColumnName="habilitado" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="fecha_evento" ColumnName="fecha_evento" />
+                <ScalarProperty Name="img_url" ColumnName="img_url" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre_evento" ColumnName="nombre_evento" />
+                <ScalarProperty Name="id_lugar" ColumnName="id_lugar" />
+                <ScalarProperty Name="id_empresa" ColumnName="id_empresa" />
+                <ScalarProperty Name="id_tipo_evento" ColumnName="id_tipo_evento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lugares">
+            <EntityTypeMapping TypeName="TNTModel.Lugares">
+              <MappingFragment StoreEntitySet="Lugares">
+                <ScalarProperty Name="longitud" ColumnName="longitud" />
+                <ScalarProperty Name="latitud" ColumnName="latitud" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre_lugar" ColumnName="nombre_lugar" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="capacidad_maxima" ColumnName="capacidad_maxima" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Personas">
+            <EntityTypeMapping TypeName="TNTModel.Personas">
+              <MappingFragment StoreEntitySet="Personas">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="cedula_identidad" ColumnName="cedula_identidad" />
+                <ScalarProperty Name="fecha_nacimiento" ColumnName="fecha_nacimiento" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+                <ScalarProperty Name="fecha_modificacion" ColumnName="fecha_modificacion" />
+                <ScalarProperty Name="numero_celular" ColumnName="numero_celular" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sectores">
+            <EntityTypeMapping TypeName="TNTModel.sectores">
+              <MappingFragment StoreEntitySet="sectores">
+                <ScalarProperty Name="img_url" ColumnName="img_url" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="precio_unitario" ColumnName="precio_unitario" />
+                <ScalarProperty Name="id_evento" ColumnName="id_evento" />
+                <ScalarProperty Name="asientos_disponibles" ColumnName="asientos_disponibles" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suscripcion">
+            <EntityTypeMapping TypeName="TNTModel.Suscripcion">
+              <MappingFragment StoreEntitySet="Suscripcion">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_persona" ColumnName="id_persona" />
+                <ScalarProperty Name="id_tipo_evento" ColumnName="id_tipo_evento" />
+                <ScalarProperty Name="fecha_suscripcion" ColumnName="fecha_suscripcion" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ticket">
+            <EntityTypeMapping TypeName="TNTModel.Ticket">
+              <MappingFragment StoreEntitySet="Ticket">
+                <ScalarProperty Name="costo_sin_comision" ColumnName="costo_sin_comision" />
+                <ScalarProperty Name="fecha_modificacion" ColumnName="fecha_modificacion" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nit_usuario" ColumnName="nit_usuario" />
+                <ScalarProperty Name="nombre_usuario" ColumnName="nombre_usuario" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="butaca" ColumnName="butaca" />
+                <ScalarProperty Name="id_evento" ColumnName="id_evento" />
+                <ScalarProperty Name="valida" ColumnName="valida" />
+                <ScalarProperty Name="utilizada" ColumnName="utilizada" />
+                <ScalarProperty Name="id_sector" ColumnName="id_sector" />
+                <ScalarProperty Name="codigo_recaudacion" ColumnName="codigo_recaudacion" />
+                <ScalarProperty Name="fecha_uso" ColumnName="fecha_uso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tipos_evento">
+            <EntityTypeMapping TypeName="TNTModel.Tipos_evento">
+              <MappingFragment StoreEntitySet="Tipos_evento">
+                <ScalarProperty Name="img_url" ColumnName="img_url" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="token_usuario">
+            <EntityTypeMapping TypeName="TNTModel.token_usuario">
+              <MappingFragment StoreEntitySet="token_usuario">
+                <ScalarProperty Name="fecha_expiracion" ColumnName="fecha_expiracion" />
+                <ScalarProperty Name="token" ColumnName="token" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="fecha_generacion" ColumnName="fecha_generacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="TNTModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="rol" ColumnName="rol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="comisiones">
+            <EntityTypeMapping TypeName="TNTModel.comisiones">
+              <MappingFragment StoreEntitySet="comisiones">
+                <ScalarProperty Name="usuario_modificacion" ColumnName="usuario_modificacion" />
+                <ScalarProperty Name="fecha_modificacion" ColumnName="fecha_modificacion" />
+                <ScalarProperty Name="monto_comision" ColumnName="monto_comision" />
+                <ScalarProperty Name="rango_superior" ColumnName="rango_superior" />
+                <ScalarProperty Name="rango_inferior" ColumnName="rango_inferior" />
+                <ScalarProperty Name="id_empresa" ColumnName="id_empresa" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Puntos_pago">
+            <EntityTypeMapping TypeName="TNTModel.Puntos_pago">
+              <MappingFragment StoreEntitySet="Puntos_pago">
+                <ScalarProperty Name="longitud" ColumnName="longitud" />
+                <ScalarProperty Name="latitud" ColumnName="latitud" />
+                <ScalarProperty Name="departamento" ColumnName="departamento" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="imei_validos">
+            <EntityTypeMapping TypeName="TNTModel.imei_validos">
+              <MappingFragment StoreEntitySet="imei_validos">
+                <ScalarProperty Name="imei" ColumnName="imei" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnviosRelegadosSINTESIS">
+            <EntityTypeMapping TypeName="TNTModel.EnviosRelegadosSINTESIS">
+              <MappingFragment StoreEntitySet="EnviosRelegadosSINTESIS">
+                <ScalarProperty Name="pendiente" ColumnName="pendiente" />
+                <ScalarProperty Name="fecha_hora" ColumnName="fecha_hora" />
+                <ScalarProperty Name="total_comision" ColumnName="total_comision" />
+                <ScalarProperty Name="costo_total" ColumnName="costo_total" />
+                <ScalarProperty Name="nit_empresa" ColumnName="nit_empresa" />
+                <ScalarProperty Name="nombre_empresa" ColumnName="nombre_empresa" />
+                <ScalarProperty Name="nombre_evento" ColumnName="nombre_evento" />
+                <ScalarProperty Name="nit_usuario" ColumnName="nit_usuario" />
+                <ScalarProperty Name="nombre_usuario" ColumnName="nombre_usuario" />
+                <ScalarProperty Name="email_usuario" ColumnName="email_usuario" />
+                <ScalarProperty Name="codigo_recaudacion" ColumnName="codigo_recaudacion" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

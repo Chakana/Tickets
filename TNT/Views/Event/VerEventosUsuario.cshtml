@@ -1,0 +1,62 @@
+﻿@model IEnumerable<TNT.Models.Eventos>
+
+@{
+    ViewBag.Title = "VerEventosUsuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Eventos</h2>
+<div class="row">
+    <br />
+    <br />
+    
+    <table class="table table-hover">
+        <tr class="info">
+            <th>
+                @Html.DisplayNameFor(model => model.nombre_evento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lugares.nombre_lugar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.fecha_evento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.hora_evento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipos_evento.descripcion)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre_evento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lugares.nombre_lugar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fecha_evento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.hora_evento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipos_evento.descripcion)
+                </td>
+                <td>
+                    @Html.ActionLink("Comprar Ticket", "ComprarTicketsUsuario", "Ticket", new { id = item.id }, htmlAttributes: new { @class = "btn btn-xs btn-primary" }) |
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+
+</table>

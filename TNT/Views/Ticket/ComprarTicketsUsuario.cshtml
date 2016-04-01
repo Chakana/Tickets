@@ -1,0 +1,91 @@
+﻿@model TNT.Models.Ticket
+
+@{
+    ViewBag.Title = "ComprarTicketsUsuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <h2>Informacion del evento</h2>
+        <div class="col-md-12"><img src="@ViewBag.img_url" /></div>
+        <div class="col-md-6">Nombre</div><div class="col-md-6">@ViewBag.nombre_evento</div>
+        <div class="col-md-6">Fecha</div><div class="col-md-6">@ViewBag.fecha_evento</div>
+        <div class="col-md-6">Hora</div><div class="col-md-6">@ViewBag.hora_evento</div>
+        <div class="col-md-6">Descripcion</div><div class="col-md-6">@ViewBag.descripcion</div>
+        <div class="col-md-6">Lugar</div><div class="col-md-6">@ViewBag.nombre_lugar</div>
+        <div class="col-md-3">Sectores</div>
+        <div class="col-md-9">
+            @{foreach (var item in ViewBag.sectores)
+            {
+                <div class="col-md-4">@item.descripcion</div><div class="col-md-4">Precio:@item.precio_unitario Bs.</div><div class="col-md-4">Disponibilidad: @item.precio_unitario</div>
+            }
+            }
+        </div>
+
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="row">
+            <fieldset>
+                <br />
+                <br />
+                <h2>Comprar Ticket</h2>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.id_evento, "Eventos")
+                </div>
+                <div class="editor-field">
+                    @Html.DropDownList("id_evento")
+                    @Html.ValidationMessageFor(model => model.id_evento)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.id_sector, "sectores")
+                </div>
+                <div class="editor-field">
+                    @Html.DropDownList("id_sector")
+                    @Html.ValidationMessageFor(model => model.id_sector)
+                </div>
+                <p>
+                    <input type="submit" value="Comprar Ticket" />
+                </p>
+            </fieldset>
+            <button type="button" class="btn btn-default" aria-label="Left Align" id="print_voucher" onclick="printDiv('imprimir_voucher')">
+                <span class=" glyphicon glyphicon-print" aria-hidden="true">
+                </span>
+            </button>
+            <div class="row" id="imprimir_voucher">
+                <div class="col-md-10">Imprima este voucher</div><div class="col-md-2">
+
+                </div>
+                <div class="col-md-6">Codigo de Recaudacion:</div><div class="col-md-6">@ViewBag.codigo_recaudacion</div>
+                <div class="col-md-6">Monto a Pagar:</div><div class="col-md-6">@ViewBag.monto_pagar</div>
+                <div class="col-md-12">Este voucher le ayudara a efectuar el cobro en su punto de pago mas cercano</div>
+            </div>
+            <div class="alert alert-danger" role="alert">@ViewBag.message</div>
+        </div>
+
+    }
+
+    <div>
+        @Html.ActionLink("Volver a la lista", "VerEventosUsuario", "Event")
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

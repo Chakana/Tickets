@@ -1,0 +1,40 @@
+﻿@model TNT.Models.Lugares
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Borrar Lugar</h2>
+
+<h3>Esta seguro de borrar?</h3>
+<fieldset>
+    <legend>Lugares</legend>
+
+    <div class="display-label">
+         Nombre Lugar
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nombre_lugar)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.direccion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.direccion)
+    </div>
+
+    <div class="display-label">
+         Capacidad Maxima
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.capacidad_maxima)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Borrar" class="btn btn-danger" /> |
+        @Html.ActionLink("Volver a la lista", "Index")
+    </p>
+}

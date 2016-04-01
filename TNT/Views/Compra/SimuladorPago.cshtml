@@ -1,0 +1,86 @@
+﻿@model IEnumerable<TNT.Models.Compra>
+
+@{
+    ViewBag.Title = "SimuladorPago";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Compras pendientes de pago</h2>
+    <input id="search" placeholder="Buscar..." />
+    <table class="table table-hover">
+    <tr class="info">
+        <th>
+            @Html.DisplayNameFor(model => model.fecha_compra)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Usuarios.email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.codigo_recaudacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.pagado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fecha_pago)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.monto_cobrar)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.numero_factura)
+        </th>
+        <th>
+            </th>
+</tr>
+
+    @foreach (var item in Model)
+    {
+        <tr data-state="lugar">
+            <td>
+                @Html.DisplayFor(modelItem => item.fecha_compra)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Usuarios.email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.codigo_recaudacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.pagado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fecha_pago)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.monto_cobrar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.numero_factura)
+            </td>
+            <td>
+                @Html.ActionLink("Pagar", "PagoManualDeuda", "Compra", new { id = item.id }, htmlAttributes: new { @class = "btn btn-xs btn-primary" }) |
+            </td>
+        </tr>
+    }
+
+</table>
+</div>
+<script>
+    $("input#search").keyup(function () {
+        var filter = $(this).val();
+        var regExPattern = "gi";
+        var regEx = new RegExp(filter, regExPattern);
+        $("table tr").each(function () {
+            if ($(this).data('state'))
+                if (
+                    $(this).text().search(new RegExp(filter, "i")) < 0
+                    && $(this).data('state').search(regEx) < 0
+                ) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+        });
+    });
+</script>

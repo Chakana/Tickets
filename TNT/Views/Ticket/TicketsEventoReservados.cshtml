@@ -1,0 +1,75 @@
+﻿@model IEnumerable<TNT.Models.Ticket>
+
+@{
+    ViewBag.Title = "TicketsEventoReservados";
+}
+
+<h2>Tickets Reservados</h2>
+<h3><strong>Evento:</strong>@ViewBag.nombre_evento</h3>
+<input id="search" placeholder="Buscar..." />
+<table class="table table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.codigo)
+        </th>
+        <th>
+            Sector
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.codigo_recaudacion)
+        </th>
+       
+        <th>
+            @Html.DisplayNameFor(model => model.nombre_usuario)
+        </th>
+       
+        <th>
+            @Html.DisplayNameFor(model => model.fecha_modificacion)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr data-state="ticket">
+        <td>
+            @Html.DisplayFor(modelItem => item.codigo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sectores.descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.codigo_recaudacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre_usuario)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fecha_modificacion)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.id }, htmlAttributes: new { @class = "btn btn-success" })
+            @Html.ActionLink("Borrar", "Delete", new { id = item.id }, htmlAttributes: new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>
+<script>
+    $("input#search").keyup(function () {
+        var filter = $(this).val();
+        var regExPattern = "gi";
+        var regEx = new RegExp(filter, regExPattern);
+        $("table tr").each(function () {
+            if ($(this).data('state'))
+                if (
+                    $(this).text().search(new RegExp(filter, "i")) < 0
+                    && $(this).data('state').search(regEx) < 0
+                ) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+        });
+    });
+</script>

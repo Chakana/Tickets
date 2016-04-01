@@ -1,0 +1,101 @@
+﻿@model TNT.Models.Personas
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Personas</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre)
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.apellidos)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.apellidos)
+            @Html.ValidationMessageFor(model => model.apellidos)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.cedula_identidad)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.cedula_identidad)
+            @Html.ValidationMessageFor(model => model.cedula_identidad)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.fecha_nacimiento)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.fecha_nacimiento)
+            @Html.ValidationMessageFor(model => model.fecha_nacimiento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.direccion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.direccion)
+            @Html.ValidationMessageFor(model => model.direccion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.fecha_registro)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.fecha_registro)
+            @Html.ValidationMessageFor(model => model.fecha_registro)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.fecha_modificacion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.fecha_modificacion)
+            @Html.ValidationMessageFor(model => model.fecha_modificacion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.numero_celular)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.numero_celular)
+            @Html.ValidationMessageFor(model => model.numero_celular)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.id_usuario, "Usuarios")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("id_usuario", String.Empty)
+            @Html.ValidationMessageFor(model => model.id_usuario)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

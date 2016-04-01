@@ -1,0 +1,53 @@
+﻿@model TNT.Models.sectores
+
+@{
+    ViewBag.Title = "Create";
+}
+<div class="page-header">
+    <h1>Crear Sectores evento<small>@ViewBag.nombre_evento</small></h1>
+</div>
+
+@{ Html.RenderAction("index", ""); }
+<div class="alert alert-info" role="alert">@ViewBag.message</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        
+        <legend>sectores</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.descripcion)
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.precio_unitario)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.precio_unitario, new { type = "number" })
+            @Html.ValidationMessageFor(model => model.precio_unitario)
+        </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.asientos_disponibles)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.asientos_disponibles)
+            @Html.ValidationMessageFor(model => model.asientos_disponibles)
+        </div>
+
+        <p>
+            <input type="submit" value="Crear Sector" class="btn btn-danger" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>

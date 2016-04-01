@@ -1,0 +1,62 @@
+﻿@model TNT.Models.sectores
+
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>sectores</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.descripcion)
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.precio_unitario)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.precio_unitario)
+            @Html.ValidationMessageFor(model => model.precio_unitario)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.id_evento)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.id_evento)
+            @Html.ValidationMessageFor(model => model.id_evento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.asientos_disponibles)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.asientos_disponibles)
+            @Html.ValidationMessageFor(model => model.asientos_disponibles)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.img_url)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.img_url)
+            @Html.ValidationMessageFor(model => model.img_url)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

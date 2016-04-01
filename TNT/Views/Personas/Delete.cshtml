@@ -1,0 +1,83 @@
+﻿@model TNT.Models.Personas
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Personas</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.apellidos)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.apellidos)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cedula_identidad)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cedula_identidad)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.fecha_nacimiento)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fecha_nacimiento)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.direccion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.direccion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.fecha_registro)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fecha_registro)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.fecha_modificacion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fecha_modificacion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.numero_celular)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.numero_celular)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Usuarios.email)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Usuarios.email)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

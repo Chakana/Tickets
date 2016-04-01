@@ -1,0 +1,55 @@
+﻿@model TNT.Models.Eventos
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Eventos</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nombre_evento)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nombre_evento)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Lugares.nombre_lugar)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Lugares.nombre_lugar)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.fecha_evento)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fecha_evento)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.hora_evento)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.hora_evento)
+    </div>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Empresas.nombre_empresa)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Empresas.nombre_empresa)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Tipos_evento.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Tipos_evento.descripcion)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Volver a la lista", "Index")
+</p>
