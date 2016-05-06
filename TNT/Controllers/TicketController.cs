@@ -166,7 +166,7 @@ namespace TNT.Controllers
             if (ModelState.IsValid)
             {
                 bool envio = Helpers.Envio_sintesis_compra_simple(
-                 codigo_recaudacion, usuario_actual.email, datos_usuario_actual.nombre, datos_usuario_actual.cedula_identidad, evento.nombre_evento,
+                 codigo_recaudacion, usuario_actual.email, datos_usuario_actual.nombre +" " +datos_usuario_actual.apellidos , datos_usuario_actual.cedula_identidad, evento.nombre_evento,
                  empresa.nombre_empresa, empresa.nit, (double)costo_total, (double)comision.monto_comision);
                 if (envio)
                 {
@@ -174,8 +174,10 @@ namespace TNT.Controllers
                     compra.codigo_recaudacion = codigo_recaudacion;
                     compra.fecha_compra = DateTime.Now;
                     compra.id_usuario_compra = (int)Session["id"];
-                    compra.monto_cobrar = costo_total;
+                    compra.monto_cobrar = costo_total + comision.monto_comision;
                     compra.pagado = 0;
+                    compra.monto_comision = comision.monto_comision;
+                    compra.monto_parcial = costo_total;
                     db.Compra.Add(compra);
                     ticket.codigo_recaudacion = codigo_recaudacion;
                     ticket.utilizada = false;
@@ -183,6 +185,8 @@ namespace TNT.Controllers
                     ticket.codigo = codigo_ticket;
                     ticket.nombre_usuario = datos_usuario_actual.nombre;
                     ticket.nit_usuario = datos_usuario_actual.cedula_identidad;
+                    ticket.costo_sin_comision = costo_total;
+                    ticket.fecha_modificacion = DateTime.Now;
                     db.Ticket.Add(ticket);
                     try
                     {
@@ -190,6 +194,8 @@ namespace TNT.Controllers
                         ViewBag.codigo_recaudacion = codigo_recaudacion;
                         ViewBag.monto_pagar = (costo_total + comision.monto_comision).ToString();                        
                         ViewBag.message = "compra exitosa, por favor imprima el voucher haciendo clic en el icono de imprimir";
+                        string template = "<h2>Se efectuo una compra del evento:" + evento.nombre_evento + "</h2>Este es el codigo de recaudacion:" + codigo_recaudacion + " con esto puede pasar a cancelar el monto de:" + (costo_total + comision.monto_comision).ToString() + " al punto de pago mas cercano";
+                        Helpers.EnviarMail("admin@tnt.com", "admin", usuario_actual.email, usuario_actual.Personas.First().nombre, "codigo de recaudacion", template, null);
 
                     }
                     catch (System.Data.Entity.Validation.DbEntityValidationException ex)

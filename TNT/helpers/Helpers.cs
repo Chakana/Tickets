@@ -39,15 +39,17 @@ namespace TNT.helpers
     {
         public static string Generar_codigo_recaudacion(string iniciales)
         {
-            int length = 5;
+            int length = 4;
             Random random = new Random();
             string fecha = DateTime.Now.ToString("yyyyMMdd");
-            var chars = "0123456789";
+            //var chars = "0123456789";
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var result = new string(
                 Enumerable.Repeat(chars, length)
                           .Select(s => s[random.Next(s.Length)])
                           .ToArray());
-            result = "TNT" + fecha + iniciales + result;
+            //result = "TNT" + fecha + iniciales + result;
+            result = "321" + fecha + result;
             return result;
         }
         public static string Generar_codigo_ticket(int length, Random random)
@@ -152,7 +154,7 @@ namespace TNT.helpers
             dPlanilla[0].montoCreditoFiscal = 0;
 
             dPlanilla[1] = new DPlanilla();
-            dPlanilla[1].numeroPago = 1;
+            dPlanilla[1].numeroPago = 2;
             dPlanilla[1].descripcion = "Comision"; // TODO : SACAR DE CONFIG
             dPlanilla[1].nombreFactura = "YGDRASSIL"; //TODO : SACAR DE CONFIG
             dPlanilla[1].nitFactura = "111111119"; // SACAR DE CONFIG
