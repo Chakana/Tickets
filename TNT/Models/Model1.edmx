@@ -47,6 +47,7 @@
           <Property Name="dosificacion_codigo_autorizacion" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="dosificacion_actividad_comercial" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="departamento" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dosificacion_llave" Type="varchar" MaxLength="250" Nullable="false" />
         </EntityType>
         <EntityType Name="EnviosRelegadosSINTESIS">
           <Key>
@@ -467,6 +468,7 @@
           <Property Name="dosificacion_actividad_comercial" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="departamento" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="comisiones" Relationship="TNTModel.fk_empresa" FromRole="Empresas" ToRole="comisiones" />
+          <Property Name="dosificacion_llave" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Eventos">
           <Key>
@@ -910,6 +912,7 @@
           <EntitySetMapping Name="Empresas">
             <EntityTypeMapping TypeName="TNTModel.Empresas">
               <MappingFragment StoreEntitySet="Empresas">
+                <ScalarProperty Name="dosificacion_llave" ColumnName="dosificacion_llave" />
                 <ScalarProperty Name="departamento" ColumnName="departamento" />
                 <ScalarProperty Name="dosificacion_actividad_comercial" ColumnName="dosificacion_actividad_comercial" />
                 <ScalarProperty Name="dosificacion_codigo_autorizacion" ColumnName="dosificacion_codigo_autorizacion" />

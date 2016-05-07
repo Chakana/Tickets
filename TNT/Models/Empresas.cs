@@ -31,6 +31,7 @@ namespace TNT.Models
         public string dosificacion_codigo_autorizacion { get; set; }
         public string dosificacion_actividad_comercial { get; set; }
         public string departamento { get; set; }
+        public string dosificacion_llave { get; set; }
     
         public virtual Usuarios Usuarios { get; set; }
         public virtual ICollection<Eventos> Eventos { get; set; }
