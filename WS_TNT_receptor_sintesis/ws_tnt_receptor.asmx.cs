@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
+using System.IO;
 
 
 
@@ -19,6 +21,38 @@ namespace WS_TNT_receptor_sintesis
     // [System.Web.Script.Services.ScriptService]
     public class ws_tnt_receptor : System.Web.Services.WebService
     {
+        void POST(string url, string jsonContent)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+
+            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+            Byte[] byteArray = encoding.GetBytes(jsonContent);
+
+            request.ContentLength = byteArray.Length;
+            request.ContentType = @"application/json";
+
+            using (Stream dataStream = request.GetRequestStream())
+            {
+                dataStream.Write(byteArray, 0, byteArray.Length);
+            }
+            long length = 0;
+            try
+            {
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    length = response.ContentLength;
+                }
+            }
+            catch (WebException ex)
+            {
+                StreamWriter sw = new StreamWriter(System.Web.HttpContext.Current.Server.MapPath("~") + "log_1", true);
+                sw.WriteLine(DateTime.Now.ToString() + "request error,COD_REC:" + jsonContent + " error:" + ex.Message);
+                sw.Flush();
+                sw.Close();
+            }
+        }
+
         [WebMethod]
         public RespTransaccion datosTransaccion(WsTransaccion datos, string user, string password)
         {
@@ -27,31 +61,50 @@ namespace WS_TNT_receptor_sintesis
             // datos.Transaccion
             RespTransaccion respuestaWS = new RespTransaccion();
             //Utilizar una codificación para los errores. 
+            string url_envio = System.Configuration.ConfigurationManager.AppSettings["url_envio_factura"];
+            string user_sintesis = System.Configuration.ConfigurationManager.AppSettings["user_sintesis"];
+            string user_password = System.Configuration.ConfigurationManager.AppSettings["password"];
 
-
-            if ((user.Equals("sintesis")) && (password.Equals("a1b1c1d1")))
+            if ((user.Equals(user_sintesis)) && (password.Equals(password)))
             {
-                bool exito = DA_TNT.ws_actualiza_pago(datos.CodigoRecaudacion,datos.NroRentaRecibo, datos.Fecha.ToString() ,datos.Hora.ToString());                
-                if (exito)
+                if (datos.Transaccion == "P")
                 {
-                    respuestaWS.CodError = 0;
-                    respuestaWS.Descripcion = "OK datos enviados:" + datos.Agencia + "|" + datos.Ciudad + "|" + datos.CodigoAutorizacion
-                        + "|" + datos.CodigoControl + "|" + datos.CodigoEmpresa + "|" + datos.CodigoProducto + "|" + datos.CodigoRecaudacion
-                        + "|" + datos.Departamento + "|" + datos.Entidad + "|" + datos.Fecha + "|" + datos.Hora + "|" + datos.LoteDosificacion
-                        + "|" + datos.Monto + "|" + datos.MontoCreditoFiscal + "|" + datos.NitFacturar + "|" + datos.NombreFacturar
-                        + "|" + datos.NroRentaRecibo + "|" + datos.NumeroPago + "|" + datos.Operador + "|" + datos.OrigenTransaccion
-                        + "|" + datos.Pais + "|" + datos.Secuencial + "|" + datos.Transaccion;
+                    bool exito = DA_TNT.ws_actualiza_pago(datos.CodigoRecaudacion, datos.NroRentaRecibo, datos.Fecha.ToString(), datos.Hora.ToString());
+                    if (exito)
+                    {
+                        POST(url_envio, "{\"codigo_recaudacion\":\"" + datos.CodigoRecaudacion + "\"}");
+                        //enviar correo con ticket
+                        //enviar factura
+                        respuestaWS.CodError = 0;
+                        respuestaWS.Descripcion = "OK datos enviados:" + datos.Agencia + "|" + datos.Ciudad + "|" + datos.CodigoAutorizacion
+                            + "|" + datos.CodigoControl + "|" + datos.CodigoEmpresa + "|" + datos.CodigoProducto + "|" + datos.CodigoRecaudacion
+                            + "|" + datos.Departamento + "|" + datos.Entidad + "|" + datos.Fecha + "|" + datos.Hora + "|" + datos.LoteDosificacion
+                            + "|" + datos.Monto + "|" + datos.MontoCreditoFiscal + "|" + datos.NitFacturar + "|" + datos.NombreFacturar
+                            + "|" + datos.NroRentaRecibo + "|" + datos.NumeroPago + "|" + datos.Operador + "|" + datos.OrigenTransaccion
+                            + "|" + datos.Pais + "|" + datos.Secuencial + "|" + datos.Transaccion;
+                    }
+                    else
+                    {
+                        respuestaWS.CodError = 1;
+                        respuestaWS.Descripcion = "Error:" + datos.Agencia + "|" + datos.Ciudad + "|" + datos.CodigoAutorizacion
+                            + "|" + datos.CodigoControl + "|" + datos.CodigoEmpresa + "|" + datos.CodigoProducto + "|" + datos.CodigoRecaudacion
+                            + "|" + datos.Departamento + "|" + datos.Entidad + "|" + datos.Fecha + "|" + datos.Hora + "|" + datos.LoteDosificacion
+                            + "|" + datos.Monto + "|" + datos.MontoCreditoFiscal + "|" + datos.NitFacturar + "|" + datos.NombreFacturar
+                            + "|" + datos.NroRentaRecibo + "|" + datos.NumeroPago + "|" + datos.Operador + "|" + datos.OrigenTransaccion
+                            + "|" + datos.Pais + "|" + datos.Secuencial + "|" + datos.Transaccion;
+                    }
                 }
                 else
                 {
-                    respuestaWS.CodError = 1;
-                    respuestaWS.Descripcion = "Error:" + datos.Agencia + "|" + datos.Ciudad + "|" + datos.CodigoAutorizacion
+                    respuestaWS.CodError = 0;
+                    respuestaWS.Descripcion = "OK REVERSION enviada:" + datos.Agencia + "|" + datos.Ciudad + "|" + datos.CodigoAutorizacion
                         + "|" + datos.CodigoControl + "|" + datos.CodigoEmpresa + "|" + datos.CodigoProducto + "|" + datos.CodigoRecaudacion
                         + "|" + datos.Departamento + "|" + datos.Entidad + "|" + datos.Fecha + "|" + datos.Hora + "|" + datos.LoteDosificacion
                         + "|" + datos.Monto + "|" + datos.MontoCreditoFiscal + "|" + datos.NitFacturar + "|" + datos.NombreFacturar
                         + "|" + datos.NroRentaRecibo + "|" + datos.NumeroPago + "|" + datos.Operador + "|" + datos.OrigenTransaccion
                         + "|" + datos.Pais + "|" + datos.Secuencial + "|" + datos.Transaccion;
                 }
+               
                                
             }
             else

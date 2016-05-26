@@ -283,6 +283,9 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\Images\available_seat_img.gif" />
+    <Content Include="Content\Images\booked_seat_img.gif" />
+    <Content Include="Content\Images\selected_seat_img.gif" />
     <Content Include="Content\main.css" />
     <Content Include="Content\responsive.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -357,6 +360,8 @@
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Images\about-bg.jpg" />
+    <Content Include="Images\available_seat_img.gif" />
+    <Content Include="Images\booked_seat_img.gif" />
     <Content Include="Images\contact-bg.jpg" />
     <Content Include="Images\ear-piece.png" />
     <Content Include="Images\event-bg.jpg" />
@@ -373,6 +378,7 @@
     <Content Include="Images\logo_yg.jpg" />
     <Content Include="Images\map-icon.png" />
     <Content Include="Images\performar-bg.jpg" />
+    <Content Include="Images\selected_seat_img.gif" />
     <Content Include="Images\slider\bg1.jpg" />
     <Content Include="Images\slider\bg2.jpg" />
     <Content Include="Images\slider\bg3.jpg" />

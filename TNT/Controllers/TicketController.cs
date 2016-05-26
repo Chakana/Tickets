@@ -133,16 +133,121 @@ namespace TNT.Controllers
 
             return View();
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ComprarTicketsUsuario(Ticket ticket)
+        public void CompraMultiplesTicketMismoSector(Ticket ticket)
         {
-           
-            //compra de ticket 
+            string[] butacas = ticket.butaca.Split(',');
+            string inicial = User.Identity.Name.Substring(1, 1);
+            string codigo_recaudacion = Helpers.Generar_codigo_recaudacion(inicial); //no podemos repetir el codigo de recaudacion (no debe existir en la tabla compra)
+            decimal costo_total = 0m;
+            decimal total_comision = 0m;
+            Eventos_app datos_evento = DA_clases.DA_Eventos.obtener_evento(ticket.id_evento);
+            Empresas_app datos_empresa = DA_clases.DA_Empresas.obtener_empresa(datos_evento.id_empresa);
+            Usuarios datos_usuario = db.Usuarios.FirstOrDefault(us=>us.email == User.Identity.Name);
+            sectores sector = db.sectores.Find(ticket.id_sector);
+            decimal costo_total_sector = DA_clases.DA_Tickets.obtiene_costo_sector(ticket.id_evento, ticket.id_sector.Value,butacas.Length);
+            var comisiones = db.comisiones.Where(com => com.id_empresa == datos_empresa.id_empresa);
+            if (comisiones.Count() == 0)
+            {
+                comisiones = db.comisiones.Where(com => com.id_empresa == 1);
+            }
+
+            var comision = comisiones.FirstOrDefault(com => com.rango_inferior >= costo_total_sector);
+            if (comision == null)//si no se encuentra comision inferior quiere decir que supera el limite inferior asi q tomamos el maximo
+            {
+                comision = comisiones.OrderByDescending(com => com.rango_superior).First();
+
+            }
+            decimal monto_comision = comision.monto_comision * butacas.Length; //Implementar   
+            total_comision += monto_comision;
+            try
+            {
+
+                foreach (string butaca in butacas)
+                {
+                    string codigo_ticket = Helpers.Generar_codigo_ticket(30, new Random());
+                    Ticket ticket_nuevo = new Ticket();
+                    ticket_nuevo.butaca = butaca;
+                    ticket_nuevo.codigo = codigo_ticket;
+                    ticket_nuevo.codigo_recaudacion = codigo_recaudacion;
+                    ticket_nuevo.id_evento = ticket.id_evento;
+                    ticket_nuevo.id_sector = ticket.id_sector;
+                    ticket_nuevo.nit_usuario = datos_usuario.Personas.First().cedula_identidad;
+                    ticket_nuevo.nombre_usuario = User.Identity.Name;
+                    ticket_nuevo.utilizada = false;
+                    ticket_nuevo.valida = 0;
+                    ticket_nuevo.costo_sin_comision = costo_total_sector / butacas.Length;
+                    ticket_nuevo.fecha_modificacion = DateTime.Now;
+                    db.Ticket.Add(ticket_nuevo);
+                    db.SaveChanges();
+                }
+                costo_total += costo_total_sector;
+                sector.asientos_disponibles = sector.asientos_disponibles - butacas.Length;
+                db.Entry(sector).State = System.Data.EntityState.Modified;
+                db.SaveChanges();
+                bool envio = Helpers.Envio_sintesis_compra_simple(
+                          codigo_recaudacion, User.Identity.Name, User.Identity.Name, datos_usuario.Personas.First().cedula_identidad, datos_evento.nombre_evento,
+                          datos_empresa.nombre_empresa, datos_empresa.nit_empresa, (double)costo_total, (double)total_comision);
+                if (!envio)
+                {
+                    //guardar en SINTESIS relegados
+                    Models.EnviosRelegadosSINTESIS relegado = new EnviosRelegadosSINTESIS();
+                    relegado.codigo_recaudacion = codigo_recaudacion;
+                    relegado.costo_total = costo_total;
+                    relegado.email_usuario = User.Identity.Name;
+                    relegado.fecha_hora = DateTime.Now;
+                    relegado.nit_empresa = datos_usuario.Personas.First().cedula_identidad;
+                    relegado.nit_usuario = ticket.nit_usuario;
+                    relegado.nombre_empresa = datos_empresa.nombre_empresa;
+                    relegado.nombre_evento = datos_evento.nombre_evento;
+                    relegado.nombre_usuario = User.Identity.Name;
+                    relegado.pendiente = true;
+                    relegado.total_comision = total_comision;
+                    db.EnviosRelegadosSINTESIS.Add(relegado);
+                    db.SaveChanges();
+                    helpers.Helpers.EnviarMail("admin@tnt.com", "admin", "eisenob@gmail.com", "admin", "CODIGO RECAUDACION NO ENVIADO SINTESIS - PENDIENTE", "<h1>Codigo de recaudacion no enviado y pendiente de envio</h1><h2>" + codigo_recaudacion + "</h2>", null);
+
+                }
+                string email_usuario = User.Identity.Name;
+                Usuarios usuario = db.Usuarios.FirstOrDefault(us => us.email == email_usuario);
+                Compra compra_nueva = new Compra();
+                compra_nueva.codigo_recaudacion = codigo_recaudacion;
+                compra_nueva.fecha_compra = DateTime.Now;
+                compra_nueva.id_usuario_compra = usuario.id;
+                compra_nueva.monto_cobrar = costo_total + total_comision;
+                compra_nueva.monto_comision = total_comision;
+                compra_nueva.monto_parcial = costo_total;
+                compra_nueva.pagado = 0;
+                db.Compra.Add(compra_nueva);
+                db.SaveChanges();
+                //enviar correo a usuario con codigo de recaudacion
+                string template = "<h2>Se efectuo una compra del evento:" + datos_evento.nombre_evento + "</h2>Este es el codigo de recaudacion:" + codigo_recaudacion + " con esto puede pasar a cancelar el monto de:" + (costo_total + total_comision) + " a el punto de pago mas cercano";
+                Helpers.EnviarMail("admin@tnt.com", "admin", usuario.email, usuario.Personas.First().nombre, "codigo de recaudacion", template, null);
+                ViewBag.codigo_recaudacion = codigo_recaudacion;
+                ViewBag.monto_pagar = (costo_total + total_comision).ToString();
+                ViewBag.message = "compra exitosa, por favor imprima el voucher haciendo clic en el icono de imprimir";
+
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+            {
+                List<string> errorMessages = new List<string>();
+                foreach (System.Data.Entity.Validation.DbEntityValidationResult validationResult in ex.EntityValidationErrors)
+                {
+                    string entityName = validationResult.Entry.Entity.GetType().Name;
+                    foreach (System.Data.Entity.Validation.DbValidationError error in validationResult.ValidationErrors)
+                    {
+                        errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                    }
+                }
+                ViewBag.message = errorMessages.ToString();
+
+            }
+        }
+        public void CompraIndividualTicket(Ticket ticket)
+        {
             Eventos evento = db.Eventos.Find(ticket.id_evento);
             Empresas empresa = db.Empresas.Find(evento.id_empresa);
             sectores sector = db.sectores.Find(ticket.id_sector);
-            Usuarios usuario_actual = db.Usuarios.FirstOrDefault( us=>us.email==User.Identity.Name);
+            Usuarios usuario_actual = db.Usuarios.FirstOrDefault(us => us.email == User.Identity.Name);
             Personas datos_usuario_actual = db.Personas.FirstOrDefault(per => per.id_usuario == usuario_actual.id);
             decimal costo_total = sector.precio_unitario * 1;
             var comisiones = db.comisiones.Where(com => com.id_empresa == empresa.id);
@@ -150,9 +255,9 @@ namespace TNT.Controllers
             {
                 comisiones = db.comisiones.Where(com => com.id_empresa == 1);
             }
-          
+
             var comision = comisiones.FirstOrDefault(com => com.rango_inferior >= costo_total);
-            if(comision==null)//si no se encuentra comision inferior quiere decir que supera el limite inferior asi q tomamos el maximo
+            if (comision == null)//si no se encuentra comision inferior quiere decir que supera el limite inferior asi q tomamos el maximo
             {
                 comision = comisiones.OrderByDescending(com => com.rango_superior).First();
 
@@ -161,12 +266,12 @@ namespace TNT.Controllers
             string inicial = User.Identity.Name.Substring(1, 1);
             string codigo_recaudacion = Helpers.Generar_codigo_recaudacion(inicial); //no podemos repetir el codigo de recaudacion (no debe existir en la tabla compra)
             string codigo_ticket = Helpers.Generar_codigo_ticket(50, new Random());
-            
+
 
             if (ModelState.IsValid)
             {
-                bool envio = Helpers.Envio_sintesis_compra_simple(
-                 codigo_recaudacion, usuario_actual.email, datos_usuario_actual.nombre +" " +datos_usuario_actual.apellidos , datos_usuario_actual.cedula_identidad, evento.nombre_evento,
+                bool envio = Helpers.Envio_sintesis_compra_simple_nuevo(
+                 codigo_recaudacion, usuario_actual.email, datos_usuario_actual.nombre + " " + datos_usuario_actual.apellidos, datos_usuario_actual.cedula_identidad, evento.nombre_evento,
                  empresa.nombre_empresa, empresa.nit, (double)costo_total, (double)comision.monto_comision);
                 if (envio)
                 {
@@ -192,7 +297,7 @@ namespace TNT.Controllers
                     {
                         db.SaveChanges();
                         ViewBag.codigo_recaudacion = codigo_recaudacion;
-                        ViewBag.monto_pagar = (costo_total + comision.monto_comision).ToString();                        
+                        ViewBag.monto_pagar = (costo_total + comision.monto_comision).ToString();
                         ViewBag.message = "compra exitosa, por favor imprima el voucher haciendo clic en el icono de imprimir";
                         string template = "<h2>Se efectuo una compra del evento:" + evento.nombre_evento + "</h2>Este es el codigo de recaudacion:" + codigo_recaudacion + " con esto puede pasar a cancelar el monto de:" + (costo_total + comision.monto_comision).ToString() + " al punto de pago mas cercano";
                         Helpers.EnviarMail("admin@tnt.com", "admin", usuario_actual.email, usuario_actual.Personas.First().nombre, "codigo de recaudacion", template, null);
@@ -217,7 +322,21 @@ namespace TNT.Controllers
                 {
                     ViewBag.message = "Error en la compra, por favor reintente";
                 }
-                
+
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ComprarTicketsUsuario(Ticket ticket)
+        {
+            string[] butacas = ticket.butaca.Split(',');
+            if (butacas.Length > 1)
+            {
+                CompraMultiplesTicketMismoSector(ticket);
+            }
+            else
+            {
+                CompraIndividualTicket(ticket);
             }
             var eventos = db.Eventos.Where(ev => ev.id == ticket.id_evento).Include(e => e.Empresas).Include(e => e.Lugares).Include(e => e.Tipos_evento);
             eventos.Where(ev => ev.fecha_evento >= DateTime.Now);

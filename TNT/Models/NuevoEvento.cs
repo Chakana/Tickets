@@ -8,6 +8,7 @@ namespace TNT.Models
     public class NuevoEvento
     {
         public string descripcion { get; set; }
+        public string descripcion_factura { get; set; }
         public DateTime fecha_evento { get; set; }
         public TimeSpan hora_evento { get; set; }
         public int id_empresa { get; set; }
@@ -24,5 +25,7 @@ namespace TNT.Models
         public decimal precio_unitario { get; set; }
         public int id_evento { get; set; }
         public int asientos_disponibles { get; set; }
+        public int filas { get; set; }
+        public int columnas { get; set; }
     }
 }

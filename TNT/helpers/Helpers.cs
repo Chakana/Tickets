@@ -543,7 +543,8 @@ namespace TNT.helpers
         public static string Obtener_codigo_control(string numeroAutorizacion, string numeroFactura, string nitCliente, string fechaTransaccion, string montoTransaccion, string llaveTransaccion)
         {
             string codigoControl = "";
-            montoTransaccion = Math.Round(Convert.ToDecimal(montoTransaccion), 0).ToString();
+            montoTransaccion = Math.Round(Convert.ToDecimal(montoTransaccion), 0).ToString("0.##");
+            
             //1erPaso añadir verhoeff 2 diitos a cada uno
             numeroFactura = numeroFactura + Verhoeff.generateVerhoeff_iterative(numeroFactura, 2);
             //numeroFactura = numeroFactura + Verhoeff.generateVerhoeff(numeroFactura);
@@ -680,6 +681,77 @@ namespace TNT.helpers
                 return true;
             }
             else
+            {
+                return false;
+            }
+
+        }
+        public static bool Envio_sintesis_compra_simple_nuevo(string codigo_recaudacion, string email_cliente, string nombre_cliente, string nit_cliente, string nombre_evento, string nombre_empresa, string nit_empresa, double montoTicket, double comision)
+        {
+            ComelecSoapClient cli = new ComelecSoapClient();
+            DatosPlanilla datosPlanilla = new DatosPlanilla();
+            DPlanilla[] dPlanilla = new DPlanilla[1];
+            RespPlanilla respPlanilla = new RespPlanilla();
+            DateTime now_date = new DateTime();
+
+            datosPlanilla.codigoCliente = "1";
+            datosPlanilla.codigoEmpresa = 321;
+            datosPlanilla.codigoProducto = "1";
+            datosPlanilla.codigoRecaudacion = codigo_recaudacion;
+            datosPlanilla.correoElectronico = email_cliente;
+            datosPlanilla.descripcionRecaudacion = "COMPRA TICKETS"; //SACAR DE CONFIG
+            datosPlanilla.fecha = Int32.Parse(now_date.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture));
+            datosPlanilla.hora = Int32.Parse(now_date.ToString("hhmmss", System.Globalization.CultureInfo.InvariantCulture));
+            datosPlanilla.fechaVencimiento = 0;
+            datosPlanilla.horaVencimiento = 0;
+            datosPlanilla.moneda = "BS";
+            datosPlanilla.nombre = nombre_cliente;
+            datosPlanilla.nit_CI_cliente = nit_cliente;
+            datosPlanilla.transaccion = "A";
+
+            dPlanilla[0] = new DPlanilla();
+            dPlanilla[0].numeroPago = 1;
+            dPlanilla[0].descripcion = nombre_evento;
+            dPlanilla[0].nombreFactura = nombre_empresa;
+            dPlanilla[0].nitFactura = nit_empresa;
+            dPlanilla[0].montoPago = montoTicket + comision;
+            dPlanilla[0].montoCreditoFiscal = comision;
+
+            datosPlanilla.planillas = dPlanilla;
+            try
+            {
+                respPlanilla = cli.cmeRegistroPlan(datosPlanilla, "wsiggdrasil");
+
+                RespItem respuesta = new RespItem();
+                DatosItem datosItem = new DatosItem();
+                DItem[] items = new DItem[2];
+                items[0] = new DItem();
+                items[0].cantidad = 1;
+                items[0].descripcion = nombre_evento;
+                items[0].numeroItem = 1;
+                items[0].precioUnitario = montoTicket;
+
+                items[1] = new DItem();
+                items[1].cantidad = 1;
+                items[1].descripcion = "Comision";
+                items[1].numeroItem = 2;
+                items[1].precioUnitario = comision;
+
+                datosItem.idTransaccion = respPlanilla.idTransaccion;
+                datosItem.items = items;
+                datosItem.numeroPago = 1;
+                datosItem.transaccion = "A";
+                respuesta = cli.cmeRegistroItem(datosItem, "wsiggdrasil");
+                if (respuesta.codError == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
             {
                 return false;
             }

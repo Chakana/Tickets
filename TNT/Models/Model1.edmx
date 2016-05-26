@@ -80,6 +80,7 @@
           <Property Name="habilitado" Type="bit" Nullable="false" />
           <Property Name="fecha_evento" Type="date" Nullable="false" />
           <Property Name="hora_evento" Type="time" Precision="7" Nullable="false" />
+          <Property Name="descripcion_factura" Type="varchar" MaxLength="150" Nullable="false" />
         </EntityType>
         <EntityType Name="imei_validos">
           <Key>
@@ -134,6 +135,9 @@
           <Property Name="id_evento" Type="int" Nullable="false" />
           <Property Name="asientos_disponibles" Type="int" Nullable="false" />
           <Property Name="img_url" Type="varchar" MaxLength="500" />
+          <Property Name="es_sector_numerado" Type="bit" Nullable="false" />
+          <Property Name="filas" Type="int" Nullable="false" />
+          <Property Name="columnas" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Suscripcion">
           <Key>
@@ -489,6 +493,7 @@
           <Property Name="descripcion" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
           <Property Name="habilitado" Type="Boolean" Nullable="false" />
           <Property Name="hora_evento" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="descripcion_factura" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Lugares">
           <Key>
@@ -531,6 +536,9 @@
           <NavigationProperty Name="Eventos" Relationship="Self.FK_sectores_Eventos" FromRole="sectores" ToRole="Eventos" />
           <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_sectores" FromRole="sectores" ToRole="Ticket" />
           <Property Name="img_url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="es_sector_numerado" Type="Boolean" Nullable="false" />
+          <Property Name="filas" Type="Int32" Nullable="false" />
+          <Property Name="columnas" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Suscripcion">
           <Key>
@@ -930,6 +938,7 @@
           <EntitySetMapping Name="Eventos">
             <EntityTypeMapping TypeName="TNTModel.Eventos">
               <MappingFragment StoreEntitySet="Eventos">
+                <ScalarProperty Name="descripcion_factura" ColumnName="descripcion_factura" />
                 <ScalarProperty Name="hora_evento" ColumnName="hora_evento" />
                 <ScalarProperty Name="habilitado" ColumnName="habilitado" />
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />
@@ -974,6 +983,9 @@
           <EntitySetMapping Name="sectores">
             <EntityTypeMapping TypeName="TNTModel.sectores">
               <MappingFragment StoreEntitySet="sectores">
+                <ScalarProperty Name="columnas" ColumnName="columnas" />
+                <ScalarProperty Name="filas" ColumnName="filas" />
+                <ScalarProperty Name="es_sector_numerado" ColumnName="es_sector_numerado" />
                 <ScalarProperty Name="img_url" ColumnName="img_url" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />

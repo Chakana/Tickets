@@ -24,7 +24,7 @@ namespace tnt_receptor_tst
             req.CodigoControl = "920292";
             req.CodigoEmpresa = 1;
             req.CodigoProducto = "1";
-            req.CodigoRecaudacion = "WMIDYXFOPNF1ZIRLSYN6";
+            req.CodigoRecaudacion = "32120160512V4XP";
             req.Departamento = 1;
             req.Entidad = "BNB";
             req.Fecha = 20151129;

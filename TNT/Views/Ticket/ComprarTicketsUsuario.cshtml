@@ -4,7 +4,11 @@
     ViewBag.Title = "ComprarTicketsUsuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    
+</style>
 <script>
+    
     function printDiv(divName) {
         var printContents = document.getElementById(divName).innerHTML;
         var originalContents = document.body.innerHTML;
@@ -15,9 +19,142 @@
 
         document.body.innerHTML = originalContents;
     }
+    //mostrar datos del sector elegido
+    jQuery(window).load(function () {
+        var idSectorElegido = $('#id_sector').val();
+        var settings = {
+            rows: 10,
+            cols: 10,
+            rowCssPrefix: 'row-',
+            colCssPrefix: 'col-',
+            seatWidth: 35,
+            seatHeight: 35,
+            seatCss: 'seat',
+            selectedSeatCss: 'selectedSeat',
+            selectingSeatCss: 'selectingSeat'
+        };
+        function CargarDatosSector(idSector) {
+            var data = { id: idSector };
+            $.ajax({
+                url: '/Sector/ObtenerDatosSector',
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "JSON",
+                contentType: "application/json",
+                success: function (response) {
+                    settings['rows'] = response.filas;
+                    settings['cols'] = response.columnas;
+                    obtenerReservas();
+                    if (response.filas > 0 && response.columnas > 0) {
+                        $('#taquillas').show(1000);
+                    } else {
+                        $('#taquillas').hide(1000);
+                    }
+                },
+                error: function () {
+                    alert("errror");
+                }
+            });
+            
+        }
+       
+        var obtenerReservas = function () {
+            var parts = document.location.href.split("/");
+            var id = parts[parts.length - 1];
+            var sector_id = $('#id_sector').val();
+            var data = { id: id,sector:sector_id };
+            $.ajax({
+                url: '/Event/ObtenerReservasEvento',
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "JSON",
+                contentType: "application/json",
+                success: function (response) {
+                    console.log(response);
+                    init(response);
+                    $('.' + settings.seatCss).click(function () {
+                        if ($(this).hasClass(settings.selectedSeatCss)) {
+                            alert('This seat is already reserved');
+                        }
+                        else {
+                            $(this).toggleClass(settings.selectingSeatCss);
+                            var str = [], item;
+                            $.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
+                                item = $(this).attr('title');
+                                str.push(item);
+                            });
+                            console.log(str.join(','));
+                            $('#butaca').val(str.join(','));
+                            
+                        }
+                    });
+                    
+
+                },
+                error: function () {
+                    alert("errror");
+                }
+            });
+
+          
+           
+        }
+
+        var init = function (reservedSeat) {
+            //console.log(reservedSeat);
+            //reservedSeat = JSON.parse(reservedSeat);
+            console.log(reservedSeat);
+            var str = [], seatNo, className;
+            for (i = 0; i < settings.rows; i++) {
+                for (j = 0; j < settings.cols; j++) {
+                    seatNo = (i + j * settings.rows + 1);
+                    className = settings.seatCss + ' ' + settings.rowCssPrefix + i.toString() + ' ' + settings.colCssPrefix + j.toString();
+                    if ($.isArray(reservedSeat) && $.inArray(seatNo, reservedSeat) != -1) {
+                        className += ' ' + settings.selectedSeatCss;
+                    }
+                    str.push('<li class="' + className + '"' +
+                              'style="top:' + (i * settings.seatHeight).toString() + 'px;left:' + (j * settings.seatWidth).toString() + 'px">' +
+                              '<a title="' + seatNo + '">' + seatNo + '</a>' +
+                              '</li>');
+                }
+            }
+            $('#place').html(str.join(''));
+        };
+        //case I: Show from starting
+        //init();
+
+        //Case II: If already booked
+        //obtenerReservas();
+        //var bookedSeats = $('#asientos_reservados').val();
+        CargarDatosSector(idSectorElegido);
+        
+        $("#id_sector").change(function () {
+            idSectorElegido = $('#id_sector').val();
+            CargarDatosSector(idSectorElegido);
+        });
+
+        $('#btnShow').click(function () {
+            var str = [];
+            $.each($('#place li.' + settings.selectedSeatCss + ' a, #place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
+                str.push($(this).attr('title'));
+            });
+            alert(str.join(','));
+        })
+
+        $('#btnShowNew').click(function () {
+            var str = [], item;
+            $.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
+                item = $(this).attr('title');
+                str.push(item);
+            });
+            alert(str.join(','));
+        })
+    });
+
 </script>
 <div class="container">
     <div class="row">
+        <input type="hidden" id="asientos_reservados" value="" />
         <h2>Informacion del evento</h2>
         <div class="col-md-12"><img src="@ViewBag.img_url" /></div>
         <div class="col-md-6">Nombre</div><div class="col-md-6">@ViewBag.nombre_evento</div>
@@ -29,7 +166,7 @@
         <div class="col-md-9">
             @{foreach (var item in ViewBag.sectores)
             {
-                <div class="col-md-4">@item.descripcion</div><div class="col-md-4">Precio:@item.precio_unitario Bs.</div><div class="col-md-4">Disponibilidad: @item.precio_unitario</div>
+                <div class="col-md-4">@item.descripcion</div><div class="col-md-4">Precio:@item.precio_unitario Bs.</div><div class="col-md-4">Disponibilidad: @item.asientos_disponibles</div>
             }
             }
         </div>
@@ -41,43 +178,61 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
         <div class="row">
-            <fieldset>
-                <br />
-                <br />
-                <h2>Comprar Ticket</h2>
+            <div class="col-xs-6">
+                <fieldset>
+                    <br />
+                    <br />
+                    <h2>Comprar Ticket</h2>
 
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.id_evento, "Eventos")
-                </div>
-                <div class="editor-field">
-                    @Html.DropDownList("id_evento")
-                    @Html.ValidationMessageFor(model => model.id_evento)
-                </div>
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.id_evento, "Eventos")
+                    </div>
+                    <div class="editor-field">
+                        @Html.DropDownList("id_evento")
+                        @Html.ValidationMessageFor(model => model.id_evento)
+                    </div>
 
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.id_sector, "sectores")
-                </div>
-                <div class="editor-field">
-                    @Html.DropDownList("id_sector")
-                    @Html.ValidationMessageFor(model => model.id_sector)
-                </div>
-                <p>
-                    <input type="submit" value="Comprar Ticket" />
-                </p>
-            </fieldset>
-            <button type="button" class="btn btn-default" aria-label="Left Align" id="print_voucher" onclick="printDiv('imprimir_voucher')">
-                <span class=" glyphicon glyphicon-print" aria-hidden="true">
-                </span>
-            </button>
-            <div class="row" id="imprimir_voucher">
-                <div class="col-md-10">Imprima este voucher</div><div class="col-md-2">
-
-                </div>
-                <div class="col-md-6">Codigo de Recaudacion:</div><div class="col-md-6">@ViewBag.codigo_recaudacion</div>
-                <div class="col-md-6">Monto a Pagar:</div><div class="col-md-6">@ViewBag.monto_pagar</div>
-                <div class="col-md-12">Este voucher le ayudara a efectuar el cobro en su punto de pago mas cercano</div>
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.id_sector, "sectores")
+                    </div>
+                    <div class="editor-field">
+                        @Html.DropDownList("id_sector")
+                        @Html.ValidationMessageFor(model => model.id_sector)
+                    </div>
+                    @Html.HiddenFor(model => model.butaca);
+                    <p>
+                        <input type="submit" value="Comprar Ticket" />
+                    </p>
+                </fieldset>
             </div>
-            <div class="alert alert-danger" role="alert">@ViewBag.message</div>
+            <div class="col-xs-6" id="taquillas" hidden="hidden">
+                <h2> Elija los asientos haciendo clic en uno de ellos:</h2>
+                <div id="holder">
+                    <ul id="place"></ul>
+                </div>
+                <div style="float:left;">
+                    <ul id="seatDescription">
+                        <li style="background:url('../../Images/available_seat_img.gif') no-repeat scroll 0 0 transparent;">Asiento Disponible</li>
+                        <li style="background:url('../../Images/booked_seat_img.gif') no-repeat scroll 0 0 transparent;">Asiento Reservado</li>
+                        <li style="background:url('../../Images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Asiento Seleccionado</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <button type="button" class="btn btn-default" aria-label="Left Align" id="print_voucher" onclick="printDiv('imprimir_voucher')">
+                    <span class=" glyphicon glyphicon-print" aria-hidden="true">
+                    </span>
+                </button>
+                <div class="row" id="imprimir_voucher">
+                    <div class="col-md-10">Imprima este voucher</div><div class="col-md-2">
+
+                    </div>
+                    <div class="col-md-6">Codigo de Recaudacion:</div><div class="col-md-6">@ViewBag.codigo_recaudacion</div>
+                    <div class="col-md-6">Monto a Pagar:</div><div class="col-md-6">@ViewBag.monto_pagar</div>
+                    <div class="col-md-12">Este voucher le ayudara a efectuar el cobro en su punto de pago mas cercano</div>
+                </div>
+                <div class="alert alert-danger" role="alert">@ViewBag.message</div>
+            </div>
         </div>
 
     }

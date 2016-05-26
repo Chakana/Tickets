@@ -123,9 +123,12 @@ namespace TNT.Controllers
                 string path = System.IO.Path.Combine(Server.MapPath("~/Reports"), "factura.rdlc");
                 Empresas empresa = tickets.First().Eventos.Empresas;
                 string fechaEmision =DateTime.Now.AddMonths(3).ToString("dd/MM/yyyy");
-                string codigoControl = helpers.Helpers.Obtener_codigo_control(empresa.dosificacion_codigo_autorizacion,compra.id.ToString(),tickets.First().nit_usuario,DateTime.Now.ToString("yyyyMMdd"),compra.monto_parcial.ToString(),empresa.dosificacion_llave);
-                string qrCodigo = "http://qrickit.com/api/qr?d=" + "camilo";
+                string codigoControl = helpers.Helpers.Obtener_codigo_control(empresa.dosificacion_codigo_autorizacion,compra.id.ToString(),tickets.First().nit_usuario.Trim(),DateTime.Now.ToString("yyyyMMdd"),compra.monto_parcial.ToString(),empresa.dosificacion_llave);
+                string codigoQR = empresa.nit + "|" + compra.id.ToString() + "|" + empresa.dosificacion_codigo_autorizacion + "|" + DateTime.Now.ToString("dd/MM/yyyy",System.Globalization.CultureInfo.InvariantCulture) + "|" + compra.monto_parcial.ToString() + "|" + compra.monto_parcial.ToString() + "|" + codigoControl + "|" + tickets.First().nit_usuario + "|" + "0|0|0|0";
+                string qrCodigo = "http://qrickit.com/api/qr?d=" + codigoQR;
+
                 lr.ReportPath = path;
+                lr.EnableExternalImages = true;
                 System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
                 lr.SetParameters(new ReportParameter("ParamEmpresaNombre",empresa.nombre_empresa));
                 lr.SetParameters(new ReportParameter("ParamDireccion", empresa.direccion ));

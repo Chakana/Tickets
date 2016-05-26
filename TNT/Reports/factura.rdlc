@@ -8,10 +8,10 @@
             <Source>External</Source>
             <Value>=Parameters!ParamURLQR.Value</Value>
             <Sizing>Fit</Sizing>
-            <Top>13.85493cm</Top>
-            <Left>13.85978cm</Left>
-            <Height>1.9287cm</Height>
-            <Width>1.93583cm</Width>
+            <Top>15.96002cm</Top>
+            <Left>6.87915cm</Left>
+            <Height>3.00781cm</Height>
+            <Width>3.80862cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -66,7 +66,7 @@
             <Top>5.4547in</Top>
             <Left>0.09843in</Left>
             <Height>0.75933in</Height>
-            <Width>3.9375in</Width>
+            <Width>6.55782in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -107,8 +107,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox24</rd:DefaultName>
-            <Top>6.45014in</Top>
-            <Left>0.00125in</Left>
+            <Top>7.5371in</Top>
+            <Left>0.09843in</Left>
             <Height>0.35417in</Height>
             <Width>6.21875in</Width>
             <ZIndex>2</ZIndex>
@@ -126,10 +126,9 @@
             <Source>Embedded</Source>
             <Value>logo_yg</Value>
             <Sizing>Fit</Sizing>
-            <Top>0.10639in</Top>
             <Left>2.70833in</Left>
-            <Height>0.8125in</Height>
-            <Width>0.875in</Width>
+            <Height>0.91889in</Height>
+            <Width>1.10145in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -140,7 +139,7 @@
           <Line Name="Line1">
             <Top>0.94667in</Top>
             <Height>0in</Height>
-            <Width>6.38542in</Width>
+            <Width>6.83364in</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -148,12 +147,272 @@
               </Border>
             </Style>
           </Line>
+          <Textbox Name="Textbox3">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>NIT</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox3</rd:DefaultName>
+            <Top>1.08556in</Top>
+            <Left>4.28125in</Left>
+            <Height>0.25in</Height>
+            <Width>0.35417in</Width>
+            <ZIndex>5</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox5">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Nº FACTURA</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox5</rd:DefaultName>
+            <Top>1.33556in</Top>
+            <Left>4.28125in</Left>
+            <Height>0.25in</Height>
+            <Width>1in</Width>
+            <ZIndex>6</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox6">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Nº AUTORIZACION</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox5</rd:DefaultName>
+            <Top>1.58556in</Top>
+            <Left>4.28125in</Left>
+            <Height>0.25in</Height>
+            <Width>1.28125in</Width>
+            <ZIndex>7</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="ParamNumeroAutorizacion">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!ParamNumeroAutorizacion.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>ParamNumeroAutorizacion</rd:DefaultName>
+            <Top>1.58556in</Top>
+            <Left>5.65625in</Left>
+            <Height>0.25in</Height>
+            <Width>1in</Width>
+            <ZIndex>8</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="ParamNroFactura">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!ParamNroFactura.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>ParamNroFactura</rd:DefaultName>
+            <Top>1.34945in</Top>
+            <Left>5.65625in</Left>
+            <Height>0.25in</Height>
+            <Width>1in</Width>
+            <ZIndex>9</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="ParamNitEmpresa">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!ParamNitEmpresa.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>ParamNitEmpresa</rd:DefaultName>
+            <Top>1.08556in</Top>
+            <Left>5.65625in</Left>
+            <Height>0.25in</Height>
+            <Width>1in</Width>
+            <ZIndex>10</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox10">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>ORIGINAL</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox10</rd:DefaultName>
+            <Top>1.86334in</Top>
+            <Left>5.23958in</Left>
+            <Height>0.25in</Height>
+            <Width>0.76042in</Width>
+            <ZIndex>11</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="ParamRubroEmpresa">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!ParamRubroEmpresa.Value</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>ParamRubroEmpresa</rd:DefaultName>
+            <Top>2.11334in</Top>
+            <Left>4.28125in</Left>
+            <Height>0.25in</Height>
+            <Width>2.375in</Width>
+            <ZIndex>12</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>0.14583in</Top>
         <Left>0.86209in</Left>
-        <Height>6.80431in</Height>
-        <Width>6.39583in</Width>
+        <Height>7.89126in</Height>
+        <Width>6.83364in</Width>
         <Style>
           <Border>
             <Style>Solid</Style>
@@ -321,266 +580,6 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Textbox Name="Textbox3">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>NIT</Value>
-                <Style>
-                  <FontSize>8pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Top>1.23139in</Top>
-        <Left>4.70583in</Left>
-        <Height>0.25in</Height>
-        <Width>0.35417in</Width>
-        <ZIndex>6</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox5">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Nº FACTURA</Value>
-                <Style>
-                  <FontSize>8pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>1.48139in</Top>
-        <Left>4.70583in</Left>
-        <Height>0.25in</Height>
-        <Width>1in</Width>
-        <ZIndex>7</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox6">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Nº AUTORIZACION</Value>
-                <Style>
-                  <FontSize>8pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>1.73139in</Top>
-        <Left>4.70583in</Left>
-        <Height>0.25in</Height>
-        <Width>1.28125in</Width>
-        <ZIndex>8</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="ParamNitEmpresa">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!ParamNitEmpresa.Value</Value>
-                <Style>
-                  <FontSize>8pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>ParamNitEmpresa</rd:DefaultName>
-        <Top>1.23139in</Top>
-        <Left>6.08083in</Left>
-        <Height>0.25in</Height>
-        <Width>1in</Width>
-        <ZIndex>9</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="ParamNroFactura">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!ParamNroFactura.Value</Value>
-                <Style>
-                  <FontSize>8pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>ParamNroFactura</rd:DefaultName>
-        <Top>1.49528in</Top>
-        <Left>6.08083in</Left>
-        <Height>0.25in</Height>
-        <Width>1in</Width>
-        <ZIndex>10</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="ParamNumeroAutorizacion">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!ParamNumeroAutorizacion.Value</Value>
-                <Style>
-                  <FontSize>8pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>ParamNumeroAutorizacion</rd:DefaultName>
-        <Top>1.73139in</Top>
-        <Left>6.08083in</Left>
-        <Height>0.25in</Height>
-        <Width>1in</Width>
-        <ZIndex>11</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox10">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>ORIGINAL</Value>
-                <Style>
-                  <FontSize>8pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox10</rd:DefaultName>
-        <Top>2.00917in</Top>
-        <Left>5.66417in</Left>
-        <Height>0.25in</Height>
-        <Width>0.76042in</Width>
-        <ZIndex>12</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="ParamRubroEmpresa">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!ParamRubroEmpresa.Value</Value>
-                <Style>
-                  <FontSize>8pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>ParamRubroEmpresa</rd:DefaultName>
-        <Top>2.25917in</Top>
-        <Left>4.70583in</Left>
-        <Height>0.25in</Height>
-        <Width>2.375in</Width>
-        <ZIndex>13</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Textbox Name="Textbox12">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -603,8 +602,8 @@
         <Top>2.7175in</Top>
         <Left>0.86209in</Left>
         <Height>0.25in</Height>
-        <Width>6.21875in</Width>
-        <ZIndex>14</ZIndex>
+        <Width>6.65625in</Width>
+        <ZIndex>6</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -641,7 +640,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox13</rd:DefaultName>
             <Height>0.25in</Height>
-            <Width>5.94792in</Width>
+            <Width>6.65625in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -705,7 +704,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox15</rd:DefaultName>
             <Top>0.26389in</Top>
-            <Left>3.42708in</Left>
+            <Left>4.13541in</Left>
             <Height>0.25in</Height>
             <Width>2.52083in</Width>
             <ZIndex>2</ZIndex>
@@ -724,11 +723,11 @@
         <Top>3.06125in</Top>
         <Left>0.86209in</Left>
         <Height>0.58333in</Height>
-        <Width>6.22in</Width>
-        <ZIndex>15</ZIndex>
+        <Width>6.65625in</Width>
+        <ZIndex>7</ZIndex>
         <Style>
           <Border>
-            <Style>None</Style>
+            <Style>Solid</Style>
           </Border>
         </Style>
       </Rectangle>
@@ -755,7 +754,7 @@
             <rd:DefaultName>Textbox16</rd:DefaultName>
             <Left>0in</Left>
             <Height>0.25in</Height>
-            <Width>5.94792in</Width>
+            <Width>6.65625in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -770,7 +769,7 @@
             <Top>0.25in</Top>
             <Left>0in</Left>
             <Height>0in</Height>
-            <Width>6.22in</Width>
+            <Width>6.65625in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -861,8 +860,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox19</rd:DefaultName>
-            <Top>0.31944in</Top>
-            <Left>3.42708in</Left>
+            <Top>0.27778in</Top>
+            <Left>4.13541in</Left>
             <Height>0.25in</Height>
             <Width>2.52083in</Width>
             <ZIndex>4</ZIndex>
@@ -892,7 +891,7 @@
             </Paragraphs>
             <rd:DefaultName>ParamMonto</rd:DefaultName>
             <Top>0.67361in</Top>
-            <Left>4.94792in</Left>
+            <Left>5.65625in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
             <ZIndex>5</ZIndex>
@@ -956,7 +955,7 @@
             </Paragraphs>
             <rd:DefaultName>ParamMonto</rd:DefaultName>
             <Top>1.25694in</Top>
-            <Left>4.94792in</Left>
+            <Left>5.65625in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
             <ZIndex>7</ZIndex>
@@ -975,8 +974,8 @@
         <Top>3.70014in</Top>
         <Left>0.86209in</Left>
         <Height>1.62847in</Height>
-        <Width>6.22in</Width>
-        <ZIndex>16</ZIndex>
+        <Width>6.65625in</Width>
+        <ZIndex>8</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -984,10 +983,10 @@
         </Style>
       </Rectangle>
     </ReportItems>
-    <Height>18.55065cm</Height>
+    <Height>21.50325cm</Height>
     <Style />
   </Body>
-  <Width>19.65854cm</Width>
+  <Width>20.34876cm</Width>
   <Page>
     <PageHeight>27.94cm</PageHeight>
     <PageWidth>21.59cm</PageWidth>

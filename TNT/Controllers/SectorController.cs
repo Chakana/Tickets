@@ -120,7 +120,12 @@ namespace TNT.Controllers
             ViewBag.id_evento = new SelectList(db.Eventos, "id", "nombre_evento", sectores.id_evento);
             return View(sectores);
         }
+        public JsonResult ObtenerDatosSector(int id)
+        {
+            sectores sector = db.sectores.Find(id);
 
+            return new JsonResult { Data = new { filas = sector.filas,columnas=sector.columnas } };
+        }
         //
         // GET: /Sector/Edit/5
 

@@ -49,6 +49,7 @@
                     id_tipo_evento: $('#id_tipo_evento').val().trim(),
                     img_url: $('#img_url').val().trim(),
                     nombre_evento: $('#nombre_evento').val().trim(),
+                    descripcion_factura: $('#descripcion_factura').val().trim(),
                     sectores: sectoresItems
                 }
 
@@ -98,14 +99,14 @@
                     descripcion: $('#descripcionSector').val().trim(),
                     precio_unitario: parseInt($('#precio_unitario').val().trim()),
                     asientos_disponibles: $('#asientos_disponibles').val().trim(),
+                    filas: $('#filas').val().trim(),
+                    columnas: $('#columnas').val().trim()
                 });
 
                 //Clear fields
                 $('#descripcionSector').val('').focus();
                 $('#descripcionSector,#precio_unitario,#asientos_disponibles').val('');
-
             }
-
             //populate order items
             console.log(sectoresItems);
             GeneratedItemsTable();
@@ -114,13 +115,15 @@
         function GeneratedItemsTable() {
             if (sectoresItems.length > 0) {
                 var $table = $('<table class="table table-hover"/>');
-                $table.append('<thead><tr><th>Descripcion</th><th>Precio Unitario</th><th>Asientos Disponibles</th></tr></thead>');
+                $table.append('<thead><tr><th>Descripcion</th><th>Precio Unitario</th><th>Asientos Disponibles</th><th>Filas</th><th>Columnas</th></tr></thead>');
                 var $tbody = $('<tbody/>');
                 $.each(sectoresItems, function (i, val) {
                     var $row = $('<tr/>');
                     $row.append($('<td/>').html(val.descripcion));
                     $row.append($('<td/>').html(val.precio_unitario));
                     $row.append($('<td/>').html(val.asientos_disponibles));
+                    $row.append($('<td/>').html(val.filas));
+                    $row.append($('<td/>').html(val.columnas));
                     $tbody.append($row);
                 });
                 $table.append($tbody);
@@ -204,6 +207,13 @@
             @Html.TextAreaFor(model => model.descripcion)
             @Html.ValidationMessageFor(model => model.descripcion)
         </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion_factura)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.descripcion_factura)
+            @Html.ValidationMessageFor(model => model.descripcion_factura)
+        </div>
         <p>
             <button id="submit" type="submit" class="btn btn-primary">Grabar Evento</button>
 
@@ -218,7 +228,9 @@
                 <td>Descripcion</td>
                 <td>Precio Unitario</td>
                 <td>Asientos Disponibles</td>
-                <td></td>
+                <td>Taquillas Numeradas</td>
+                <td>Filas</td>
+                <td>Columnas</td>
             </tr>
             <tr>
                 <td>
@@ -229,6 +241,15 @@
                 </td>
                 <td>
                     <input type="text" name="" class="form-control" id="asientos_disponibles" value="">
+                </td>
+                <td>
+                    <input type="checkbox" name="" class="form-control" id="es_sector_numerado" value="0"> 
+                </td>
+                <td>
+                    <input type="number" name="" class="form-control" id="filas" value="">
+                </td>
+                <td>
+                    <input type="number" name="" class="form-control" id="columnas" value="">
                 </td>
                 <td><input type="button" class="btn btn-primary" id="add" value="Añadir" /></td>
             </tr>

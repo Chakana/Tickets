@@ -229,4 +229,12 @@ namespace TNT.Controllers
     {
         public string message { get; set; }
     }
+    public class request_enviar_factura_ticket_correo
+    {
+        public string codigo_recaudacion { get; set; }
+    }
+    public class response_enviar_factura_ticket_correo
+    {
+        public bool resultado { get; set; }
+    }
 }

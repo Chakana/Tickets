@@ -84,6 +84,13 @@ namespace TNT.Controllers
             ViewBag.id_tipo_evento = new SelectList(db.Tipos_evento, "id", "descripcion");
             return View();
         }
+        public JsonResult ObtenerReservasEvento(int id,int sector)
+        {
+            Eventos evento = db.Eventos.Find(id);
+            List<int> resultado = evento.Ticket.Where(evt=>evt.id_sector==sector).Select(evT => Int32.Parse(evT.butaca)).ToList();
+           
+            return new JsonResult { Data = resultado };
+        }
         [Authorize(Roles = "admin")]
         public JsonResult HabilitarEvento(int id)
         {
@@ -115,8 +122,17 @@ namespace TNT.Controllers
                 NuevoEvento.id_tipo_evento = evento.id_tipo_evento;
                 NuevoEvento.img_url = evento.img_url;
                 NuevoEvento.nombre_evento = evento.nombre_evento;
-                db.Eventos.Add(NuevoEvento);
-                db.SaveChanges();
+                NuevoEvento.descripcion_factura = evento.descripcion_factura;
+                try
+                {
+                    db.Eventos.Add(NuevoEvento);
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+                
                 List<sectores> sectores = new List<Models.sectores>();
                 foreach (var sector in evento.sectores)
                 {
@@ -126,7 +142,10 @@ namespace TNT.Controllers
                         descripcion = sector.descripcion,
                         id_evento = NuevoEvento.id,
                         img_url = "",
-                        precio_unitario = sector.precio_unitario
+                        precio_unitario = sector.precio_unitario,
+                        filas = sector.filas,
+                        columnas = sector.columnas,
+                        es_sector_numerado = (sector.filas > 0 && sector.columnas > 0)
                     };
                     db.sectores.Add(nuevoSector);
                 }
