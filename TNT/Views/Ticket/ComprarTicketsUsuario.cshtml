@@ -21,7 +21,9 @@
     }
     //mostrar datos del sector elegido
     jQuery(window).load(function () {
+        
         var idSectorElegido = $('#id_sector').val();
+        setInterval(function () { CargarDatosSector(idSectorElegido); }, 60000);
         var settings = {
             rows: 10,
             cols: 10,

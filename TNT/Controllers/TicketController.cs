@@ -325,11 +325,40 @@ namespace TNT.Controllers
 
             }
         }
+        public bool AsientoDisponible(int id_sector, string butaca)
+        {
+            var tickets = db.Ticket.Where(tck => tck.id_sector == id_sector && tck.butaca == butaca);
+            if (tickets.Count() > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ComprarTicketsUsuario(Ticket ticket)
         {
+            var eventos = db.Eventos.Where(ev => ev.id == ticket.id_evento).Include(e => e.Empresas).Include(e => e.Lugares).Include(e => e.Tipos_evento);
+            eventos.Where(ev => ev.fecha_evento >= DateTime.Now);
+            ViewBag.id_evento = new SelectList(eventos, "id", "nombre_evento");
+            var sectores = db.sectores.Where(sec => sec.id_evento == ticket.id_evento);
+            ViewBag.sectores = sectores;
+            ViewBag.id_sector = new SelectList(sectores, "id", "descripcion");
+
             string[] butacas = ticket.butaca.Split(',');
+            var asientosOcupados = db.Ticket.Where(tick => tick.id_sector == ticket.id_sector);
+            foreach (var asiento in asientosOcupados)
+            {
+                if(butacas.Contains(asiento.butaca)){
+                    ViewBag.message = "Asientos ocupados,por favor elija otros.";
+                    return View(ticket);
+                }
+            }
+            
             if (butacas.Length > 1)
             {
                 CompraMultiplesTicketMismoSector(ticket);
@@ -338,12 +367,7 @@ namespace TNT.Controllers
             {
                 CompraIndividualTicket(ticket);
             }
-            var eventos = db.Eventos.Where(ev => ev.id == ticket.id_evento).Include(e => e.Empresas).Include(e => e.Lugares).Include(e => e.Tipos_evento);
-            eventos.Where(ev => ev.fecha_evento >= DateTime.Now);
-            ViewBag.id_evento = new SelectList(eventos, "id", "nombre_evento");
-            var sectores = db.sectores.Where(sec => sec.id_evento == ticket.id_evento);
-            ViewBag.sectores = sectores;
-            ViewBag.id_sector = new SelectList(sectores, "id", "descripcion");
+           
             return View(ticket);
         }
         public ActionResult Create()
