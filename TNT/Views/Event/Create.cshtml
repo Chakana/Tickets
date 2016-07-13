@@ -49,8 +49,14 @@
                     id_tipo_evento: $('#id_tipo_evento').val().trim(),
                     img_url: $('#img_url').val().trim(),
                     nombre_evento: $('#nombre_evento').val().trim(),
-                    descripcion_factura: $('#descripcion_factura').val().trim(),
-                    sectores: sectoresItems
+                    sectores: sectoresItems,
+                    nit_facturacion: $('#nit_facturacion').val().trim(),
+                    nombre_empresa_facturacion: $('#nombre_empresa_facturacion').val().trim(),
+                    numero_autorizacion_facturacion: $('#numero_autorizacion_facturacion').val().trim(),
+                    rubro_facturacion: $('#rubro_facturacion').val().trim(),
+                    telefono_facturacion: $('#telefono_facturacion').val().trim(),
+                    departamento_facturacion: $('#departamento_facturacion').val().trim(),
+                    direccion_facturacion: $('#direccion_facturacion').val().trim()
                 }
 
 
@@ -207,13 +213,57 @@
             @Html.TextAreaFor(model => model.descripcion)
             @Html.ValidationMessageFor(model => model.descripcion)
         </div>
+        <span>Solo rellene los siguientes datos si el evento va tener su propia facturacion, caso contrario dejelos en blanco, se tomara automaticamente los datos de la empresa credora del evento</span>
         <div class="editor-label">
-            @Html.LabelFor(model => model.descripcion_factura)
+            @Html.LabelFor(model => model.nit_facturacion)
         </div>
         <div class="editor-field">
-            @Html.TextAreaFor(model => model.descripcion_factura)
-            @Html.ValidationMessageFor(model => model.descripcion_factura)
+            @Html.TextAreaFor(model => model.nit_facturacion)
+            @Html.ValidationMessageFor(model => model.nit_facturacion)
         </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre_empresa_facturacion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.nombre_empresa_facturacion)
+            @Html.ValidationMessageFor(model => model.nombre_empresa_facturacion)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.numero_autorizacion_facturacion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.numero_autorizacion_facturacion)
+            @Html.ValidationMessageFor(model => model.numero_autorizacion_facturacion)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.rubro_facturacion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.rubro_facturacion)
+            @Html.ValidationMessageFor(model => model.rubro_facturacion)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.telefono_facturacion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.telefono_facturacion)
+            @Html.ValidationMessageFor(model => model.telefono_facturacion)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.departamento_facturacion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.departamento_facturacion)
+            @Html.ValidationMessageFor(model => model.departamento_facturacion)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.direccion_facturacion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.direccion_facturacion)
+            @Html.ValidationMessageFor(model => model.direccion_facturacion)
+        </div>
+
         <p>
             <button id="submit" type="submit" class="btn btn-primary">Grabar Evento</button>
 

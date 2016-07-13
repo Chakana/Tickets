@@ -39,6 +39,8 @@ namespace TNT.Controllers
                     {
                         //obtenemos su id
                         Usuarios usuario = entities.Usuarios.FirstOrDefault(user => user.email == username);
+                        Personas persona = entities.Personas.FirstOrDefault(per => per.id_usuario == usuario.id);
+                        Session.Add("persona_id", persona.id);
                         Session.Add("id", usuario.id);
                         FormsAuthentication.SetAuthCookie(username, false);
                       
@@ -92,7 +94,7 @@ namespace TNT.Controllers
                     persona.numero_celular=model.numero_celular;
                     persona.fecha_modificacion = DateTime.Now;
                     persona.fecha_registro = DateTime.Now;
-                    persona.fecha_nacimiento = null;                    
+                    //persona.fecha_nacimiento = DateTime.Now;                     
                     db.Personas.Add(persona);
                     db.SaveChanges();
                     return RedirectToAction("Index", "Home");
@@ -158,6 +160,55 @@ namespace TNT.Controllers
             // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
             return View(model);
         }
+        public ActionResult ReiniciarPassword()
+        {
+            return View();
+        }
+         [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReiniciarPassword(ReinicioPassword model)
+        {
+             //generar token 
+             string token = helpers.Helpers.Generar_token(32, new Random());
+             //guardar token con el email enviado
+             Usuarios usuario = db.Usuarios.Where(us=>us.email == model.email).First();
+             if(usuario!=null){
+                 usuario.reiniciar_contraseña = true;
+                 usuario.token_reinicio = token;
+                 db.Entry(usuario).State = System.Data.EntityState.Modified;
+                 db.SaveChanges();
+                 UrlHelper u = new UrlHelper(this.ControllerContext.RequestContext);
+                 string url = u.Action("RecuperarPassword", "Account", new{token=token},Request.Url.Scheme);
+                 string contenido_email = String.Format("Por favor ingrese al siguiente link para reiniciar su contraseña en TNT.:<a href=\"{0}\">{0}</a>",url);
+                 helpers.Helpers.EnviarMail("admin@tnt.com", "administrador", model.email, model.email, "reinicio de password", contenido_email, null);
+             }
+             ModelState.AddModelError("email", "correo enviado a:" + model.email);
+            return View(model);
+        }
+         public ActionResult RecuperarPassword(string token)
+         {
+             ViewBag.token = token;
+             return View();
+         }
+         [HttpPost]
+         [AllowAnonymous]
+         [ValidateAntiForgeryToken]
+         public ActionResult RecuperarPassword(string token,NuevoPassword model)
+         {
 
+             Usuarios usuario = db.Usuarios.FirstOrDefault(us => us.token_reinicio == model.token);
+             if (usuario != null)
+             {
+                 usuario.reiniciar_contraseña = false;
+                 usuario.token_reinicio = "";
+                 usuario.password = model.password;
+                 db.Entry(usuario).State = System.Data.EntityState.Modified;
+                 db.SaveChanges();
+                 return RedirectToAction("Login", "Account");
+             }
+             ModelState.AddModelError("password", "error al reiniciar password, por favor intente de nuevo");
+             return View(model);
+         }
     }
 }

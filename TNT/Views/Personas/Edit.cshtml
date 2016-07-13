@@ -40,13 +40,7 @@
             @Html.ValidationMessageFor(model => model.cedula_identidad)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.fecha_nacimiento)
-        </div>
-        <div class="editor-field">
-            @Html.TextBoxFor(model => model.fecha_nacimiento, Model.fecha_nacimiento.Value.ToString("yyyy-MM-dd"), new { type = "date" })
-            @Html.ValidationMessageFor(model => model.fecha_nacimiento)
-        </div>
+       
 
         <div class="editor-label">
             @Html.LabelFor(model => model.direccion)

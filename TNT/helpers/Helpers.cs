@@ -454,6 +454,16 @@ namespace TNT.helpers
             result = "321" + fecha + result;
             return result;
         }
+        public static string Generar_token(int length, Random random)
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var result = new string(
+                Enumerable.Repeat(chars, length)
+                          .Select(s => s[random.Next(s.Length)])
+                          .ToArray());
+            //result = CryptoClass.Encrypt(result, System.Configuration.ConfigurationManager.AppSettings["passphrase"]);
+            return result;
+        }
         public static string Generar_codigo_ticket(int length, Random random)
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -692,7 +702,7 @@ namespace TNT.helpers
             DatosPlanilla datosPlanilla = new DatosPlanilla();
             DPlanilla[] dPlanilla = new DPlanilla[1];
             RespPlanilla respPlanilla = new RespPlanilla();
-            DateTime now_date = new DateTime();
+            DateTime now_date = DateTime.Now;
 
             datosPlanilla.codigoCliente = "1";
             datosPlanilla.codigoEmpresa = 321;
@@ -706,7 +716,7 @@ namespace TNT.helpers
             datosPlanilla.horaVencimiento = 0;
             datosPlanilla.moneda = "BS";
             datosPlanilla.nombre = nombre_cliente;
-            datosPlanilla.nit_CI_cliente = nit_cliente;
+            datosPlanilla.nit_CI_cliente = nit_cliente.Trim();
             datosPlanilla.transaccion = "A";
 
             dPlanilla[0] = new DPlanilla();
@@ -715,7 +725,7 @@ namespace TNT.helpers
             dPlanilla[0].nombreFactura = nombre_empresa;
             dPlanilla[0].nitFactura = nit_empresa;
             dPlanilla[0].montoPago = montoTicket + comision;
-            dPlanilla[0].montoCreditoFiscal = comision;
+            dPlanilla[0].montoCreditoFiscal = 0;
 
             datosPlanilla.planillas = dPlanilla;
             try
@@ -729,13 +739,12 @@ namespace TNT.helpers
                 items[0].cantidad = 1;
                 items[0].descripcion = nombre_evento;
                 items[0].numeroItem = 1;
-                items[0].precioUnitario = montoTicket;
-
+                items[0].precioUnitario = montoTicket + comision;
                 items[1] = new DItem();
                 items[1].cantidad = 1;
-                items[1].descripcion = "Comision";
+                items[1].descripcion = "GLOSA PARA EL RECIBO, SE DEBE NOTIFICAR AL USUARIO QUE SE LE ENVIARA LA FACTURA AL E MAIL";
                 items[1].numeroItem = 2;
-                items[1].precioUnitario = comision;
+                items[1].precioUnitario = 0;
 
                 datosItem.idTransaccion = respPlanilla.idTransaccion;
                 datosItem.items = items;

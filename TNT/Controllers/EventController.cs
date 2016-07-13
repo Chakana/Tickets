@@ -41,6 +41,15 @@ namespace TNT.Controllers
             eventos = eventos.Where(ev => ev.fecha_evento >= DateTime.Now);
             return View(eventos.ToList());            
         }
+        public ActionResult VerTodosEventos()
+        {
+            if (User.IsInRole("admin"))
+            {
+                var eventos = db.Eventos.Include(e => e.Empresas).Include(e => e.Lugares).Include(e => e.Tipos_evento).OrderByDescending(ev=>ev.id);                
+                return View(eventos.ToList());
+            }
+            return View();
+        }
         public ActionResult PendientesHabilitacion()
         {
             if (User.IsInRole("admin"))
@@ -87,7 +96,17 @@ namespace TNT.Controllers
         public JsonResult ObtenerReservasEvento(int id,int sector)
         {
             Eventos evento = db.Eventos.Find(id);
-            List<int> resultado = evento.Ticket.Where(evt=>evt.id_sector==sector).Select(evT => Int32.Parse(evT.butaca)).ToList();
+            sectores info_sector = db.sectores.Find(sector);
+            List<int> resultado;
+            if (info_sector.es_sector_numerado == false)
+            {
+                resultado = new List<int>{0};
+            }
+            else
+            {
+                resultado = evento.Ticket.Where(evt => evt.id_sector == sector).Select(evT => Int32.Parse(evT.butaca)).ToList();
+            }
+             
            
             return new JsonResult { Data = resultado };
         }
@@ -106,7 +125,7 @@ namespace TNT.Controllers
         public JsonResult GrabarEventoSector(NuevoEvento evento)
         {
             bool status = false;
-            if (ModelState.IsValid)
+            //if (ModelState.IsValid)
             {
                 if (User.IsInRole("empresa"))
                 {
@@ -122,7 +141,13 @@ namespace TNT.Controllers
                 NuevoEvento.id_tipo_evento = evento.id_tipo_evento;
                 NuevoEvento.img_url = evento.img_url;
                 NuevoEvento.nombre_evento = evento.nombre_evento;
-                NuevoEvento.descripcion_factura = evento.descripcion_factura;
+                NuevoEvento.departamento_facturacion = evento.departamento_facturacion;
+                NuevoEvento.direccion_facturacion = evento.direccion_facturacion;
+                NuevoEvento.nit_facturacion = evento.nit_facturacion;
+                NuevoEvento.nombre_empresa_facturacion = evento.nombre_empresa_facturacion;
+                NuevoEvento.numero_autorizacion_facturacion = evento.numero_autorizacion_facturacion;
+                NuevoEvento.rubro_facturacion = evento.rubro_facturacion;
+                NuevoEvento.telefono_facturacion = evento.telefono_facturacion;
                 try
                 {
                     db.Eventos.Add(NuevoEvento);
@@ -247,6 +272,19 @@ namespace TNT.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Eventos eventos = db.Eventos.Find(id);
+            //si hay tickets no se puede borrar
+            if (eventos.Ticket.Count > 0)
+            {
+                return RedirectToAction("Index");    
+            }
+            //borrar sectores
+            var sectores_list = db.sectores.Where(ev => ev.id_evento == id);
+            foreach (sectores sector in sectores_list)
+            {
+                db.sectores.Remove(sector);
+                
+            }
+            db.SaveChanges();
             db.Eventos.Remove(eventos);
             db.SaveChanges();
             return RedirectToAction("Index");

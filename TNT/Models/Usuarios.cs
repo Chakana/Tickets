@@ -27,6 +27,8 @@ namespace TNT.Models
         public string email { get; set; }
         public string password { get; set; }
         public string rol { get; set; }
+        public bool reiniciar_contraseña { get; set; }
+        public string token_reinicio { get; set; }
     
         public virtual ICollection<Compra> Compra { get; set; }
         public virtual ICollection<Empresas> Empresas { get; set; }

@@ -80,7 +80,13 @@
           <Property Name="habilitado" Type="bit" Nullable="false" />
           <Property Name="fecha_evento" Type="date" Nullable="false" />
           <Property Name="hora_evento" Type="time" Precision="7" Nullable="false" />
-          <Property Name="descripcion_factura" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="nit_facturacion" Type="varchar" MaxLength="50" />
+          <Property Name="nombre_empresa_facturacion" Type="varchar" MaxLength="150" />
+          <Property Name="numero_autorizacion_facturacion" Type="varchar" MaxLength="50" />
+          <Property Name="direccion_facturacion" Type="varchar" MaxLength="250" />
+          <Property Name="telefono_facturacion" Type="varchar" MaxLength="50" />
+          <Property Name="departamento_facturacion" Type="varchar" MaxLength="50" />
+          <Property Name="rubro_facturacion" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="imei_validos">
           <Key>
@@ -107,7 +113,6 @@
           <Property Name="nombre" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="apellidos" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="cedula_identidad" Type="nchar" MaxLength="30" Nullable="false" />
-          <Property Name="fecha_nacimiento" Type="date" />
           <Property Name="direccion" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="fecha_registro" Type="datetime" Nullable="false" />
           <Property Name="fecha_modificacion" Type="datetime" Nullable="false" />
@@ -136,8 +141,8 @@
           <Property Name="asientos_disponibles" Type="int" Nullable="false" />
           <Property Name="img_url" Type="varchar" MaxLength="500" />
           <Property Name="es_sector_numerado" Type="bit" Nullable="false" />
-          <Property Name="filas" Type="int" Nullable="false" />
-          <Property Name="columnas" Type="int" Nullable="false" />
+          <Property Name="filas" Type="int" />
+          <Property Name="columnas" Type="int" />
         </EntityType>
         <EntityType Name="Suscripcion">
           <Key>
@@ -192,6 +197,8 @@
           <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="rol" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="reiniciar_contraseña" Type="bit" Nullable="false" />
+          <Property Name="token_reinicio" Type="varchar" MaxLength="250" />
         </EntityType>
         <Association Name="FK_comisiones_comisiones">
           <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
@@ -493,7 +500,13 @@
           <Property Name="descripcion" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
           <Property Name="habilitado" Type="Boolean" Nullable="false" />
           <Property Name="hora_evento" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="descripcion_factura" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="nit_facturacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nombre_empresa_facturacion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="numero_autorizacion_facturacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="direccion_facturacion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="telefono_facturacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="departamento_facturacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="rubro_facturacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Lugares">
           <Key>
@@ -515,7 +528,6 @@
           <Property Name="nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="apellidos" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="cedula_identidad" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="fecha_nacimiento" Type="DateTime" Precision="0" />
           <Property Name="direccion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="fecha_modificacion" Type="DateTime" Nullable="false" Precision="3" />
@@ -537,8 +549,8 @@
           <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_sectores" FromRole="sectores" ToRole="Ticket" />
           <Property Name="img_url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="es_sector_numerado" Type="Boolean" Nullable="false" />
-          <Property Name="filas" Type="Int32" Nullable="false" />
-          <Property Name="columnas" Type="Int32" Nullable="false" />
+          <Property Name="filas" Type="Int32" />
+          <Property Name="columnas" Type="Int32" />
         </EntityType>
         <EntityType Name="Suscripcion">
           <Key>
@@ -605,6 +617,8 @@
           <NavigationProperty Name="Personas" Relationship="Self.FK_Personas_Usuarios" FromRole="Usuarios" ToRole="Personas" />
           <NavigationProperty Name="token_usuario" Relationship="Self.FK_token_usuario_Usuarios" FromRole="Usuarios" ToRole="token_usuario" />
           <NavigationProperty Name="comisiones" Relationship="TNTModel.FK_comisiones_comisiones" FromRole="Usuarios" ToRole="comisiones" />
+          <Property Name="reiniciar_contraseña" Type="Boolean" Nullable="false" />
+          <Property Name="token_reinicio" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Compra_Usuarios">
           <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
@@ -643,8 +657,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Eventos_Lugares">
-          <End Role="Lugares" Type="Self.Lugares" Multiplicity="1" />
-          <End Role="Eventos" Type="Self.Eventos" Multiplicity="*" />
+          <End Role="Lugares" Type="Self.Lugares" Multiplicity="1" ></End>
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="*" ></End>
           <ReferentialConstraint>
             <Principal Role="Lugares">
               <PropertyRef Name="id" />
@@ -667,8 +681,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_sectores_Eventos">
-          <End Role="Eventos" Type="Self.Eventos" Multiplicity="1" />
-          <End Role="sectores" Type="Self.sectores" Multiplicity="*" />
+          <End Role="Eventos" Type="Self.Eventos" Multiplicity="1" ></End>
+          <End Role="sectores" Type="Self.sectores" Multiplicity="*" ></End>
           <ReferentialConstraint>
             <Principal Role="Eventos">
               <PropertyRef Name="id" />
@@ -715,8 +729,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_sectores">
-          <End Role="sectores" Type="Self.sectores" Multiplicity="0..1" />
-          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <End Role="sectores" Type="Self.sectores" Multiplicity="0..1" ></End>
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" ></End>
           <ReferentialConstraint>
             <Principal Role="sectores">
               <PropertyRef Name="id" />
@@ -938,7 +952,13 @@
           <EntitySetMapping Name="Eventos">
             <EntityTypeMapping TypeName="TNTModel.Eventos">
               <MappingFragment StoreEntitySet="Eventos">
-                <ScalarProperty Name="descripcion_factura" ColumnName="descripcion_factura" />
+                <ScalarProperty Name="rubro_facturacion" ColumnName="rubro_facturacion" />
+                <ScalarProperty Name="departamento_facturacion" ColumnName="departamento_facturacion" />
+                <ScalarProperty Name="telefono_facturacion" ColumnName="telefono_facturacion" />
+                <ScalarProperty Name="direccion_facturacion" ColumnName="direccion_facturacion" />
+                <ScalarProperty Name="numero_autorizacion_facturacion" ColumnName="numero_autorizacion_facturacion" />
+                <ScalarProperty Name="nombre_empresa_facturacion" ColumnName="nombre_empresa_facturacion" />
+                <ScalarProperty Name="nit_facturacion" ColumnName="nit_facturacion" />
                 <ScalarProperty Name="hora_evento" ColumnName="hora_evento" />
                 <ScalarProperty Name="habilitado" ColumnName="habilitado" />
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />
@@ -971,7 +991,6 @@
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="apellidos" ColumnName="apellidos" />
                 <ScalarProperty Name="cedula_identidad" ColumnName="cedula_identidad" />
-                <ScalarProperty Name="fecha_nacimiento" ColumnName="fecha_nacimiento" />
                 <ScalarProperty Name="direccion" ColumnName="direccion" />
                 <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
                 <ScalarProperty Name="fecha_modificacion" ColumnName="fecha_modificacion" />
@@ -1047,6 +1066,8 @@
           <EntitySetMapping Name="Usuarios">
             <EntityTypeMapping TypeName="TNTModel.Usuarios">
               <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="token_reinicio" ColumnName="token_reinicio" />
+                <ScalarProperty Name="reiniciar_contraseña" ColumnName="reiniciar_contraseña" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="password" ColumnName="password" />

@@ -44,17 +44,19 @@
                 dataType: "JSON",
                 contentType: "application/json",
                 success: function (response) {
-                    settings['rows'] = response.filas;
-                    settings['cols'] = response.columnas;
-                    obtenerReservas();
                     if (response.filas > 0 && response.columnas > 0) {
-                        $('#taquillas').show(1000);
-                    } else {
-                        $('#taquillas').hide(1000);
-                    }
+                        settings['rows'] = response.filas;
+                        settings['cols'] = response.columnas;
+                        obtenerReservas();
+                            $('#taquillas').show(1000);
+                        
+                    }else{
+                            $('#taquillas').hide(1000);
+                        }
+                    
                 },
                 error: function () {
-                    alert("errror");
+                    
                 }
             });
             
@@ -94,7 +96,7 @@
 
                 },
                 error: function () {
-                    alert("errror");
+                 
                 }
             });
 
@@ -202,6 +204,7 @@
                         @Html.ValidationMessageFor(model => model.id_sector)
                     </div>
                     @Html.HiddenFor(model => model.butaca);
+                    
                     <p>
                         <input type="submit" value="Comprar Ticket" />
                     </p>

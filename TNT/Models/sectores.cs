@@ -26,8 +26,8 @@ namespace TNT.Models
         public int asientos_disponibles { get; set; }
         public string img_url { get; set; }
         public bool es_sector_numerado { get; set; }
-        public int filas { get; set; }
-        public int columnas { get; set; }
+        public Nullable<int> filas { get; set; }
+        public Nullable<int> columnas { get; set; }
     
         public virtual Eventos Eventos { get; set; }
         public virtual ICollection<Ticket> Ticket { get; set; }

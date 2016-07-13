@@ -348,25 +348,40 @@ namespace TNT.Controllers
             var sectores = db.sectores.Where(sec => sec.id_evento == ticket.id_evento);
             ViewBag.sectores = sectores;
             ViewBag.id_sector = new SelectList(sectores, "id", "descripcion");
-
-            string[] butacas = ticket.butaca.Split(',');
-            var asientosOcupados = db.Ticket.Where(tick => tick.id_sector == ticket.id_sector);
-            foreach (var asiento in asientosOcupados)
+            //validar si usuario ya hizo mas de 5 compras para este evento
+            var tickets_comprados_usuario = db.Ticket.Where(tick => tick.nombre_usuario == User.Identity.Name);
+            if (tickets_comprados_usuario.Count() > 5)
             {
-                if(butacas.Contains(asiento.butaca)){
-                    ViewBag.message = "Asientos ocupados,por favor elija otros.";
-                    return View(ticket);
-                }
+                ModelState.AddModelError("id_evento", "Usted ya compro 5 tickets para este evento, no puede comprar más");
+                return View(ticket);
             }
-            
-            if (butacas.Length > 1)
+            if (ticket.butaca != null)
             {
-                CompraMultiplesTicketMismoSector(ticket);
+                string[] butacas = ticket.butaca.Split(',');
+                var asientosOcupados = db.Ticket.Where(tick => tick.id_sector == ticket.id_sector);
+                foreach (var asiento in asientosOcupados)
+                {
+                    if(butacas.Contains(asiento.butaca)){
+                        ViewBag.message = "Asientos ocupados,por favor elija otros.";
+                        return View(ticket);
+                    }
+                }
+            
+                if (butacas.Length > 1)
+                {
+                    CompraMultiplesTicketMismoSector(ticket);
+                }
+                else
+                {
+                    CompraIndividualTicket(ticket);
+                }
             }
             else
             {
+
                 CompraIndividualTicket(ticket);
             }
+           
            
             return View(ticket);
         }

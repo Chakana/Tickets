@@ -23,7 +23,6 @@ namespace TNT.Models
         public string nombre { get; set; }
         public string apellidos { get; set; }
         public string cedula_identidad { get; set; }
-        public Nullable<System.DateTime> fecha_nacimiento { get; set; }
         public string direccion { get; set; }
         public System.DateTime fecha_registro { get; set; }
         public System.DateTime fecha_modificacion { get; set; }

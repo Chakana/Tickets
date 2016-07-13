@@ -179,6 +179,57 @@ namespace TNT.Controllers
                     out warnings);
 
                 helpers.Helpers.EnviarMail("admin@tnt.com", "admin", email_to, usuario.Personas.First().nombre, "factura", "<h1>FACTURA</h1>", renderedBytes);
+                lr = new LocalReport();
+                path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory + @"Reports\", "factura_comision.rdlc");
+                empresa = db.Empresas.Find(1);
+                fechaEmision = DateTime.Now.AddMonths(3).ToString("dd/MM/yyyy");
+                codigoControl = helpers.Helpers.Obtener_codigo_control(empresa.dosificacion_codigo_autorizacion, compra.id.ToString(), tickets.First().nit_usuario.Trim(), DateTime.Now.ToString("yyyyMMdd"), compra.monto_parcial.ToString(), empresa.dosificacion_llave);
+                codigoQR = empresa.nit + "|" + compra.id.ToString() + "|" + empresa.dosificacion_codigo_autorizacion + "|" + DateTime.Now.ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture) + "|" + compra.monto_parcial.ToString() + "|" + compra.monto_parcial.ToString() + "|" + codigoControl + "|" + tickets.First().nit_usuario + "|" + "0|0|0|0";
+                qrCodigo = "http://qrickit.com/api/qr?d=" + codigoQR;
+
+                lr.ReportPath = path;
+                lr.EnableExternalImages = true;
+                System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+                lr.SetParameters(new ReportParameter("ParamEmpresaNombre", empresa.nombre_empresa));
+                lr.SetParameters(new ReportParameter("ParamDireccion", empresa.direccion));
+                lr.SetParameters(new ReportParameter("ParamTelefono", empresa.telefono));
+                lr.SetParameters(new ReportParameter("ParamDepartamento", empresa.departamento));
+                lr.SetParameters(new ReportParameter("ParamNitEmpresa", empresa.nit));
+                lr.SetParameters(new ReportParameter("ParamNroFactura", compra.id.ToString()));
+                lr.SetParameters(new ReportParameter("ParamNumeroAutorizacion", empresa.dosificacion_codigo_autorizacion));
+                lr.SetParameters(new ReportParameter("ParamRubroEmpresa", empresa.dosificacion_actividad_comercial));
+                lr.SetParameters(new ReportParameter("ParamLugarFecha", "La Paz," + DateTime.Now.ToLongDateString()));
+                lr.SetParameters(new ReportParameter("ParamCliente", tickets.First().nombre_usuario));
+                lr.SetParameters(new ReportParameter("ParamNitCliente", tickets.First().nit_usuario));
+                lr.SetParameters(new ReportParameter("ParamDescripcionFactura", "COMISION"));
+                lr.SetParameters(new ReportParameter("ParamMonto", compra.monto_comision.ToString()));
+                lr.SetParameters(new ReportParameter("ParamMontoLiteral", helpers.NumLetra.Convertir(compra.monto_comision.ToString(), false)));
+                lr.SetParameters(new ReportParameter("ParamCodigoControl", codigoControl));
+                lr.SetParameters(new ReportParameter("ParamFechaEmision", fechaEmision));
+                lr.SetParameters(new ReportParameter("ParamURLQR", qrCodigo));
+
+                reportType = "PDF"; //puede ser PDF,Excel,Word,Image
+
+                deviceInfo =
+                "<DeviceInfo>" +
+                "  <OutputFormat>" + reportType + "</OutputFormat>" +
+                "  <PageWidth>8.5in</PageWidth>" +
+                "  <PageHeight>11in</PageHeight>" +
+                "  <MarginTop>0.5in</MarginTop>" +
+                "  <MarginLeft>0in</MarginLeft>" +
+                "  <MarginRight>0in</MarginRight>" +
+                "  <MarginBottom>0.5in</MarginBottom>" +
+                "</DeviceInfo>";
+
+                renderedBytes = lr.Render(
+                    reportType,
+                    deviceInfo,
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                helpers.Helpers.EnviarMail("admin@tnt.com", "admin", email_to, usuario.Personas.First().nombre, "TNT - factura comision", "<h1>FACTURA COMISION</h1>", renderedBytes);
                 db.Entry(compra).State = EntityState.Modified;  
                 db.SaveChanges();
                 return RedirectToAction("SimuladorPago");

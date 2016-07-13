@@ -30,7 +30,13 @@ namespace TNT.Models
         public string descripcion { get; set; }
         public bool habilitado { get; set; }
         public System.TimeSpan hora_evento { get; set; }
-        public string descripcion_factura { get; set; }
+        public string nit_facturacion { get; set; }
+        public string nombre_empresa_facturacion { get; set; }
+        public string numero_autorizacion_facturacion { get; set; }
+        public string direccion_facturacion { get; set; }
+        public string telefono_facturacion { get; set; }
+        public string departamento_facturacion { get; set; }
+        public string rubro_facturacion { get; set; }
     
         public virtual Empresas Empresas { get; set; }
         public virtual Lugares Lugares { get; set; }

@@ -68,6 +68,7 @@ namespace TNT.Controllers
         public ActionResult Edit(int id = 0)
         {
             Personas personas = db.Personas.Find(id);
+           
             if (personas == null)
             {
                 return HttpNotFound();
@@ -83,12 +84,14 @@ namespace TNT.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Personas personas)
         {
+            //personas.fecha_nacimiento = DateTime.ParseExact(personas.fecha_nacimiento.Value.ToString("yyyy-MM-dd"), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            
             if (ModelState.IsValid)
             {
+                personas.fecha_registro = DateTime.Now;
                 personas.fecha_modificacion = DateTime.Now;
                 db.Entry(personas).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
             ViewBag.id_usuario = new SelectList(db.Usuarios, "id", "email", personas.id_usuario);
             return View(personas);

@@ -8,7 +8,6 @@ namespace TNT.Models
     public class NuevoEvento
     {
         public string descripcion { get; set; }
-        public string descripcion_factura { get; set; }
         public DateTime fecha_evento { get; set; }
         public TimeSpan hora_evento { get; set; }
         public int id_empresa { get; set; }
@@ -17,6 +16,13 @@ namespace TNT.Models
         public string img_url { get; set; }
         public string nombre_evento { get; set; }
         public virtual ICollection<NuevoSector> sectores { get; set; }
+        public string departamento_facturacion { get; set; }
+        public string direccion_facturacion { get; set; }
+        public string nit_facturacion { get; set; }
+        public string nombre_empresa_facturacion { get; set; }
+        public string numero_autorizacion_facturacion { get; set; }
+        public string rubro_facturacion { get; set; }
+        public string telefono_facturacion { get; set; }
 
     }
     public class NuevoSector

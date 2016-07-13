@@ -7,7 +7,7 @@
       <Diagram DiagramId="1a0a38e0cf774e89901fd9c9596ee4e5" Name="Diagram1" ZoomLevel="81">
         <EntityTypeShape EntityType="TNTModel.Compra" Width="1.5" PointX="3" PointY="1.625" IsExpanded="true" />
         <EntityTypeShape EntityType="TNTModel.Empresas" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TNTModel.Eventos" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TNTModel.Eventos" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="TNTModel.Lugares" Width="1.5" PointX="3" PointY="16.25" IsExpanded="true" />
         <EntityTypeShape EntityType="TNTModel.Personas" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TNTModel.sectores" Width="1.5" PointX="7.5" PointY="5.375" IsExpanded="true" />
