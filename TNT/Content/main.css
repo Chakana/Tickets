@@ -300,11 +300,11 @@ h2 {
 
 #countdown li span {
   display: block;
-  font-size: 40px;
+  font-size: 21px;
   font-weight: 700;
-  height: 82px;
-  line-height: 79px;
-  width: 75px;
+  /* height: 50px; */
+  /* line-height: 82px; */
+  /* width: 55px; */
   border-radius: 10px;
   border-right: 1px solid #9e3e2e;
   border-bottom: 1px solid #9e3e2e;
@@ -648,7 +648,7 @@ h2 {
 }
 
 #gmap {
-  height:450px;  
+  height:200px;  
 }
 
 
@@ -798,4 +798,5 @@ list-style: none outside none;
 padding-left:35px;
 height:35px;
 float:left;
+}ft;
 }

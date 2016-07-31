@@ -10,6 +10,7 @@ using TNT.Models;
 using System.Text;
 using Microsoft.Reporting.WebForms;
 using System.Web;
+using System.Web.Mvc;
 
 
 namespace TNT.Controllers
@@ -17,21 +18,40 @@ namespace TNT.Controllers
 
     public class RegistraUsuarioController : ApiController
     {
-       
+        private TNTEntities db = new TNTEntities();
        public respuesta_usuario Post(request_registra_usuario request)
         {
             respuesta_usuario respuesta = new respuesta_usuario();
-            int id_usuario = 0;
-            respuesta.resultado = DA_clases.DA_Usuarios.registrar_usuario(request.email, request.password, request.cedula_identidad, request.numero_celular, ref id_usuario);
-            if (respuesta.resultado)
+           Usuarios usuario = new Usuarios();
+           usuario.password = request.password;
+           usuario.reiniciar_contraseña=false;
+           usuario.rol = "usuario";
+           usuario.token_reinicio="";           
+           usuario.email = request.email;
+           db.Usuarios.Add(usuario);
+           db.SaveChanges();
+           Personas persona = new Personas();
+           persona.apellidos = "";
+           persona.cedula_identidad = request.cedula_identidad;
+           persona.direccion = "";
+           persona.fecha_modificacion = DateTime.Now;
+           persona.fecha_registro = DateTime.Now;
+           persona.id_usuario = usuario.id;
+           persona.nombre = "";
+           persona.numero_celular = request.numero_celular;
+           db.Personas.Add(persona);
+           db.SaveChanges();
+           if (usuario.id > 0)
             {
+                respuesta.resultado = true; 
                 respuesta.mensaje = "OK";
             }
             else
             {
+                respuesta.resultado = false;
                 respuesta.mensaje = "ERROR";
             }
-            respuesta.id_usuario = id_usuario;
+            respuesta.id_usuario = usuario.id;
             return respuesta;
         }
 
@@ -334,7 +354,7 @@ namespace TNT.Controllers
         public response_obtener_historial_compra Post(request_obtener_historial_compra request)
         {
             response_obtener_historial_compra response = new response_obtener_historial_compra();
-            var compras = db.Compra.Where(cmp => cmp.id_usuario_compra == request.id_usuario && cmp.fecha_pago!=null).Take(5);
+            var compras = db.Compra.Where(cmp => cmp.id_usuario_compra == request.id_usuario && cmp.fecha_pago!=null).OrderByDescending(cmp=>cmp.fecha_compra).Take(5);
             response.historial_compras = new List<Compra_app_historial>();
             foreach (var compra in compras)
             {
@@ -356,7 +376,7 @@ namespace TNT.Controllers
                 compra_h.codigo_recaudacion = tickets.codigo_recaudacion;
                 response.historial_compras.Add(compra_h);
             }
-            var reservas = db.Compra.Where(cmp => cmp.id_usuario_compra == request.id_usuario && cmp.fecha_pago == null).Take(5);
+            var reservas = db.Compra.Where(cmp => cmp.id_usuario_compra == request.id_usuario && cmp.fecha_pago == null).OrderByDescending(cmp=>cmp.fecha_compra).Take(5);
             foreach (var compra in reservas)
             {
                 Compra_app_historial compra_h = new Compra_app_historial();
@@ -373,6 +393,10 @@ namespace TNT.Controllers
                 compra_h.id_compra = compra.id;
                 compra_h.monto_total = (decimal)compra.monto_cobrar;
                 var tickets = db.Ticket.FirstOrDefault(tck => tck.codigo_recaudacion == compra.codigo_recaudacion);
+                if (tickets == null)
+                {
+                    continue;
+                }
                 compra_h.nombre_evento = tickets.Eventos.nombre_evento;
                 compra_h.codigo_recaudacion = "";
                 response.historial_compras.Add(compra_h);
@@ -395,18 +419,20 @@ namespace TNT.Controllers
             }
             else
             {
-                try
-                {
-                    string old_password = usuario.password;
-                    string new_pass = helpers.Helpers.Generar_pass_temporal(6, new Random());
-                    usuario.password = new_pass;
-                    if (ModelState.IsValid)
-                    {
-                        db.Entry(usuario).State = System.Data.EntityState.Modified;
-                        db.SaveChanges();
-                    }
-                    helpers.Helpers.EnviarMail("admin@tnt.com", "admin", usuario.email, usuario.Personas.First().nombre, "cambio de password", "<h2>Usted solicito un nuevo password</h2><h3>password:</h3>" + new_pass, null);
-                    response.message = old_password;
+                try{
+                    //generar token 
+                    string token = helpers.Helpers.Generar_token(32, new Random());
+                
+                    usuario.reiniciar_contraseña = true;
+                    usuario.token_reinicio = token;
+                    db.Entry(usuario).State = System.Data.EntityState.Modified;
+                    db.SaveChanges();
+                    //UrlHelper u = new UrlHelper(this.ControllerContext.RequestContext);
+                    //string url = u.Action("RecuperarPassword", "Account", new { token = token }, Request.Url.Scheme);
+                    string url = "http://lquenta-001-site1.htempurl.com/Account/RecuperarPassword?token=" + token;
+                    string contenido_email = String.Format("Por favor ingrese al siguiente link para reiniciar su contraseña en TNT.:<a href=\"{0}\">{0}</a>", url);
+                    helpers.Helpers.EnviarMail("admin@tnt.com", "administrador", request.email,request.email, "reinicio de password", contenido_email, null);
+                    response.message = String.Format("Verifique su correo{0} para reiniciar su contraseña",usuario.email);
                 }
                 catch (Exception)
                 {

@@ -1,4 +1,8 @@
 ﻿@model IEnumerable<TNT.Models.Eventos>
+@{
+    ViewBag.Title = "Login";
+    Layout = "";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Evento | Free Onepage Event Template | ShapeBootstrap</title>
+    <title>TNT</title>
     <link href="Content/bootstrap.min.css" rel="stylesheet">
     <link href="Content/font-awesome.min.css" rel="stylesheet">
     <link href="Content/main.css" rel="stylesheet">
@@ -25,6 +29,57 @@
 </head><!--/head-->
 
 <body>
+    <style>
+        .flip {
+  -webkit-perspective: 800;
+perspective: 800;
+
+    position: relative;
+ text-align: center;
+}
+.flip .card.flipped {
+  -webkit-transform: rotatey(-180deg);
+    transform: rotatey(-180deg);
+}
+.flip .card {
+
+  height: 100%;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transition: 0.5s;
+    transform-style: preserve-3d;
+    transition: 0.5s;
+}
+.flip .card .face {
+
+  -webkit-backface-visibility: hidden ;
+    backface-visibility: hidden ;
+  z-index: 2;
+   
+}
+.flip .card .front {
+  position: absolute;
+   width: 100%;
+  z-index: 1;
+
+}
+.flip .card .back {
+  -webkit-transform: rotatey(-180deg);
+    transform: rotatey(-180deg);
+}
+  .inner{margin:0px !important;}
+  .form-login {
+    background-color: #952727;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 15px;
+    border-color:#d2d2d2;
+    border-width: 5px;
+    box-shadow:0 1px 0 #cfcfcf;
+}
+    </style>
+    
     <header id="header" role="banner">
         <div class="main-nav">
             <div class="container">
@@ -43,10 +98,23 @@
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
-                            <li class="scroll active"><a href="#home">Inicio</a></li>
-                            <li class="scroll"><a href="#explore">Explorar</a></li>                          
-                            <li><a class="no-scroll" href="@Url.Action("Login","Account")">COMPRAR TICKETS</a></li>
-                            <li><a class="no-scroll" href="@Url.Action("Login","Account")">LOGIN</a></li>
+                            <li><a data-toggle="modal" data-target="#myModal" class="" href="#"><img class="img-responsive" src="images/icon_conciertos.png" alt="logo" style="width: 70px;"></a></li>
+                            <li><a data-toggle="modal" data-target="#myModal" class="" href="#"><img class="img-responsive" src="images/icon_articulos.png" alt="logo" style="width: 70px;"></a></li>
+                            <li><a data-toggle="modal" data-target="#myModal" class="" href="#"><img class="img-responsive" src="images/icon_deporte.png" alt="logo" style="width: 70px;"></a></li>
+                            <li><a data-toggle="modal" data-target="#myModal" class="" href="#"><img class="img-responsive" src="images/icon_viajes_turismo.png" alt="logo" style="width: 70px;"></a></li>
+                            <li><a data-toggle="modal" data-target="#myModal" class="" href="#"><img class="img-responsive" src="images/icon_cultura.png" alt="logo" style="width: 70px;"></a></li>
+                            @if (Request.IsAuthenticated)
+                            {
+                                if (User.IsInRole("usuario"))
+                                {
+                                    <li>@Html.ActionLink( User.Identity.Name, "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })</li>
+                                }   
+                            
+                            }
+                            else
+                            {
+                                <li><a data-toggle="modal" data-target="#myLogin" class="no-scroll" href="#">LOGIN</a></li>    
+                            }
                             <li class="scroll"><a href="#contact">Contactar</a></li>
                         </ul>
                     </div>
@@ -57,237 +125,113 @@
     <!--/#header-->
 
     <section id="home">
-        <div id="main-slider" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target="#main-slider" data-slide-to="0" class="active"></li>
-                <li data-target="#main-slider" data-slide-to="1"></li>
-                <li data-target="#main-slider" data-slide-to="2"></li>
-                <li data-target="#main-slider" data-slide-to="3"></li>
-                <li data-target="#main-slider" data-slide-to="4"></li>
-            </ol>
+        <div id="main-slider" class="carousel slide" data-ride="carousel" data-pause="false">
             <div class="carousel-inner">
                 <div class="item active">
-                    <img class="img-responsive" src="images/slider/concert.jpg" style="max-height:759px;" alt="slider">
-                    <div class="carousel-caption">
-                        <h2>Conciertos</h2>
-                        <h4>Diversos generos</h4>
-                        <a href="#contact">Buscar Eventos <i class="fa fa-angle-right"></i></a>
-                    </div>
+                    <img class="img-responsive" src="images/slider/concert.jpg" style="max-height:639px;" alt="slider">
+                    
                 </div>
                 <div class="item">
-                    <img class="img-responsive" src="images/slider/sport.jpg" style="max-height:759px;" alt="slider" >
-                    <div class="carousel-caption">
-                        <h2>Eventos deportivos </h2>
-                        <h4>futbol</h4>
-                        <a href="#contact">Buscar Eventos <i class="fa fa-angle-right"></i></a>
-                    </div>
+                    <img class="img-responsive" src="images/slider/sport.jpg" style="max-height:639px;" alt="slider" >
+                    
                 </div>
                 <div class="item">
-                    <img class="img-responsive" src="images/slider/gift.jpg" style="max-height:759px;" alt="slider">
-                    <div class="carousel-caption">
-                        <h2>Merchandising</h2>
-                        <h4>articulos diversos</h4>
-                        <a href="#contact">Buscar <i class="fa fa-angle-right"></i></a>
-                    </div>
+                    <img class="img-responsive" src="images/slider/gift.jpg" style="max-height:639px;" alt="slider">
+                   
                 </div>
                 <div class="item">
-                    <img class="img-responsive" src="images/slider/voyage.jpg" style="max-height:759px;" alt="slider">
-                    <div class="carousel-caption">
-                        <h2>Viajes y turismo</h2>
-                        <h4>Descripcion de Viajes</h4>
-                        <a href="#contact">Buscar <i class="fa fa-angle-right"></i></a>
-                    </div>
+                    <img class="img-responsive" src="images/slider/voyage.jpg" style="max-height:639px;" alt="slider">
+                   
                 </div>
                 <div class="item">
-                    <img class="img-responsive" src="images/slider/trip.jpg" style="max-height:759px;" alt="slider">
-                    <div class="carousel-caption">
-                        <h2>Cultura</h2>
-                        <h4>Eventos Culturales</h4>
-                        <a href="#contact">Buscar <i class="fa fa-angle-right"></i></a>
-                    </div>
+                    <img class="img-responsive" src="images/slider/trip.jpg" style="max-height:639px;" alt="slider">
+                   
                 </div>
             </div>
         </div>
     </section>
     <!--/#home-->
-
-    <section id="explore">
-        <div class="container">
-            <div class="row">
-                <div class="watch">
-                    <img class="img-responsive" src="images/watch.png" alt="">
-                </div>
-
-                <div class="col-md-5 col-md-offset-2 col-sm-5">
-                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                        <!-- Indicators -->
-                        <ol class="carousel-indicators">
-                            @{
-                                var i = 0;
-                                var index = 0;
-                                foreach (var item in Model)
-                                {
-                                    index = i;
-                                    var itemClass = i++ == 0 ? "active" : " ";
-                                    <li data-target="#myCarousel" data-slide-to="@index" class="@itemClass"></li>
-                                }
-                            }
-                        </ol>
-                        <!-- Images-->
-                        <div class="carousel-inner" role="listbox">
-                            @{
-                                i = 0;
-                                foreach (var item in Model)
-                                {
-                                    var itemClass = i++ == 0 ? "item active" : "item";
-                                    <div id="event-banner" class="@itemClass" xeventdate="@item.fecha_evento.Add(item.hora_evento).ToString("yyyy-MM-dd hh:mm:ss",System.Globalization.CultureInfo.InvariantCulture)" xLocationLat="@item.Lugares.latitud" xLocationLong="@item.Lugares.longitud">
-                                        <img src="@item.img_url" style="width:100%;height:200px" />
-                                        <div class="container" style="text-align:center">
-
-                                        </div> <!-- /container -->
-                                    </div>
-                                }
-                            }
-                        </div>
-
-                      
-                    </div>
-                </div>
-                <div class="col-sm-5 col-md-5">
-                    <ul id="countdown">
-                        <li>
-                            <span class="days time-font">00</span>
-                            <p>dias </p>
-                        </li>
-                        <li>
-                            <span class="hours time-font">00</span>
-                            <p class="">horas </p>
-                        </li>
-                        <li>
-                            <span class="minutes time-font">00</span>
-                            <p class="">minutos</p>
-                        </li>
-                        
-                    </ul>
-                </div>
-            </div>
-            <div class="cart">
-                <a href ="@Url.Action("Login","Account")"><i class="fa fa-shopping-cart"></i> <span>Comprar Tickets</span></a>
-            </div>
-        </div>
-    </section><!--/#explore-->
-    <section id="eventos">
-        <div class="container">
-            <div class="row">
+    <div class="modal fade bs-example-modal-sm" id="myLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm" >
+            <div class="modal-content">
                 
-            </div>
-        </div>
-    </section>
-    <section id="contact">
-        <div id="map">
-            <div id="gmap-wrap">
-                <div id="gmap">
-                </div>
-            </div>
-        </div><!--/#map-->
-        <div class="contact-section">
-            <div class="ear-piece">
-                <img class="img-responsive" src="images/ear-piece.png" alt="">
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-3 col-sm-offset-4">
-                        <div class="contact-text">
-                            <h3>Contact</h3>
-                            <address>
-                                E-mail: admin@tnt.com<br>
-                                Telefono: +1 (123) 456 7890<br>
-                            </address>
-                        </div>
-                        <div class="contact-address">
-                            <h3>Contacto</h3>
-                            <address>
-                                Av.16 de Julio 2000.,<br>
-                                Zona central,<br>
-                                La Paz<br>
-                                Bolivia
-                            </address>
-                        </div>
-                    </div>
-                    <div class="col-sm-5">
-                        <div id="contact-section">
-                            <h3>Enviar un mensaje</h3>
-                            <div class="status alert alert-success" style="display: none"></div>
-                            <form id="main-contact-form" class="contact-form" name="contact-form" method="post" action="sendemail.php">
-                                <div class="form-group">
-                                    <input type="text" name="name" class="form-control" required="required" placeholder="Nombre">
+                    
+                        <div class="col-md-12">
+                            <div class="form-login">
+                                <input type="email" id="userName" class="form-control input-sm chat-input" placeholder="email" />
+                                <br />
+                                <input type="password" id="userPassword" class="form-control input-sm chat-input" />
+                                <br />
+                                <div class="wrapper">
+                                    <span class="group-btn">
+                                        <button id="btn_login" class="btn btn-danger btn-md">login<i class="fa fa-sign-in"></i></button>
+                                    </span>
                                 </div>
-                                <div class="form-group">
-                                    <input type="email" name="email" class="form-control" required="required" placeholder="EMAIL">
-                                </div>
-                                <div class="form-group">
-                                    <textarea name="message" id="message" required="required" class="form-control" rows="4" placeholder="Mensaje..."></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary pull-right">Send</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="sponsor">
-        <div id="sponsor-carousel" class="carousel slide" data-interval="false">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-10">
-                        <h2>Sponsors</h2>
-                        <a class="sponsor-control-left" href="#sponsor-carousel" data-slide="prev"><i class="fa fa-angle-left"></i></a>
-                        <a class="sponsor-control-right" href="#sponsor-carousel" data-slide="next"><i class="fa fa-angle-right"></i></a>
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <ul>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor1.png" alt=""></a></li>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor2.png" alt=""></a></li>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor3.png" alt=""></a></li>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor4.png" alt=""></a></li>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor5.png" alt=""></a></li>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor6.png" alt=""></a></li>
-                                </ul>
                             </div>
-                            <div class="item">
-                                <ul>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor6.png" alt=""></a></li>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor5.png" alt=""></a></li>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor4.png" alt=""></a></li>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor3.png" alt=""></a></li>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor2.png" alt=""></a></li>
-                                    <li><a href="#"><img class="img-responsive" src="images/sponsor/sponsor1.png" alt=""></a></li>
-                                </ul>
-                            </div>
+
                         </div>
+                    
+                </div>
+               
+            
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                    @{
+                    var i = 0;
+                    foreach (var item in Model)
+                    {
+                        var itemClass = i++ == 0 ? "item active" : "item";
+                       
+                        <div class="row">
+                            <div class="flip">
+                                <div class="card">
+                                    <div class="face front">
+                                        <img src="@item.img_url" style="width:100%;height:200px" />
+                                       
+                                    </div>
+                                    <div class="face back" style="width:100%;height:200px;background-color:#952727">
+                                        <div class="col-xs-6">
+                                            <h1>@item.nombre_evento</h1>
+                                            <p>
+                                                @item.fecha_evento.Add(item.hora_evento).ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)
+                                                @item.hora_evento
+                                            </p>
+                                            <p style="text-overflow: ellipsis;">@item.descripcion</p>
+                                            <div class="cart">
+                                                <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><i class="fa fa-shopping-cart"></i> <span>Comprar Tickets</span></a>    
+                                            </div>
+                                        </div>
+                                        <div class="mapa_evento col-xs-6" xlocationlat="@item.Lugares.latitud" xlocationlong="@item.Lugares.longitud" xitemindex="@i" xeventdate="@item.fecha_evento.Add(item.hora_evento).ToString("yyyy-MM-dd hh:mm:ss",System.Globalization.CultureInfo.InvariantCulture)">
+                                            <div id="map">
+                                                <div id="gmap-wrap">
+                                                    <div id="gmap" class="gmap">
+                                                    </div>
+                                                </div>
+                                            </div><!--/#map-->
+                                        </div>
+                                    </div>
+                            </div>
+                          </div>
+                        </div>
+                     }
+                    }
                     </div>
                 </div>
-            </div>
-            <div class="light">
-                <img class="img-responsive" src="images/light.png" alt="">
+                <div class="modal-footer">
+
+                </div>
             </div>
         </div>
-    </section><!--/#sponsor-->
-
-    
-    <!--/#contact-->
-
-    <footer id="footer">
-        <div class="container">
-            <div class="text-center">
-                <p> Copyright  &copy;2016<br> Diseñado por YGGDRASIL soluciones moviles</p>
-            </div>
-        </div>
-    </footer>
+    </div>
     <!--/#footer-->
 
     <script type="text/javascript" src="Scripts/jquery.js"></script>
@@ -300,24 +244,39 @@
     <script type="text/javascript" src="Scripts/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="Scripts/jquery.nav.js"></script>
     <script type="text/javascript" src="Scripts/main.js"></script>
-<script>
-    $('#myCarousel').carousel({
-        interval: 1000 * 10
-    });
-    $('#myCarousel').on('slid.bs.carousel', function () {
-        CargaBannerEventos();
-        CargaMapa();
-    })
-    jQuery(function ($) {
-        CargaBannerEventos();
-        CargaMapa();
-    });
-    function CargaMapa() {
+    <script>
+         $('.flip').hover(function () {
+             $(this).find('.card').toggleClass('flipped');
+             //CargaContadoresEventos($(this).find('.card').find('.mapa_evento').attr('xitemindex'), $(this).find('.card').find('.mapa_evento').attr('xeventdate'));
+             CargaMapa($(this).find('.card').find('.mapa_evento').attr('xitemindex'), $(this).find('.card').find('.mapa_evento').attr('xLocationLat'), $(this).find('.card').find('.mapa_evento').attr('xLocationLong'));
+         });
+         $('#btn_login').click(function () {
+             var data = { email: $('#userName').val(),password:$('#userPassword').val()};
+             $.ajax({
+                 url: '/Account/LoginJSON',
+                 type: "POST",
+                 data: JSON.stringify(data),
+                 dataType: "JSON",
+                 contentType: "application/json",
+                 success: function (response) {
+                     console.log(response);
+                     location.reload();
+                 },
+                 error: function () {
+
+                 }
+             });
+         });
+        </script>
+    <script>
+    
+    
+        function CargaMapa(index,lat,lng) {
         var map;
         map = new GMaps({
-            el: '#gmap',
-            lat: $('#event-banner.item.active').attr('xLocationLat'),
-            lng: $('#event-banner.item.active').attr('xLocationLong'),
+            el: $('.gmap').get(index-1),
+            lat: lat,
+            lng: lng,
             scrollwheel: false,
             zoom: 16,
             zoomControl: false,
@@ -330,8 +289,8 @@
 
         var image = 'images/map-icon.png';
         map.addMarker({
-            lat: $('#event-banner.item.active').attr('xLocationLat'),
-            lng: $('#event-banner.item.active').attr('xLocationLong'),
+            lat: lat,
+            lng: lng,
             icon: image,
             animation: google.maps.Animation.DROP,
             verticalAlign: 'bottom',
@@ -386,10 +345,11 @@
 
         map.setStyle("map_style");
     }
-    function CargaBannerEventos() {
-        thisEl = $('#countdown');
-        eventDate = Date.parse($('#event-banner.item.active').attr('xeventdate')) / 1000;
-        //console.log(eventDate); 
+        function CargaContadoresEventos(index, eventDate) {
+            console.log(eventDate);
+        thisEl = $('#countdown').get(index-1);
+        eventDate = Date.parse(eventDate) / 1000;
+        //console.log(eventDate);
         //console.log(settings['date']);
         currentDate = Math.floor($.now() / 1000);
 
@@ -427,10 +387,10 @@
             thisEl.find(".minutes").text(minutes);
             //thisEl.find(".seconds").text(seconds);
         } else {
-            alert("Invalid date. Here's an example: 12 Tuesday 2012 17:30:00");
+            console.log("error");
             clearInterval(interval);
         }
     }
-</script>
+    </script>
 </body>
 </html>

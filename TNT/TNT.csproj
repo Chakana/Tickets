@@ -373,6 +373,11 @@
     <Content Include="Images\guitar.png" />
     <Content Include="Images\guitar2.jpg" />
     <Content Include="Images\header-bg.png" />
+    <Content Include="Images\icon_articulos.png" />
+    <Content Include="Images\icon_conciertos.png" />
+    <Content Include="Images\icon_cultura.png" />
+    <Content Include="Images\icon_deporte.png" />
+    <Content Include="Images\icon_viajes_turismo.png" />
     <Content Include="Images\light.png" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\logo_tnt.png" />
@@ -581,6 +586,7 @@
     <Content Include="Views\Event\VerTodosEventos.cshtml" />
     <Content Include="Views\Account\ReiniciarPassword.cshtml" />
     <Content Include="Views\Account\RecuperarPassword.cshtml" />
+    <Content Include="Views\Shared\_Layout_usuario.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

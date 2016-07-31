@@ -116,6 +116,7 @@ namespace TNT.Controllers
         }
         //
         // GET: /Ticket/Create
+         [Authorize]
         public ActionResult ComprarTicketsUsuario(int id)
         {
             var eventos = db.Eventos.Where(ev=>ev.id == id).Include(e => e.Empresas).Include(e => e.Lugares).Include(e => e.Tipos_evento);

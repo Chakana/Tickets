@@ -11,11 +11,42 @@ namespace TNT.Controllers
     public class AccountController : Controller
     {
         private TNTEntities db = new TNTEntities();
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+        public JsonResult LoginJSON(string email, string password)
+        {
+            using (TNTEntities entities = new TNTEntities())
+            {
+                string username = email;
 
+                // Now if our password was enctypted or hashed we would have done the
+                // same operation on the user entered password here, But for now
+                // since the password is in plain text lets just authenticate directly
+
+                bool userValid = entities.Usuarios.Any(user => user.email == username && user.password == password);
+
+                // User found in the database
+                if (userValid)
+                {
+                    //obtenemos su id
+                    Usuarios usuario = entities.Usuarios.FirstOrDefault(user => user.email == username);
+                    Personas persona = entities.Personas.FirstOrDefault(per => per.id_usuario == usuario.id);
+                    Session.Add("persona_id", persona.id);
+                    Session.Add("id", usuario.id);
+                    FormsAuthentication.SetAuthCookie(username, false);
+                    RedirectToAction("Index", "Home");
+                    return Json(true);
+                    
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+        }
         [HttpPost]
         public ActionResult Login(Usuarios model, string returnUrl)
         {

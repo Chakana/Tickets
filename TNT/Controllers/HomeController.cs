@@ -45,8 +45,10 @@ namespace TNT.Controllers
                 }
                 if (User.IsInRole("usuario"))
                 {
-                    var eventos = entities.Eventos.Where(e => e.sectores.Count > 0 && e.habilitado == true);
-                    return View("UserIndex", eventos.ToList());
+                    var eventos = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now);
+                    //return View("UserIndex", eventos.ToList());
+                    return View("Index", eventos.ToList());
+
 
                 }
                 if (User.IsInRole("admin"))

@@ -1,0 +1,290 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>TNT</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/main.css" rel="stylesheet">
+    <link href="~/Content/animate.css" rel="stylesheet">
+    <link href="~/Content/responsive.css" rel="stylesheet">
+
+
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="~/images/ico/apple-touch-icon-57-precomposed.png">
+    <script type="text/javascript" src="~/Scripts/jquery.js"></script>
+</head><!--/head-->
+
+<body>
+    <style>
+        .flip {
+            -webkit-perspective: 800;
+            perspective: 800;
+            position: relative;
+            text-align: center;
+        }
+
+            .flip .card.flipped {
+                -webkit-transform: rotatey(-180deg);
+                transform: rotatey(-180deg);
+            }
+
+            .flip .card {
+                height: 100%;
+                -webkit-transform-style: preserve-3d;
+                -webkit-transition: 0.5s;
+                transform-style: preserve-3d;
+                transition: 0.5s;
+            }
+
+                .flip .card .face {
+                    -webkit-backface-visibility: hidden;
+                    backface-visibility: hidden;
+                    z-index: 2;
+                }
+
+                .flip .card .front {
+                    position: absolute;
+                    width: 100%;
+                    z-index: 1;
+                }
+
+                .flip .card .back {
+                    -webkit-transform: rotatey(-180deg);
+                    transform: rotatey(-180deg);
+                }
+
+        .inner {
+            margin: 0px !important;
+        }
+
+        .form-login {
+            background-color: #952727;
+            padding-top: 10px;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-radius: 15px;
+            border-color: #d2d2d2;
+            border-width: 5px;
+            box-shadow: 0 1px 0 #cfcfcf;
+        }
+    </style>
+
+    <header id="header" role="banner">
+        <div class="main-nav">
+            <div class="container">
+                <div class="row">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">
+                            <img class="img-responsive" src="~/images/logo_tnt.png" alt="logo" style="width: 150px;">
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                          
+                            @if (Request.IsAuthenticated)
+                            {
+                                if (User.IsInRole("usuario"))
+                                {
+                                    <li>@Html.ActionLink(User.Identity.Name, "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })</li>
+                                }
+
+                            }
+                            else
+                            {
+                                <li><a data-toggle="modal" data-target="#myLogin" class="no-scroll" href="#">LOGIN</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!--/#header-->
+
+    <section id="home">
+       
+        @RenderBody()
+        
+    </section>
+    <!--/#home-->
+   
+    <!--/#footer-->
+    
+    <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="~/Scripts/gmaps.js"></script>
+    <script type="text/javascript" src="~/Scripts/smoothscroll.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.parallax.js"></script>
+    <script type="text/javascript" src="~/Scripts/coundown-timer.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.scrollTo.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.nav.js"></script>
+    <script type="text/javascript" src="~/Scripts/main.js"></script>
+    @RenderSection("scripts", required: false)
+    <script>
+         $('.flip').hover(function () {
+             $(this).find('.card').toggleClass('flipped');
+             //CargaContadoresEventos($(this).find('.card').find('.mapa_evento').attr('xitemindex'), $(this).find('.card').find('.mapa_evento').attr('xeventdate'));
+             CargaMapa($(this).find('.card').find('.mapa_evento').attr('xitemindex'), $(this).find('.card').find('.mapa_evento').attr('xLocationLat'), $(this).find('.card').find('.mapa_evento').attr('xLocationLong'));
+         });
+         $('#btn_login').click(function () {
+             var data = { email: $('#userName').val(),password:$('#userPassword').val()};
+             $.ajax({
+                 url: '/Account/LoginJSON',
+                 type: "POST",
+                 data: JSON.stringify(data),
+                 dataType: "JSON",
+                 contentType: "application/json",
+                 success: function (response) {
+                     console.log(response);
+                     location.reload();
+                 },
+                 error: function () {
+
+                 }
+             });
+         });
+    </script>
+    <script>
+
+
+        function CargaMapa(index,lat,lng) {
+        var map;
+        map = new GMaps({
+            el: $('.gmap').get(index-1),
+            lat: lat,
+            lng: lng,
+            scrollwheel: false,
+            zoom: 16,
+            zoomControl: false,
+            panControl: false,
+            streetViewControl: false,
+            mapTypeControl: false,
+            overviewMapControl: false,
+            clickable: false
+        });
+
+        var image = 'images/map-icon.png';
+        map.addMarker({
+            lat: lat,
+            lng: lng,
+            icon: image,
+            animation: google.maps.Animation.DROP,
+            verticalAlign: 'bottom',
+            horizontalAlign: 'center',
+            backgroundColor: '#3e8bff',
+        });
+
+
+        var styles = [
+
+        {
+            "featureType": "road",
+            "stylers": [
+            { "color": "#b4b4b4" }
+            ]
+        }, {
+            "featureType": "water",
+            "stylers": [
+            { "color": "#d8d8d8" }
+            ]
+        }, {
+            "featureType": "landscape",
+            "stylers": [
+            { "color": "#f1f1f1" }
+            ]
+        }, {
+            "elementType": "labels.text.fill",
+            "stylers": [
+            { "color": "#000000" }
+            ]
+        }, {
+            "featureType": "poi",
+            "stylers": [
+            { "color": "#d9d9d9" }
+            ]
+        }, {
+            "elementType": "labels.text",
+            "stylers": [
+            { "saturation": 1 },
+            { "weight": 0.1 },
+            { "color": "#000000" }
+            ]
+        }
+
+        ];
+
+        map.addStyle({
+            styledMapName: "Styled Map",
+            styles: styles,
+            mapTypeId: "map_style"
+        });
+
+        map.setStyle("map_style");
+    }
+        function CargaContadoresEventos(index, eventDate) {
+            console.log(eventDate);
+        thisEl = $('#countdown').get(index-1);
+        eventDate = Date.parse(eventDate) / 1000;
+        //console.log(eventDate);
+        //console.log(settings['date']);
+        currentDate = Math.floor($.now() / 1000);
+
+
+
+        seconds = eventDate - currentDate;
+
+        days = Math.floor(seconds / (60 * 60 * 24)); //calculate the number of days
+        seconds -= days * 60 * 60 * 24; //update the seconds variable with no. of days removed
+
+        hours = Math.floor(seconds / (60 * 60));
+        seconds -= hours * 60 * 60; //update the seconds variable with no. of hours removed
+
+        minutes = Math.floor(seconds / 60);
+        seconds -= minutes * 60; //update the seconds variable with no. of minutes removed
+
+        //conditional Ss
+        if (days == 1) { thisEl.find(".timeRefDays").text("day"); } else { thisEl.find(".timeRefDays").text("days"); }
+        if (hours == 1) { thisEl.find(".timeRefHours").text("hour"); } else { thisEl.find(".timeRefHours").text("hours"); }
+        if (minutes == 1) { thisEl.find(".timeRefMinutes").text("minute"); } else { thisEl.find(".timeRefMinutes").text("minutes"); }
+        if (seconds == 1) { thisEl.find(".timeRefSeconds").text("second"); } else { thisEl.find(".timeRefSeconds").text("seconds"); }
+
+        //logic for the two_digits ON setting
+        //if (settings['format'] == "on") {
+        days = (String(days).length >= 2) ? days : "0" + days;
+        hours = (String(hours).length >= 2) ? hours : "0" + hours;
+        minutes = (String(minutes).length >= 2) ? minutes : "0" + minutes;
+        seconds = (String(seconds).length >= 2) ? seconds : "0" + seconds;
+        //}
+
+        //update the countdown's html values.
+        if (!isNaN(eventDate)) {
+            thisEl.find(".days").text(days);
+            thisEl.find(".hours").text(hours);
+            thisEl.find(".minutes").text(minutes);
+            //thisEl.find(".seconds").text(seconds);
+        } else {
+            console.log("error");
+            clearInterval(interval);
+        }
+    }
+    </script>
+</body>
+</html>
