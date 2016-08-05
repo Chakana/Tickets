@@ -45,6 +45,18 @@ namespace TNT.Controllers
                 }
                 if (User.IsInRole("usuario"))
                 {
+                    var eventosConciertos = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now && ev.Tipos_evento.descripcion == "CONCIERTO");
+                    var eventosVarios = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now && ev.Tipos_evento.descripcion == "VARIOS");
+                    var eventosDeportes = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now && ev.Tipos_evento.descripcion == "DEPORTES");
+                    var eventosViajesTurismo = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now && ev.Tipos_evento.descripcion == "VIAJES Y TURISMO");
+                    var eventosCultura = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now && ev.Tipos_evento.descripcion == "CULTURA");
+                    ViewBag.eventosConciertos = eventosConciertos;
+                    ViewBag.eventosVarios = eventosVarios;
+                    ViewBag.eventosDeportes = eventosDeportes;
+                    ViewBag.eventosViajesTurismo = eventosViajesTurismo;
+                    ViewBag.eventosCultura = eventosCultura;
+                    
+
                     var eventos = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now);
                     //return View("UserIndex", eventos.ToList());
                     return View("Index", eventos.ToList());
@@ -60,6 +72,16 @@ namespace TNT.Controllers
             }
             else
             {
+                var eventosConciertos = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now && ev.Tipos_evento.descripcion == "CONCIERTO");
+                var eventosVarios = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now && ev.Tipos_evento.descripcion == "VARIOS");
+                var eventosDeportes = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now && ev.Tipos_evento.descripcion == "DEPORTES");
+                var eventosViajesTurismo = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now && ev.Tipos_evento.descripcion == "VIAJES Y TURISMO");
+                var eventosCultura = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now && ev.Tipos_evento.descripcion == "CULTURA");
+                ViewBag.eventosConciertos = eventosConciertos;
+                ViewBag.eventosVarios = eventosVarios;
+                ViewBag.eventosDeportes = eventosDeportes;
+                ViewBag.eventosViajesTurismo = eventosViajesTurismo;
+                ViewBag.eventosCultura = eventosCultura;
                 //cargar eventos para la vista publica
                 var eventos = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now);
                 return View("index",eventos.ToList());

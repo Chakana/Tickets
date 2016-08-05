@@ -114,6 +114,134 @@ namespace TNT.Controllers
             respuesta.sector = ticket.sectores.descripcion;
             return Json(respuesta);
         }
+        public class req_tickets_multiple{
+            public string id_sector {get;set;}
+            public string butaca {get;set;}
+            public string cantidad {get;set;}
+        }
+
+        public JsonResult ComprarTicketsMultiple(List<req_tickets_multiple> req)
+        {
+            response_compra_rapida_ticket respuesta = new response_compra_rapida_ticket();
+            try
+            {
+                
+                string codigo_recaudacion = Helpers.Generar_codigo_recaudacion("A"); //no podemos repetir el codigo de recaudacion (no debe existir en la tabla compra)
+                decimal costo_total = 0m;
+                decimal total_comision = 0m;
+                Usuarios datos_usuario = db.Usuarios.FirstOrDefault(us => us.email == User.Identity.Name);
+                /*if (sector.asientos_disponibles - request.cantidad <= 0)
+                   {
+                       respuesta.codigo_recaudacion = "";
+                       respuesta.costo_total = 0;
+                       list_respuesta.Add(respuesta);
+                       continue;
+                   }*/
+                int id_sector = Int32.Parse(req.First().id_sector);
+                sectores sector_empresa = db.sectores.Find(id_sector);
+                Eventos evento = sector_empresa.Eventos;
+                foreach (req_tickets_multiple ticket_reserva in req)
+                {
+                    id_sector = Int32.Parse(ticket_reserva.id_sector);
+                    sectores sector = db.sectores.Find(id_sector);
+
+                    decimal costo_total_sector = DA_clases.DA_Tickets.obtiene_costo_sector(sector.id_evento, sector.id, Int32.Parse(ticket_reserva.cantidad));
+                    var comisiones = db.comisiones.Where(com => com.id_empresa == sector.Eventos.id_empresa);
+                    if (comisiones.Count() == 0)
+                    {
+                        comisiones = db.comisiones.Where(com => com.id_empresa == 1);
+                    }
+
+                    var comision = comisiones.FirstOrDefault(com => com.rango_inferior >= costo_total_sector);
+                    if (comision == null)//si no se encuentra comision inferior quiere decir que supera el limite inferior asi q tomamos el maximo
+                    {
+                        comision = comisiones.OrderByDescending(com => com.rango_superior).First();
+
+                    }
+                    decimal monto_comision = comision.monto_comision * Int32.Parse(ticket_reserva.cantidad); //Implementar   
+                    total_comision += monto_comision;
+
+                    string butaca = ticket_reserva.butaca;
+                    //generamos un numero de ticket nuevo por cada registro
+
+                    for (int i = 1; i <= Int32.Parse(ticket_reserva.cantidad); i++)
+                    {
+                        string codigo_ticket = Helpers.Generar_codigo_ticket(30, new Random());
+                        Ticket ticket_nuevo = new Ticket();
+                        ticket_nuevo.butaca = butaca;
+                        ticket_nuevo.codigo = codigo_ticket;
+                        ticket_nuevo.codigo_recaudacion = codigo_recaudacion;
+                        ticket_nuevo.id_evento = sector.id_evento;
+                        ticket_nuevo.id_sector = Int32.Parse(ticket_reserva.id_sector);
+                        ticket_nuevo.nit_usuario = datos_usuario.Personas.First().cedula_identidad; ;
+                        ticket_nuevo.nombre_usuario = User.Identity.Name; ;
+                        ticket_nuevo.utilizada = false;
+                        ticket_nuevo.valida = 0;
+                        ticket_nuevo.costo_sin_comision = costo_total_sector / 1;
+                        ticket_nuevo.fecha_modificacion = DateTime.Now;
+                        db.Ticket.Add(ticket_nuevo);
+                        db.SaveChanges();
+                    }
+                    costo_total += costo_total_sector;
+                    sector.asientos_disponibles = sector.asientos_disponibles - Int32.Parse(ticket_reserva.cantidad);
+                    db.Entry(sector).State = System.Data.EntityState.Modified;
+                    db.SaveChanges();
+                    //DA_clases.DA_Tickets.registra_ticket(codigo_ticket, butaca, request.id_evento, request.id_sector, codigo_recaudacion, request.nombre_usuario, request.nit_usuario);
+                    //DA_clases.DA_Tickets.registra_compra(usuario.id, codigo_recaudacion, costo_total + monto_comision);
+
+                }
+                bool envio = Helpers.Envio_sintesis_compra_simple(
+                           codigo_recaudacion, User.Identity.Name, User.Identity.Name, datos_usuario.Personas.First().cedula_identidad, evento.nombre_evento,
+                           evento.Empresas.nombre_empresa, evento.Empresas.nit, (double)costo_total, (double)total_comision);
+                if (!envio)
+                {
+                    //guardar en SINTESIS relegados
+                    Models.EnviosRelegadosSINTESIS relegado = new EnviosRelegadosSINTESIS();
+                    relegado.codigo_recaudacion = codigo_recaudacion;
+                    relegado.costo_total = costo_total;
+                    relegado.email_usuario = User.Identity.Name;
+                    relegado.fecha_hora = DateTime.Now;
+                    relegado.nit_empresa = evento.Empresas.nit;
+                    relegado.nit_usuario = datos_usuario.Personas.First().cedula_identidad;
+                    relegado.nombre_empresa = evento.Empresas.nombre_empresa;
+                    relegado.nombre_evento = evento.nombre_evento;
+                    relegado.nombre_usuario = User.Identity.Name;
+                    relegado.pendiente = true;
+                    relegado.total_comision = total_comision;
+                    db.EnviosRelegadosSINTESIS.Add(relegado);
+                    db.SaveChanges();
+                    helpers.Helpers.EnviarMail("admin@tnt.com", "admin", "eisenob@gmail.com", "admin", "CODIGO RECAUDACION NO ENVIADO SINTESIS - PENDIENTE", "<h1>Codigo de recaudacion no enviado y pendiente de envio</h1><h2>" + codigo_recaudacion + "</h2>", null);
+
+                }
+                Usuarios usuario = db.Usuarios.FirstOrDefault(us => us.email == User.Identity.Name);
+                Compra compra_nueva = new Compra();
+                compra_nueva.codigo_recaudacion = codigo_recaudacion;
+                compra_nueva.fecha_compra = DateTime.Now;
+                compra_nueva.id_usuario_compra = usuario.id;
+                compra_nueva.monto_cobrar = costo_total + total_comision;
+                compra_nueva.monto_comision = total_comision;
+                compra_nueva.monto_parcial = costo_total;
+                compra_nueva.pagado = 0;
+                db.Compra.Add(compra_nueva);
+                db.SaveChanges();
+                respuesta.codigo_recaudacion = codigo_recaudacion;
+                respuesta.costo_total = costo_total + total_comision;
+                //enviar correo a usuario con codigo de recaudacion
+                string template = "<h2>Se efectuo una compra del evento:" + evento.nombre_evento + "</h2>Este es el codigo de recaudacion:" + codigo_recaudacion + " con esto puede pasar a cancelar el monto de:" + respuesta.costo_total + " a el punto de pago mas cercano";
+                Helpers.EnviarMail("admin@tnt.com", "admin", usuario.email, usuario.Personas.First().nombre, "codigo de recaudacion", template, null);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+
+
+            return Json(respuesta);
+
+        }
         //
         // GET: /Ticket/Create
          [Authorize]
@@ -128,6 +256,8 @@ namespace TNT.Controllers
             ViewBag.nombre_evento = eventos.First().nombre_evento;
             ViewBag.fecha_evento = eventos.First().fecha_evento;
             ViewBag.hora_evento = eventos.First().hora_evento;
+            ViewBag.longitud = eventos.First().Lugares.longitud;
+            ViewBag.latitud = eventos.First().Lugares.latitud;
             ViewBag.descripcion = eventos.First().descripcion;
             ViewBag.nombre_lugar = eventos.First().Lugares.nombre_lugar;
             ViewBag.img_url = eventos.First().img_url;

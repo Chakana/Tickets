@@ -3,7 +3,14 @@
     ViewBag.Title = "Landing Empresas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    .carousel-indicators {
+      bottom:-50px;
+    }
+    .carousel-inner {
+   margin-bottom:50px;
+}
+</style>
 <div class="container">
     <div class="row">
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -16,7 +23,8 @@
                     {
                         index = i;
                         var itemClass = i++ == 0 ? "active" : " ";
-                        <li data-target="#myCarousel" data-slide-to="@index" class="@itemClass"></li>
+                        <li data-target="#myCarousel" data-slide-to="@index" class="@itemClass">
+                        </li>
                     }
                 }
             </ol>

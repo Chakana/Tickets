@@ -2,11 +2,16 @@
 
 @{
     ViewBag.Title = "ComprarTicketsUsuario";
-    Layout = "~/Views/Shared/_Layout_usuario.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<style>
-    
-</style>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
+<script type="text/javascript" src="~/Scripts/gmaps.js"></script>
+<script type="text/javascript" src="~/Scripts/smoothscroll.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.parallax.js"></script>
+<script type="text/javascript" src="~/Scripts/coundown-timer.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.scrollTo.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.nav.js"></script>
+<script type="text/javascript" src="~/Scripts/main.js"></script>
 <script>
     
     function printDiv(divName) {
@@ -20,10 +25,36 @@
         document.body.innerHTML = originalContents;
     }
     //mostrar datos del sector elegido
+   
     jQuery(window).load(function () {
+        var ticketsReservados = [];
+        var idSectorElegido = '';
+        jQuery('.sel_butacas').click(function () {
+            var $item = $(this).closest("tr");   // Finds the closest row <tr>
+            console.log($item);
+            idSectorElegido = $item.find('#input_sector_id').val();
+            console.log(idSectorElegido);
+            CargarDatosSector(idSectorElegido);
+            $('#butacas_seleccionar').modal('show');
+        });
+        jQuery('.cantidad_butacas_no_numeradas').change(function () {
+            var $item = $(this).closest("tr");   // Finds the closest row <tr>
+            var $cantidad = $item.find('#cantidad_butacas_no_numeradas').find(":selected").text();
+            if ($cantidad != '0') {
+                ticketsReservados.push({
+                    id_sector: $item.find('#input_sector_id').val(),
+                    butaca: '',
+                    cantidad: $cantidad
+                });
+                console.log(ticketsReservados);
+            }
+            
+            
+        });
+
+        CargaMapa($('.mapa_evento').attr('xLocationLat'), $('.mapa_evento').attr('xLocationLong'));
         
-        var idSectorElegido = $('#id_sector').val();
-        setInterval(function () { CargarDatosSector(idSectorElegido); }, 60000);
+        //setInterval(function () { CargarDatosSector(idSectorElegido); }, 60000);
         var settings = {
             rows: 10,
             cols: 10,
@@ -65,7 +96,7 @@
         var obtenerReservas = function () {
             var parts = document.location.href.split("/");
             var id = parts[parts.length - 1];
-            var sector_id = $('#id_sector').val();
+            var sector_id = idSectorElegido;
             var data = { id: id,sector:sector_id };
             $.ajax({
                 url: '/Event/ObtenerReservasEvento',
@@ -78,7 +109,7 @@
                     init(response);
                     $('.' + settings.seatCss).click(function () {
                         if ($(this).hasClass(settings.selectedSeatCss)) {
-                            alert('This seat is already reserved');
+                            alert('Asiento reservado');
                         }
                         else {
                             $(this).toggleClass(settings.selectingSeatCss);
@@ -87,7 +118,19 @@
                                 item = $(this).attr('title');
                                 str.push(item);
                             });
+                            console.log(this);
+                            if ($(this).hasClass('selectingSeat')) {
+                                ticketsReservados.push({
+                                    id_sector: idSectorElegido,
+                                    butaca: item,
+                                    cantidad: 1
+                                });
+                            } else {
+                                    //TODO: remover de la lista cuando se deseleccione un asiento
+                            }
                             console.log(str.join(','));
+                            
+                            console.log(ticketsReservados);
                             $('#butaca').val(str.join(','));
                             
                         }
@@ -130,7 +173,7 @@
         //Case II: If already booked
         //obtenerReservas();
         //var bookedSeats = $('#asientos_reservados').val();
-        CargarDatosSector(idSectorElegido);
+        //CargarDatosSector(idSectorElegido);
         
         $("#id_sector").change(function () {
             idSectorElegido = $('#id_sector').val();
@@ -153,99 +196,295 @@
             });
             alert(str.join(','));
         })
+        $('#btn_pagar_punto').click(function () {
+            var data = { req: ticketsReservados };
+            $.ajax({
+                url: '/Ticket/ComprarTicketsMultiple',
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "JSON",
+                contentType: "application/json",
+                success: function (response) {
+                    $('#confirmacion_codigo_recaudacion').html(response.codigo_recaudacion);
+                    $('#confirmacion_costo_total').html(response.costo_total);
+                    $('#confirma-reserva').modal('show');
+                    ticketsReservados = [];
+                },
+                error: function () {
+
+                }
+            });
+        });
     });
 
 </script>
 <div class="container">
     <div class="row">
         <input type="hidden" id="asientos_reservados" value="" />
-        <h2>Informacion del evento</h2>
-        <div class="col-md-12"><img src="@ViewBag.img_url" /></div>
-        <div class="col-md-6">Nombre</div><div class="col-md-6">@ViewBag.nombre_evento</div>
-        <div class="col-md-6">Fecha</div><div class="col-md-6">@ViewBag.fecha_evento</div>
-        <div class="col-md-6">Hora</div><div class="col-md-6">@ViewBag.hora_evento</div>
-        <div class="col-md-6">Descripcion</div><div class="col-md-6">@ViewBag.descripcion</div>
-        <div class="col-md-6">Lugar</div><div class="col-md-6">@ViewBag.nombre_lugar</div>
-        <div class="col-md-3">Sectores</div>
-        <div class="col-md-9">
-            @{foreach (var item in ViewBag.sectores)
-            {
-                <div class="col-md-4">@item.descripcion</div><div class="col-md-4">Precio:@item.precio_unitario Bs.</div><div class="col-md-4">Disponibilidad: @item.asientos_disponibles</div>
-            }
-            }
+        <div class="panel panel-default">
+            <div class="panel-heading">@ViewBag.nombre_evento</div>
+            <div class="panel-body">
+                <div>
+                    <div class="col-xs-12"><img src="@ViewBag.img_url" /></div>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Informacion General</a></li>
+                        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-shopping-cart"></i>&nbsp; COMPRAR</a></li>
+                        
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="home">
+                            <div class="col-md-6">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>Fecha</td>
+                                        <td><input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount" value="@ViewBag.fecha_evento"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Hora</td>
+                                        <td><input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount" value="@ViewBag.hora_evento"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Descripcion</td>
+                                        <td><input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount" value="@ViewBag.descripcion"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lugar</td>
+                                        <td><input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount" value="@ViewBag.nombre_lugar"></td>
+                                    </tr>
+                                </table>
+                              
+                                <h4>Sectores</h4>
+                                <table class="table table-bordered">
+                                    @{foreach (var item in ViewBag.sectores)
+                                    {
+                                        <tr>
+                                            <td>@item.descripcion</td>
+                                            <td>Precio:@item.precio_unitario Bs.</td>
+                                            <td>disponibilidad: @item.asientos_disponibles </td>
+                                        </tr>
+                                    }
+                                    }
+                                </table>
+                             
+                                
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mapa_evento col-xs-6" xlocationlat="@ViewBag.latitud" xlocationlong="@ViewBag.longitud" xeventdate="@ViewBag.fecha_evento.Add(ViewBag.hora_evento).ToString("yyyy-MM-dd hh:mm:ss", System.Globalization.CultureInfo.InvariantCulture)">
+                                    <div id="map">
+                                        <div id="gmap-wrap">
+                                            <div id="gmap" class="gmap">
+                                            </div>
+                                           
+                                        </div>
+                                    </div><!--/#map-->
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="profile">
+                            <h2>Sectores disponibles</h2>
+                            <table class="table table-hover">
+
+                                @foreach (TNT.Models.sectores sector in ViewBag.sectores)
+                                {
+                                    <tr>
+                                        <td><input type="hidden" id="input_sector_id" value="@sector.id" /> </td>
+                                        <td>@sector.descripcion</td>
+                                        <td>$ @sector.precio_unitario Bs.</td>
+                                        @if (sector.es_sector_numerado)
+                                        {
+                                            <td> <button id="sel_butacas" class="sel_butacas btn-primary" data-target="#butacas_seleccionar">Seleccionar butacas</button> </td>    
+                                        }
+                                        else
+                                        {
+                                            <td><select id="cantidad_butacas_no_numeradas" class="cantidad_butacas_no_numeradas">
+                                                <option value="0">0</option>
+                                                <option value="0">1</option>
+                                                <option value="0">2</option>
+                                                <option value="0">3</option>
+                                                <option value="0">4</option>
+                                                <option value="0">5</option>
+                                                </select>  </td>
+                                        }
+                                    </tr>
+                                }
+                            </table>
+                            <p>
+                                Elija metodo de pago:
+                                <button type="button" class="btn btn-primary" id="btn_pagar_punto" >Reserve y pague despues en un punto de pago cercano</button>
+                            </p>
+                           
+                        </div>
+                       
+                    </div>
+
+                </div>
+                
+                
+            </div>
         </div>
+        
 
     </div>
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
-        <div class="row">
-            <div class="col-xs-6">
-                <fieldset>
-                    <br />
-                    <br />
-                    <h2>Comprar Ticket</h2>
-
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.id_evento, "Eventos")
-                    </div>
-                    <div class="editor-field">
-                        @Html.DropDownList("id_evento")
-                        @Html.ValidationMessageFor(model => model.id_evento)
-                    </div>
-
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.id_sector, "sectores")
-                    </div>
-                    <div class="editor-field">
-                        @Html.DropDownList("id_sector")
-                        @Html.ValidationMessageFor(model => model.id_sector)
-                    </div>
-                    @Html.HiddenFor(model => model.butaca);
-                    
-                    <p>
-                        <input type="submit" value="Comprar Ticket" />
-                    </p>
-                </fieldset>
-            </div>
-            <div class="col-xs-6" id="taquillas" hidden="hidden">
-                <h2> Elija los asientos haciendo clic en uno de ellos:</h2>
-                <div id="holder">
-                    <ul id="place"></ul>
-                </div>
-                <div style="float:left;">
-                    <ul id="seatDescription">
-                        <li style="background:url('../../Images/available_seat_img.gif') no-repeat scroll 0 0 transparent;">Asiento Disponible</li>
-                        <li style="background:url('../../Images/booked_seat_img.gif') no-repeat scroll 0 0 transparent;">Asiento Reservado</li>
-                        <li style="background:url('../../Images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Asiento Seleccionado</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="row">
-                <button type="button" class="btn btn-default" aria-label="Left Align" id="print_voucher" onclick="printDiv('imprimir_voucher')">
-                    <span class=" glyphicon glyphicon-print" aria-hidden="true">
-                    </span>
-                </button>
-                <div class="row" id="imprimir_voucher">
-                    <div class="col-md-10">Imprima este voucher</div><div class="col-md-2">
-
-                    </div>
-                    <div class="col-md-6">Codigo de Recaudacion:</div><div class="col-md-6">@ViewBag.codigo_recaudacion</div>
-                    <div class="col-md-6">Monto a Pagar:</div><div class="col-md-6">@ViewBag.monto_pagar</div>
-                    <div class="col-md-12">Este voucher le ayudara a efectuar el cobro en su punto de pago mas cercano</div>
-                </div>
-                <div class="alert alert-danger" role="alert">@ViewBag.message</div>
-            </div>
-        </div>
-
-    }
+    
 
     <div>
         @Html.ActionLink("Volver a la lista", "VerEventosUsuario", "Event")
     </div>
 </div>
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+<div class="modal fade" id="confirma-reserva" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirmacion de Reserva
+            </div>
+            <div class="modal-body">
+                Por favor acuda al mas proximo punto de pago con la siguiente informacion:
+                <table class="table">
+                    <tr>
+                        <th>Codigo de recaudacion</th>
+                        <td id="confirmacion_codigo_recaudacion"></td>
+                    </tr>
+                    <tr>
+                        <th>Costo Total</th>
+                        <td id="confirmacion_costo_total"></td>
+                    </tr>
+                    
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="butacas_seleccionar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Seleccionar butacas
+            </div>
+            <div class="modal-body">
+                <div class="col-xs-12" id="taquillas">
+                    <h2> Elija los asientos haciendo clic en uno de ellos:</h2>
+                    <div id="holder">
+                        <ul id="place"></ul>
+                    </div>
+                    <div style="float:left;">
+                        <ul id="seatDescription">
+                            <li style="background:url('../../Images/available_seat_img.gif') no-repeat scroll 0 0 transparent;">Asiento Disponible</li>
+                            <li style="background:url('../../Images/booked_seat_img.gif') no-repeat scroll 0 0 transparent;">Asiento Reservado</li>
+                            <li style="background:url('../../Images/selected_seat_img.gif') no-repeat scroll 0 0 transparent;">Asiento Seleccionado</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        $('#submitBtn').click(function () {
+            /* when the button in the form, display the entered values in the modal */
+            $('#lname').text($('#lastname').val());
+            $('#fname').text($('#firstname').val());
+        });
+
+        $('#submit').click(function () {
+            /* when the submit button in the modal is clicked, submit the form */
+            alert('submitting');
+            $('#formfield').submit();
+        });
+
+    function CargaMapa(lat, lng) {
+        console.log(lat);
+        console.log(lng);
+        var map;
+        map = new GMaps({
+            el: '#gmap',
+            lat: lat,
+            lng: lng,
+            scrollwheel: false,
+            zoom: 16,
+            zoomControl: false,
+            panControl: false,
+            streetViewControl: false,
+            mapTypeControl: false,
+            overviewMapControl: false,
+            clickable: false
+        });
+
+        var image = '../../images/map-icon.png';
+        map.addMarker({
+            lat: lat,
+            lng: lng,
+            icon: image,
+            animation: google.maps.Animation.DROP,
+            verticalAlign: 'bottom',
+            horizontalAlign: 'center',
+            backgroundColor: '#3e8bff',
+        });
+
+
+        var styles = [
+
+        {
+            "featureType": "road",
+            "stylers": [
+            { "color": "#b4b4b4" }
+            ]
+        }, {
+            "featureType": "water",
+            "stylers": [
+            { "color": "#d8d8d8" }
+            ]
+        }, {
+            "featureType": "landscape",
+            "stylers": [
+            { "color": "#f1f1f1" }
+            ]
+        }, {
+            "elementType": "labels.text.fill",
+            "stylers": [
+            { "color": "#000000" }
+            ]
+        }, {
+            "featureType": "poi",
+            "stylers": [
+            { "color": "#d9d9d9" }
+            ]
+        }, {
+            "elementType": "labels.text",
+            "stylers": [
+            { "saturation": 1 },
+            { "weight": 0.1 },
+            { "color": "#000000" }
+            ]
+        }
+
+        ];
+
+        map.addStyle({
+            styledMapName: "Styled Map",
+            styles: styles,
+            mapTypeId: "map_style"
+        });
+
+        map.setStyle("map_style");
+
+    }
+    </script>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

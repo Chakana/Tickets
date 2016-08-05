@@ -356,10 +356,12 @@ h2 {
 
 .cart {
   background-color: #b34534;  
-  position: absolute;
-  right:-200px;
-  top: 37%;
-  width:252px;
+  position: relative;
+  top: 0px;
+  right:124px;
+  /*right:-200px;
+  
+  width:252px;*/
    -webkit-transition: all 0.7s ease-in-out;
   -moz-transition: all 0.7s ease-in-out;
   -ms-transition: all 0.7s ease-in-out;
@@ -368,7 +370,7 @@ h2 {
 }
 
 .cart:hover {
-  right:0;
+  /*right:0;*/
 }
 
 

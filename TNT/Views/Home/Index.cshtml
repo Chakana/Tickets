@@ -11,11 +11,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>TNT</title>
-    <link href="Content/bootstrap.min.css" rel="stylesheet">
-    <link href="Content/font-awesome.min.css" rel="stylesheet">
-    <link href="Content/main.css" rel="stylesheet">
-    <link href="Content/animate.css" rel="stylesheet">
-    <link href="Content/responsive.css" rel="stylesheet">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/main.css" rel="stylesheet">
+    <link href="~/Content/animate.css" rel="stylesheet">
+    <link href="~/Content/responsive.css" rel="stylesheet">
     
     <!--[if lt IE 9]>
         <script src="js/html5shiv.js"></script>
@@ -29,55 +29,10 @@
 </head><!--/head-->
 
 <body>
-    <style>
-        .flip {
-  -webkit-perspective: 800;
-perspective: 800;
+<style>
+  .iconos-home { transition: all .2s ease-in-out;margin-bottom:5%; }
+  .iconos-home:hover { transform: scale(1.3);z-index:2 }
 
-    position: relative;
- text-align: center;
-}
-.flip .card.flipped {
-  -webkit-transform: rotatey(-180deg);
-    transform: rotatey(-180deg);
-}
-.flip .card {
-
-  height: 100%;
-  -webkit-transform-style: preserve-3d;
-  -webkit-transition: 0.5s;
-    transform-style: preserve-3d;
-    transition: 0.5s;
-}
-.flip .card .face {
-
-  -webkit-backface-visibility: hidden ;
-    backface-visibility: hidden ;
-  z-index: 2;
-   
-}
-.flip .card .front {
-  position: absolute;
-   width: 100%;
-  z-index: 1;
-
-}
-.flip .card .back {
-  -webkit-transform: rotatey(-180deg);
-    transform: rotatey(-180deg);
-}
-  .inner{margin:0px !important;}
-  .form-login {
-    background-color: #952727;
-    padding-top: 10px;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 15px;
-    border-color:#d2d2d2;
-    border-width: 5px;
-    box-shadow:0 1px 0 #cfcfcf;
-}
     </style>
     
     <header id="header" role="banner">
@@ -93,27 +48,31 @@ perspective: 800;
                             <span class="icon-bar"></span>
                         </button>
                         <a class="navbar-brand" href="#">
-                            <img class="img-responsive" src="images/logo_tnt.png" alt="logo" style="width: 150px;">
+                            <img class="img-responsive" src="~/images/logo_tnt.png" alt="logo" style="width: 150px;">
                         </a>
+                        <ul  style="display: block;list-style: none;">
+                            <li class="iconos-home"><a data-toggle="modal" data-target="#modalConciertos" class="" href="#"><img class="img-responsive" src="~/images/icon_conciertos.png" alt="logo" style="width: 70px;"></a></li>
+                            <li class="iconos-home"><a data-toggle="modal" data-target="#modalVarios" class="" href="#"><img class="img-responsive" src="~/images/icon_articulos.png" alt="logo" style="width: 70px;"></a></li>
+                            <li class="iconos-home"><a data-toggle="modal" data-target="#modalDeportes" class="" href="#"><img class="img-responsive" src="~/images/icon_deporte.png" alt="logo" style="width: 70px;"></a></li>
+                            <li class="iconos-home"><a data-toggle="modal" data-target="#modalViajesTurismo" class="" href="#"><img class="img-responsive" src="~/images/icon_viajes_turismo.png" alt="logo" style="width: 70px;"></a></li>
+                            <li class="iconos-home"><a data-toggle="modal" data-target="#modalCultura" class="" href="#"><img class="img-responsive" src="~/images/icon_cultura.png" alt="logo" style="width: 70px;"></a></li>
+                        </ul>
+
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a data-toggle="modal" data-target="#myModal" class="" href="#"><img class="img-responsive" src="images/icon_conciertos.png" alt="logo" style="width: 70px;"></a></li>
-                            <li><a data-toggle="modal" data-target="#myModal" class="" href="#"><img class="img-responsive" src="images/icon_articulos.png" alt="logo" style="width: 70px;"></a></li>
-                            <li><a data-toggle="modal" data-target="#myModal" class="" href="#"><img class="img-responsive" src="images/icon_deporte.png" alt="logo" style="width: 70px;"></a></li>
-                            <li><a data-toggle="modal" data-target="#myModal" class="" href="#"><img class="img-responsive" src="images/icon_viajes_turismo.png" alt="logo" style="width: 70px;"></a></li>
-                            <li><a data-toggle="modal" data-target="#myModal" class="" href="#"><img class="img-responsive" src="images/icon_cultura.png" alt="logo" style="width: 70px;"></a></li>
+                            
                             @if (Request.IsAuthenticated)
                             {
                                 if (User.IsInRole("usuario"))
                                 {
-                                    <li>@Html.ActionLink( User.Identity.Name, "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })</li>
-                                }   
-                            
+                                    <li>@Html.ActionLink(User.Identity.Name, "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })</li>
+                                }
+
                             }
                             else
                             {
-                                <li><a data-toggle="modal" data-target="#myLogin" class="no-scroll" href="#">LOGIN</a></li>    
+                                <li><a data-toggle="modal" data-target="#myLogin" class="no-scroll" href="#">LOGIN</a></li>
                             }
                             <li class="scroll"><a href="#contact">Contactar</a></li>
                         </ul>
@@ -128,23 +87,23 @@ perspective: 800;
         <div id="main-slider" class="carousel slide" data-ride="carousel" data-pause="false">
             <div class="carousel-inner">
                 <div class="item active">
-                    <img class="img-responsive" src="images/slider/concert.jpg" style="max-height:639px;" alt="slider">
+                    <img class="img-responsive" src="~/images/slider/concert.jpg" style="max-height:639px;" alt="slider">
                     
                 </div>
                 <div class="item">
-                    <img class="img-responsive" src="images/slider/sport.jpg" style="max-height:639px;" alt="slider" >
+                    <img class="img-responsive" src="~/images/slider/sport.jpg" style="max-height:639px;" alt="slider">
                     
                 </div>
                 <div class="item">
-                    <img class="img-responsive" src="images/slider/gift.jpg" style="max-height:639px;" alt="slider">
+                    <img class="img-responsive" src="~/images/slider/gift.jpg" style="max-height:639px;" alt="slider">
                    
                 </div>
                 <div class="item">
-                    <img class="img-responsive" src="images/slider/voyage.jpg" style="max-height:639px;" alt="slider">
+                    <img class="img-responsive" src="~/images/slider/voyage.jpg" style="max-height:639px;" alt="slider">
                    
                 </div>
                 <div class="item">
-                    <img class="img-responsive" src="images/slider/trip.jpg" style="max-height:639px;" alt="slider">
+                    <img class="img-responsive" src="~/images/slider/trip.jpg" style="max-height:639px;" alt="slider">
                    
                 </div>
             </div>
@@ -176,54 +135,51 @@ perspective: 800;
             
         </div>
     </div>
-    <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade bs-example-modal-lg" id="modalConciertos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                </div>
                 <div class="modal-body">
                     <div class="col-md-12">
-                    @{
-                    var i = 0;
-                    foreach (var item in Model)
-                    {
-                        var itemClass = i++ == 0 ? "item active" : "item";
-                       
-                        <div class="row">
-                            <div class="flip">
-                                <div class="card">
-                                    <div class="face front">
-                                        <img src="@item.img_url" style="width:100%;height:200px" />
-                                       
-                                    </div>
-                                    <div class="face back" style="width:100%;height:200px;background-color:#952727">
-                                        <div class="col-xs-6">
-                                            <h1>@item.nombre_evento</h1>
-                                            <p>
-                                                @item.fecha_evento.Add(item.hora_evento).ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)
-                                                @item.hora_evento
-                                            </p>
-                                            <p style="text-overflow: ellipsis;">@item.descripcion</p>
-                                            <div class="cart">
-                                                <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><i class="fa fa-shopping-cart"></i> <span>Comprar Tickets</span></a>    
-                                            </div>
+                        <div id="myCarouselConciertos" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                @{
+                                    var i = 0;
+                                    var index = 0;
+                                    foreach (var item in ViewBag.eventosConciertos)
+                                    {
+                                        index = i;
+                                        var itemClass = i++ == 0 ? "active" : " ";
+                                        <li data-target="#myCarouselConciertos" data-slide-to="@index" class="@itemClass">
+                                        </li>
+                                    }
+                                }
+                            </ol>
+                            <!-- Images-->
+                            <div class="carousel-inner" role="listbox">
+                                @{
+                                    i = 0;
+                                    foreach (var item in ViewBag.eventosConciertos)
+                                    {
+                                        var itemClass = i++ == 0 ? "item active" : "item";
+                                        <div class="@itemClass">
+                                            <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px;width:100%;" /></a>    
                                         </div>
-                                        <div class="mapa_evento col-xs-6" xlocationlat="@item.Lugares.latitud" xlocationlong="@item.Lugares.longitud" xitemindex="@i" xeventdate="@item.fecha_evento.Add(item.hora_evento).ToString("yyyy-MM-dd hh:mm:ss",System.Globalization.CultureInfo.InvariantCulture)">
-                                            <div id="map">
-                                                <div id="gmap-wrap">
-                                                    <div id="gmap" class="gmap">
-                                                    </div>
-                                                </div>
-                                            </div><!--/#map-->
-                                        </div>
-                                    </div>
+                                    }
+                                }
                             </div>
-                          </div>
+
+                            <!-- Left Right Arrows -->
+                            <a class="left carousel-control" href="#myCarouselConciertos" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarouselConciertos" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
                         </div>
-                     }
-                    }
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -232,24 +188,239 @@ perspective: 800;
             </div>
         </div>
     </div>
+    <div class="modal fade bs-example-modal-lg" id="modalVarios" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div id="myCarouselVarios" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                @{
+                                    i = 0;
+                                    index = 0;
+                                    foreach (var item in ViewBag.eventosVarios)
+                                    {
+                                        index = i;
+                                        var itemClass = i++ == 0 ? "active" : " ";
+                                        <li data-target="#myCarouselVarios" data-slide-to="@index" class="@itemClass">
+                                        </li>
+                                    }
+                                }
+                            </ol>
+                            <!-- Images-->
+                            <div class="carousel-inner" role="listbox">
+                                @{
+                                    i = 0;
+                                    foreach (var item in ViewBag.eventosVarios)
+                                    {
+                                        var itemClass = i++ == 0 ? "item active" : "item";
+                                        <div class="@itemClass">
+                                            <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px;width:100%;" /></a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                            <!-- Left Right Arrows -->
+                            <a class="left carousel-control" href="#myCarouselVarios" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarouselVarios" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-lg" id="modalDeportes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div id="myCarouselDeportes" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                @{
+                                    i = 0;
+                                    index = 0;
+                                    foreach (var item in ViewBag.eventosDeportes)
+                                    {
+                                        index = i;
+                                        var itemClass = i++ == 0 ? "active" : " ";
+                                        <li data-target="#myCarouselDeportes" data-slide-to="@index" class="@itemClass">
+                                        </li>
+                                    }
+                                }
+                            </ol>
+                            <!-- Images-->
+                            <div class="carousel-inner" role="listbox">
+                                @{
+                                    i = 0;
+                                    foreach (var item in ViewBag.eventosDeportes)
+                                    {
+                                        var itemClass = i++ == 0 ? "item active" : "item";
+                                        <div class="@itemClass">
+                                            <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px;width:100%;" /></a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                            <!-- Left Right Arrows -->
+                            <a class="left carousel-control" href="#myCarouselDeportes" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarouselDeportes" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-lg" id="modalViajesTurismo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div id="myCarouselViajes" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                @{
+                                    i = 0;
+                                    index = 0;
+                                    foreach (var item in ViewBag.eventosViajesTurismo)
+                                    {
+                                        index = i;
+                                        var itemClass = i++ == 0 ? "active" : " ";
+                                        <li data-target="#myCarouselViajes" data-slide-to="@index" class="@itemClass">
+                                        </li>
+                                    }
+                                }
+                            </ol>
+                            <!-- Images-->
+                            <div class="carousel-inner" role="listbox">
+                                @{
+                                    i = 0;
+                                    foreach (var item in ViewBag.eventosViajesTurismo)
+                                    {
+                                        var itemClass = i++ == 0 ? "item active" : "item";
+                                        <div class="@itemClass">
+                                            <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px;width:100%;" /></a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                            <!-- Left Right Arrows -->
+                            <a class="left carousel-control" href="#myCarouselViajes" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarouselViajes" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-lg" id="modalCultura" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div id="myCarouselCultura" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                @{
+                                    i = 0;
+                                    index = 0;
+                                    foreach (var item in ViewBag.eventosCultura)
+                                    {
+                                        index = i;
+                                        var itemClass = i++ == 0 ? "active" : " ";
+                                        <li data-target="#myCarouselCultura" data-slide-to="@index" class="@itemClass">
+                                        </li>
+                                    }
+                                }
+                            </ol>
+                            <!-- Images-->
+                            <div class="carousel-inner" role="listbox">
+                                @{
+                                    i = 0;
+                                    foreach (var item in ViewBag.eventosCultura)
+                                    {
+                                        var itemClass = i++ == 0 ? "item active" : "item";
+                                        <div class="@itemClass">
+                                            <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px;width:100%;" /></a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                            <!-- Left Right Arrows -->
+                            <a class="left carousel-control" href="#myCarouselCultura" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarouselCultura" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
+   
+
     <!--/#footer-->
 
-    <script type="text/javascript" src="Scripts/jquery.js"></script>
-    <script type="text/javascript" src="Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-    <script type="text/javascript" src="Scripts/gmaps.js"></script>
-    <script type="text/javascript" src="Scripts/smoothscroll.js"></script>
-    <script type="text/javascript" src="Scripts/jquery.parallax.js"></script>
-    <script type="text/javascript" src="Scripts/coundown-timer.js"></script>
-    <script type="text/javascript" src="Scripts/jquery.scrollTo.js"></script>
-    <script type="text/javascript" src="Scripts/jquery.nav.js"></script>
-    <script type="text/javascript" src="Scripts/main.js"></script>
+    <script type="text/javascript" src="~/Scripts/gmaps.js"></script>
+    <script type="text/javascript" src="~/Scripts/smoothscroll.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.parallax.js"></script>
+    <script type="text/javascript" src="~/Scripts/coundown-timer.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.scrollTo.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.nav.js"></script>
+    <script type="text/javascript" src="~/Scripts/main.js"></script>
     <script>
-         $('.flip').hover(function () {
-             $(this).find('.card').toggleClass('flipped');
-             //CargaContadoresEventos($(this).find('.card').find('.mapa_evento').attr('xitemindex'), $(this).find('.card').find('.mapa_evento').attr('xeventdate'));
-             CargaMapa($(this).find('.card').find('.mapa_evento').attr('xitemindex'), $(this).find('.card').find('.mapa_evento').attr('xLocationLat'), $(this).find('.card').find('.mapa_evento').attr('xLocationLong'));
-         });
+        
          $('#btn_login').click(function () {
              var data = { email: $('#userName').val(),password:$('#userPassword').val()};
              $.ajax({
