@@ -139,49 +139,66 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div class="col-md-12">
-                        <div id="myCarouselConciertos" class="carousel slide" data-ride="carousel">
-                            <!-- Indicators -->
-                            <ol class="carousel-indicators">
-                                @{
-                                    var i = 0;
-                                    var index = 0;
-                                    foreach (var item in ViewBag.eventosConciertos)
-                                    {
-                                        index = i;
-                                        var itemClass = i++ == 0 ? "active" : " ";
-                                        <li data-target="#myCarouselConciertos" data-slide-to="@index" class="@itemClass">
-                                        </li>
-                                    }
+                    <!-- thumb navigation carousel -->
+                    <div class="col-md-12 hidden-sm hidden-xs" id="slider-thumbs">
+
+                        <!-- thumb navigation carousel items -->
+                        <ul class="list-inline">
+                            @{
+                                var i = 0;
+                                var index = 0;
+                                foreach (var item in ViewBag.eventosConciertos)
+                                {
+                                    index = i;
+                                    var itemClass = i++ == 0 ? "active" : " ";
+                                    var carouselSelId = "carousel-selector-"+i;
+                                    <li>
+                                        <a id="@carouselSelId" class="selected">
+                                            <img src="@item.img_url" style="max-height:80px;max-width:100px;width:auto;height:auto" class="img-responsive">
+                                        </a>
+                                    </li>
+                                    
                                 }
-                            </ol>
-                            <!-- Images-->
-                            <div class="carousel-inner" role="listbox">
-                                @{
+                            }
+                            
+                        </ul>
+
+                    </div>
+
+
+                    <!-- main slider carousel -->
+                    <div class="row">
+                        <div class="col-md-12" id="slider">
+
+                            <div class="col-md-12" id="carousel-bounding-box">
+                                <div id="myCarouselConciertos" class="carousel slide">
+                                    <!-- main slider carousel items -->
+                                    <div class="carousel-inner">
+                                    @{
                                     i = 0;
                                     foreach (var item in ViewBag.eventosConciertos)
                                     {
                                         var itemClass = i++ == 0 ? "item active" : "item";
-                                        <div class="@itemClass">
-                                            <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px;width:100%;" /></a>    
+                                        <div class="@itemClass" data-slide-number="@i">
+                                            <img src="@item.img_url" class="img-responsive">
                                         </div>
                                     }
-                                }
+                                    }
+                                    </div>
+                                    <a class="carousel-control left" href="#myCarouselConciertos" data-slide="prev">‹</a>
+
+                                    <a class="carousel-control right" href="#myCarouselConciertos" data-slide="next">›</a>
+                                </div>
                             </div>
 
-                            <!-- Left Right Arrows -->
-                            <a class="left carousel-control" href="#myCarouselConciertos" role="button" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right carousel-control" href="#myCarouselConciertos" role="button" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
                         </div>
-
                     </div>
+                    <!--/main slider carousel-->
+                    
+
+                    
                 </div>
+               
                 <div class="modal-footer">
 
                 </div>
@@ -420,6 +437,22 @@
     <script type="text/javascript" src="~/Scripts/jquery.nav.js"></script>
     <script type="text/javascript" src="~/Scripts/main.js"></script>
     <script>
+        $('[id^=carousel-selector-]').click(function () {
+            var id_selector = $(this).attr("id");
+            var id = id_selector.substr(id_selector.length - 1);
+            id = parseInt(id);
+            $('#myCarouselConciertos').carousel(id);
+            $('[id^=carousel-selector-]').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+        // when the carousel slides, auto update
+        $('#myCarouselConciertos').on('slid', function (e) {
+            var id = $('.item.active').data('slide-number');
+            id = parseInt(id);
+            $('[id^=carousel-selector-]').removeClass('selected');
+            $('[id=carousel-selector-' + id + ']').addClass('selected');
+        });
         
          $('#btn_login').click(function () {
              var data = { email: $('#userName').val(),password:$('#userPassword').val()};
