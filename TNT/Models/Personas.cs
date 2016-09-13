@@ -11,24 +11,32 @@ namespace TNT.Models
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Personas
     {
         public Personas()
         {
             this.Suscripcion = new HashSet<Suscripcion>();
         }
-    
+
         public int id { get; set; }
         public string nombre { get; set; }
         public string apellidos { get; set; }
+
+        public string nombre_completo
+        {
+            get
+            {
+                return string.Format("{0} {1}", this.nombre, this.apellidos);
+            }
+        }
         public string cedula_identidad { get; set; }
         public string direccion { get; set; }
         public System.DateTime fecha_registro { get; set; }
         public System.DateTime fecha_modificacion { get; set; }
         public string numero_celular { get; set; }
         public Nullable<int> id_usuario { get; set; }
-    
+
         public virtual Usuarios Usuarios { get; set; }
         public virtual ICollection<Suscripcion> Suscripcion { get; set; }
     }

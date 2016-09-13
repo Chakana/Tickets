@@ -1,39 +1,43 @@
-﻿@model TNT.Models.Usuarios 
+﻿@model TNT.Models.Usuarios
 @{
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row vertical-offset-100">
-        <div class="col-md-4 col-md-offset-4">
-    		<div class="panel panel-default">
-			  	<div class="panel-heading">
-			    	<h3 class="panel-title">Por favor ingrese su email y password</h3>
-			 	</div>
-			  	<div class="panel-body">
-			    	@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
-                    {
-                        @Html.AntiForgeryToken()
-                        @Html.ValidationSummary(true)
+    <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Por favor ingrese su email y password</h3>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
                     <fieldset>
-			    	  	<div class="form-group">
-                            @Html.TextBoxFor(m => m.email, htmlAttributes: new { @class = "form-control", @placeholder = "email", @maxlength = "60", @required = "true", @autofocus = "" })
-			    		</div>
-			    		<div class="form-group">
-			    			@Html.PasswordFor(m => m.password, htmlAttributes: new { @class = "form-control", @placeholder = "", @maxlength = "30", @required = "true" })
-			    		</div>
-			    		
-			    		<input class="btn btn-lg btn-danger btn-block" type="submit" value="Login">
-			    	</fieldset>
-                    }
-                    @Html.ActionLink("Olvido su password?", "ReiniciarPassword", "Account")
+                        <div class="form-group">
+                            @*@Html.TextBoxFor(m => m.email, htmlAttributes: new { @class = "form-control", @placeholder = "email", @maxlength = "60", @required = "true", @autofocus = "" })*@
+                            @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email" })
+                            <p class="help-block">@Html.ValidationMessageFor(m => m.email)</p>
+                        </div>
+                        <div class="form-group">
+                            @*@Html.PasswordFor(m => m.password, htmlAttributes: new { @class = "form-control", @placeholder = "", @maxlength = "30", @required = "true" })*@
+                            @Html.PasswordFor(m => m.password, new { @class = "form-control", placeholder = "Password" })
+                            <p class="help-block">@Html.ValidationMessageFor(m => m.password)</p>
+                        </div>
+
+                        <input class="btn btn-lg btn-danger btn-block" type="submit" value="Login">
+                    </fieldset>
+                }
+                @Html.ActionLink("Olvido su password?", "ReiniciarPassword", "Account")
                 <p>
                     @Html.ActionLink("Regístrese", "Register") si no tiene ninguna cuenta.
                 </p>
-			    </div>
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -1,0 +1,36 @@
+﻿@model List<TNT.Controllers.TicketController.req_tickets_multiple>
+
+<div class="row">
+	<div class="col-md-4">Nombre</div>
+	<div class="col-md-4">@ViewBag.Nombre</div>
+</div>
+<div class="row">
+	<div class="col-md-4">Nit</div>
+	<div class="col-md-4">@ViewBag.Nit</div>
+</div>
+<div class="row">
+	<div class="col-md-4">Email</div>
+	<div class="col-md-4">@User.Identity.Name</div>
+</div>
+<div class="row">
+	<div class="col-md-4">Evento</div>
+	<div class="col-md-4">@ViewBag.Evento</div>
+</div>
+<table class="table col-md-12">
+    <thead>
+    <th>Cantidad</th>
+    <th>Sector</th>
+    <th>Precio</th>
+    </thead>
+    <tbody>
+        @Html.EditorFor(m => m)
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-4">Comision</div>
+    <div class="col-md-4">@ViewBag.Comision Bs</div>
+</div>
+<div class="row">
+    <div class="col-md-4">Precio Total</div>
+    <div class="col-md-4">@ViewBag.Total Bs</div>
+</div>

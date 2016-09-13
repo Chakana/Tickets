@@ -25,22 +25,22 @@ namespace TNT.Controllers
             if (User.IsInRole("empresa"))
             {
                 int empresa_id = (int)Session["empresa_id"];
-                ticket=ticket.Where(tickets => tickets.Eventos.id_empresa == empresa_id);
+                ticket = ticket.Where(tickets => tickets.Eventos.id_empresa == empresa_id);
             }
             return View(ticket.ToList());
         }
         public ActionResult TicketsEventoReservados(int id)
         {
-            var ticket = db.Ticket.Include(t => t.Eventos).Include(t => t.sectores).Where(t=>t.valida==0 && t.id_evento==id);
+            var ticket = db.Ticket.Include(t => t.Eventos).Include(t => t.sectores).Where(t => t.valida == 0 && t.id_evento == id);
             if (User.IsInRole("empresa"))
             {
                 int empresa_id = (int)Session["empresa_id"];
                 ticket = ticket.Where(tickets => tickets.Eventos.id_empresa == empresa_id);
             }
-            ViewBag.nombre_evento = db.Eventos.Find(id).nombre_evento; 
+            ViewBag.nombre_evento = db.Eventos.Find(id).nombre_evento;
             return View(ticket.ToList());
         }
-        
+
         public ActionResult TicketsEventoComprados(int id)
         {
             var ticket = db.Ticket.Include(t => t.Eventos).Include(t => t.sectores).Where(t => t.valida == 1 && t.id_evento == id);
@@ -49,7 +49,7 @@ namespace TNT.Controllers
                 int empresa_id = (int)Session["empresa_id"];
                 ticket = ticket.Where(tickets => tickets.Eventos.id_empresa == empresa_id);
             }
-            ViewBag.nombre_evento = db.Eventos.Find(id).nombre_evento; 
+            ViewBag.nombre_evento = db.Eventos.Find(id).nombre_evento;
             return View(ticket.ToList());
         }
         //
@@ -69,16 +69,16 @@ namespace TNT.Controllers
             return View();
         }
         [HttpPost]
-        public JsonResult VerificadorTicket(string id_ticket,string imei)
+        public JsonResult VerificadorTicket(string id_ticket, string imei)
         {
-            bool valido=false;
+            bool valido = false;
             var imei_valido = db.imei_validos.Find(imei);
             if (imei == null)
             {
                 return Json(valido);
             }
 
-            var ticket = db.Ticket.FirstOrDefault(tck=>tck.codigo==id_ticket && tck.valida == 1 && tck.utilizada == false);
+            var ticket = db.Ticket.FirstOrDefault(tck => tck.codigo == id_ticket && tck.valida == 1 && tck.utilizada == false);
             //var ticket = db.Ticket.FirstOrDefault(tk => tk.codigo == id_ticket);
             if (ticket != null)
             {
@@ -102,9 +102,9 @@ namespace TNT.Controllers
         }
         public JsonResult ObtieneTicket(string id_ticket)
         {
-            Ticket ticket = db.Ticket.FirstOrDefault(tk=>tk.codigo==id_ticket);
-            respuesta_ticket respuesta= new respuesta_ticket();
-            Compra compra = db.Compra.FirstOrDefault(cr=>cr.codigo_recaudacion==ticket.codigo_recaudacion);
+            Ticket ticket = db.Ticket.FirstOrDefault(tk => tk.codigo == id_ticket);
+            respuesta_ticket respuesta = new respuesta_ticket();
+            Compra compra = db.Compra.FirstOrDefault(cr => cr.codigo_recaudacion == ticket.codigo_recaudacion);
             Personas usuarios = compra.Usuarios.Personas.First();
             respuesta.nombre_cliente = usuarios.nombre + " " + usuarios.apellidos;
             respuesta.cedula_identidad = usuarios.cedula_identidad;
@@ -114,10 +114,36 @@ namespace TNT.Controllers
             respuesta.sector = ticket.sectores.descripcion;
             return Json(respuesta);
         }
-        public class req_tickets_multiple{
-            public string id_sector {get;set;}
-            public string butaca {get;set;}
-            public string cantidad {get;set;}
+        public class req_tickets_multiple
+        {
+
+            public req_tickets_multiple() { }
+
+            public string id_sector { get; set; }
+            public string butaca { get; set; }
+            public string cantidad { get; set; }
+            public sectores sector { get; set; }
+            public decimal costo_sector
+            {
+                get
+                {
+                    if (this.sector != null)
+                    {
+                        return DA_clases.DA_Tickets.obtiene_costo_sector(sector.id_evento, sector.id, Int32.Parse(this.cantidad));
+                    }
+
+                    return 0M;
+                }
+            }
+            public string SubTotal
+            {
+                get
+                {
+                    //sectores sector = db.sectores.Find(id_sector);
+
+                    return this.costo_sector.ToString("N2");
+                }
+            }
         }
 
         public JsonResult ComprarTicketsMultiple(List<req_tickets_multiple> req)
@@ -125,7 +151,7 @@ namespace TNT.Controllers
             response_compra_rapida_ticket respuesta = new response_compra_rapida_ticket();
             try
             {
-                
+
                 string codigo_recaudacion = Helpers.Generar_codigo_recaudacion("A"); //no podemos repetir el codigo de recaudacion (no debe existir en la tabla compra)
                 decimal costo_total = 0m;
                 decimal total_comision = 0m;
@@ -242,19 +268,63 @@ namespace TNT.Controllers
             return Json(respuesta);
 
         }
+
+        public ActionResult VerificarDetalleCompra(List<req_tickets_multiple> req)
+        {
+            Usuarios datos_usuario = db.Usuarios.FirstOrDefault(us => us.email == User.Identity.Name);
+            ViewBag.Nombre = datos_usuario.Personas.FirstOrDefault().nombre_completo;
+            ViewBag.NIT = datos_usuario.Personas.FirstOrDefault().cedula_identidad;
+            int id_sector = Int32.Parse(req.First().id_sector);
+            sectores sector_empresa = db.sectores.Find(id_sector);
+            Eventos evento = sector_empresa.Eventos;
+            ViewBag.Evento = evento.descripcion;
+            decimal total_comision = 0m;
+            decimal costo_total = 0m;
+            foreach (var ticket in req)
+            {
+                id_sector = Int32.Parse(ticket.id_sector);
+                sectores sector = db.sectores.Find(id_sector);
+                ticket.sector = sector;
+                var comisiones = db.comisiones.Where(com => com.id_empresa == sector.Eventos.id_empresa);
+                if (comisiones.Count() == 0)
+                {
+                    comisiones = db.comisiones.Where(com => com.id_empresa == 1);
+                }
+
+                var comision = comisiones.FirstOrDefault(com => com.rango_inferior >= ticket.costo_sector);
+                if (comision == null)//si no se encuentra comision inferior quiere decir que supera el limite inferior asi q tomamos el maximo
+                {
+                    comision = comisiones.OrderByDescending(com => com.rango_superior).First();
+
+                }
+                decimal monto_comision = comision.monto_comision * Int32.Parse(ticket.cantidad); //Implementar   
+                total_comision += monto_comision;
+                ViewBag.Comision = total_comision;
+                costo_total += ticket.costo_sector;
+                ViewBag.Total = costo_total;
+                //sectores sector = db.sectores.Find(Int32.Parse(ticket.id_sector));
+
+            }
+
+            return this.PartialView(req);
+        }
+
         //
         // GET: /Ticket/Create
-         [Authorize]
+        [Authorize]
         public ActionResult ComprarTicketsUsuario(int id)
         {
-            var eventos = db.Eventos.Where(ev=>ev.id == id).Include(e => e.Empresas).Include(e => e.Lugares).Include(e => e.Tipos_evento);
+            var eventos = db.Eventos.Where(ev => ev.id == id).Include(e => e.Empresas).Include(e => e.Lugares).Include(e => e.Tipos_evento);
             eventos.Where(ev => ev.fecha_evento >= DateTime.Now);
             ViewBag.id_evento = new SelectList(eventos, "id", "nombre_evento");
             var sectores = db.sectores.Where(sec => sec.id_evento == id);
             ViewBag.sectores = sectores;
             ViewBag.id_sector = new SelectList(sectores, "id", "descripcion");
             ViewBag.nombre_evento = eventos.First().nombre_evento;
-            ViewBag.fecha_evento = eventos.First().fecha_evento;
+
+            ViewBag.fecha_evento = DateTime.Now;
+            //eventos.First().fecha_evento;
+            //.ToString("dd/MM/yyyy");             
             ViewBag.hora_evento = eventos.First().hora_evento;
             ViewBag.longitud = eventos.First().Lugares.longitud;
             ViewBag.latitud = eventos.First().Lugares.latitud;
@@ -273,9 +343,9 @@ namespace TNT.Controllers
             decimal total_comision = 0m;
             Eventos_app datos_evento = DA_clases.DA_Eventos.obtener_evento(ticket.id_evento);
             Empresas_app datos_empresa = DA_clases.DA_Empresas.obtener_empresa(datos_evento.id_empresa);
-            Usuarios datos_usuario = db.Usuarios.FirstOrDefault(us=>us.email == User.Identity.Name);
+            Usuarios datos_usuario = db.Usuarios.FirstOrDefault(us => us.email == User.Identity.Name);
             sectores sector = db.sectores.Find(ticket.id_sector);
-            decimal costo_total_sector = DA_clases.DA_Tickets.obtiene_costo_sector(ticket.id_evento, ticket.id_sector.Value,butacas.Length);
+            decimal costo_total_sector = DA_clases.DA_Tickets.obtiene_costo_sector(ticket.id_evento, ticket.id_sector.Value, butacas.Length);
             var comisiones = db.comisiones.Where(com => com.id_empresa == datos_empresa.id_empresa);
             if (comisiones.Count() == 0)
             {
@@ -492,12 +562,13 @@ namespace TNT.Controllers
                 var asientosOcupados = db.Ticket.Where(tick => tick.id_sector == ticket.id_sector);
                 foreach (var asiento in asientosOcupados)
                 {
-                    if(butacas.Contains(asiento.butaca)){
+                    if (butacas.Contains(asiento.butaca))
+                    {
                         ViewBag.message = "Asientos ocupados,por favor elija otros.";
                         return View(ticket);
                     }
                 }
-            
+
                 if (butacas.Length > 1)
                 {
                     CompraMultiplesTicketMismoSector(ticket);
@@ -512,8 +583,8 @@ namespace TNT.Controllers
 
                 CompraIndividualTicket(ticket);
             }
-           
-           
+
+
             return View(ticket);
         }
         public ActionResult Create()
@@ -521,15 +592,15 @@ namespace TNT.Controllers
             if (User.IsInRole("empresa"))
             {
                 int empresa_id = (int)Session["empresa_id"];
-                ViewBag.id_evento = new SelectList(db.Eventos.Where(ev=>ev.id_empresa==empresa_id), "id", "nombre_evento");
-                ViewBag.id_sector = new SelectList(db.sectores.Where(sec=>sec.Eventos.id_empresa == empresa_id), "id", "descripcion");
+                ViewBag.id_evento = new SelectList(db.Eventos.Where(ev => ev.id_empresa == empresa_id), "id", "nombre_evento");
+                ViewBag.id_sector = new SelectList(db.sectores.Where(sec => sec.Eventos.id_empresa == empresa_id), "id", "descripcion");
             }
             else
             {
                 ViewBag.id_evento = new SelectList(db.Eventos, "id", "nombre_evento");
                 ViewBag.id_sector = new SelectList(db.sectores, "id", "descripcion");
             }
-            
+
             return View();
         }
 
@@ -544,19 +615,19 @@ namespace TNT.Controllers
             Eventos evento = db.Eventos.Find(ticket.id_evento);
             Empresas empresa = db.Empresas.Find(evento.id_empresa);
             sectores sector = db.sectores.Find(ticket.id_sector);
-            decimal costo_total = sector.precio_unitario * 1;            
+            decimal costo_total = sector.precio_unitario * 1;
             Random random = new Random();
             string iniciales = "Q";
             string codigo_recaudacion = Helpers.Generar_codigo_recaudacion(iniciales); //no podemos repetir el codigo de recaudacion (no debe existir en la tabla compra)
             string codigo_ticket = Helpers.Generar_codigo_ticket(50, new Random());
-            
+
             if (ModelState.IsValid)
             {
                 ComelecSoapClient cli = new ComelecSoapClient();
                 DatosPlanilla datosPlanilla = new DatosPlanilla();
                 DPlanilla[] dPlanilla = new DPlanilla[2];
                 RespPlanilla respPlanilla = new RespPlanilla();
-                
+
 
                 datosPlanilla.codigoCliente = "1";
                 datosPlanilla.codigoEmpresa = 321;
@@ -576,10 +647,10 @@ namespace TNT.Controllers
                 dPlanilla[0] = new DPlanilla();
                 dPlanilla[0].numeroPago = 1;
                 dPlanilla[0].descripcion = evento.nombre_evento;
-                dPlanilla[0].nombreFactura = empresa.nombre_empresa ;
+                dPlanilla[0].nombreFactura = empresa.nombre_empresa;
                 dPlanilla[0].nitFactura = empresa.nit;
-                dPlanilla[0].montoPago =(double)costo_total;
-                dPlanilla[0].montoCreditoFiscal =(double) costo_total;
+                dPlanilla[0].montoPago = (double)costo_total;
+                dPlanilla[0].montoCreditoFiscal = (double)costo_total;
 
                 dPlanilla[1] = new DPlanilla();
                 dPlanilla[1].numeroPago = 1;
@@ -599,7 +670,7 @@ namespace TNT.Controllers
                     compra.id_usuario_compra = 1;
                     compra.monto_cobrar = costo_total;
                     compra.pagado = 0;
-                    db.Compra.Add(compra);                
+                    db.Compra.Add(compra);
                     ticket.codigo_recaudacion = codigo_recaudacion;
                     ticket.utilizada = false;
                     ticket.valida = 0;
@@ -611,7 +682,7 @@ namespace TNT.Controllers
                     {
                         db.SaveChanges();
                     }
-                    catch (System.Data.Entity.Validation.DbEntityValidationException  ex)
+                    catch (System.Data.Entity.Validation.DbEntityValidationException ex)
                     {
                         List<string> errorMessages = new List<string>();
                         foreach (System.Data.Entity.Validation.DbEntityValidationResult validationResult in ex.EntityValidationErrors)
@@ -623,17 +694,17 @@ namespace TNT.Controllers
                             }
                         }
                         ViewBag.error_message = errorMessages.ToString();
-                        
+
                     }
-                    
+
                     ViewBag.success_message = "Compra exitosa";
                 }
                 else
                 {
                     ViewBag.error_message = "Error en la compra, por favor reintente";
                 }
-               
-               
+
+
                 return RedirectToAction("Index");
             }
 

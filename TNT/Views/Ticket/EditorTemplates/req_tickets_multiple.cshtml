@@ -1,0 +1,13 @@
+﻿@model TNT.Controllers.TicketController.req_tickets_multiple
+<tr>
+    <td>
+        @Html.DisplayFor(m => m.cantidad)
+        @Html.HiddenFor(m => m.cantidad)
+        @Html.HiddenFor(m => m.id_sector)
+    </td>
+    <td>
+        @Html.DisplayFor(m => m.sector.descripcion)
+        @Html.HiddenFor(m => m.butaca)
+    </td>
+    <td>@Html.DisplayFor(m => m.SubTotal)</td>
+</tr>

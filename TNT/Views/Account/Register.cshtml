@@ -10,32 +10,87 @@
     <h2>Cree una cuenta nueva.</h2>
 </hgroup>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary()
 
     <fieldset>
         <legend>Formulario de registro</legend>
-        <ol>
-            <li>
-                @Html.LabelFor(m => m.email )
-                @Html.TextBoxFor(m => m.email)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.password)
-                @Html.PasswordFor(m => m.password)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.nit)
-                @Html.TextBoxFor(m => m.nit)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.numero_celular)
-                @Html.TextBoxFor(m => m.numero_celular)
-            </li>
-        </ol>
-        <input type="submit" value="Registrarse" />
+        <div class="form-group">
+            @Html.LabelFor(m => m.email, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.email, new { @class = "form-control" })
+                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.email)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.password, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.password, new { @class = "form-control" })
+                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.password)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.password_confimacion, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.password_confimacion, new { @class = "form-control" })
+                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.password_confimacion)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.nit, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.nit, new { @class = "form-control" })
+                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.nit)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.numero_celular, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.numero_celular, new { @class = "form-control" })
+                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.numero_celular)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.nombre, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.nombre, new { @class = "form-control" })
+                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.nombre)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.apellidos, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.apellidos, new { @class = "form-control" })
+                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.apellidos)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.carnet_identidad, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.carnet_identidad, new { @class = "form-control" })
+                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.carnet_identidad)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.direccion, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.direccion, new { @class = "form-control" })
+                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.direccion)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.departamento, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.departamento, new { @class = "form-control" })
+                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.departamento)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-6">
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </div>
+        </div>
     </fieldset>
 }
 

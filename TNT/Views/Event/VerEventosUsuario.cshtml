@@ -4,59 +4,93 @@
     ViewBag.Title = "VerEventosUsuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<link href="~/Content/dataTables.bootstrap.css" rel="stylesheet" />
 <h2>Eventos</h2>
 <div class="row">
     <br />
     <br />
-    
-    <table class="table table-hover">
-        <tr class="info">
-            <th>
-                @Html.DisplayNameFor(model => model.nombre_evento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Lugares.nombre_lugar)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.fecha_evento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.hora_evento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tipos_evento.descripcion)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.nombre_evento)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Lugares.nombre_lugar)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fecha_evento)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.hora_evento)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tipos_evento.descripcion)
-                </td>
-                <td>
-                    @Html.ActionLink("Comprar Ticket", "ComprarTicketsUsuario", "Ticket", new { id = item.id }, htmlAttributes: new { @class = "btn btn-xs btn-primary" }) |
-                </td>
-            </tr>
-        }
-
-    </table>
+    <div class="col-md-12">
+        <table id="tbl-events" class="table table-hover">
+            <thead>
+                <tr class="info">
+                    <th>
+                        @Html.DisplayNameFor(model => model.nombre_evento)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Lugares.nombre_lugar)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.fecha_evento)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.hora_evento)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Tipos_evento.descripcion)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nombre_evento)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Lugares.nombre_lugar)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.fecha_evento)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.hora_evento)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tipos_evento.descripcion)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Comprar Ticket", "ComprarTicketsUsuario", "Ticket", new { id = item.id }, htmlAttributes: new { @class = "btn btn-xs btn-primary" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
-
-
-
-</table>
+<script src="~/Scripts/jquery.dataTables.js"></script>
+<script src="~/Scripts/dataTables.bootstrap.js"></script>
+@section scripts
+{
+    <script>
+        $(function () {
+            $('#tbl-events').DataTable({
+                "language": {
+                "decimal": "",
+                "emptyTable": "No se hallaron datos disponibles",
+                "info": "Viendo _START_ a _END_ de _TOTAL_ registross",
+                "infoEmpty": "Viendo 0 a 0 de 0 registros",
+                "infoFiltered": "(encontrados desde _MAX_ registros)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Viendo _MENU_ registros",
+                "loadingRecords": "Loading...",
+                "processing": "Processing...",
+                "search": "Buscar:",
+                "zeroRecords": "No se hallaron coincidencias",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
+                }
+                }
+            });
+        });
+    </script>
+}

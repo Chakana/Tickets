@@ -296,6 +296,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\dataTables.bootstrap.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Images\available_seat_img.gif" />
     <Content Include="Content\Images\booked_seat_img.gif" />
@@ -374,6 +375,8 @@
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Images\about-bg.jpg" />
+    <Content Include="Images\ajax-loader.gif" />
+    <Content Include="Images\atc.jpg" />
     <Content Include="Images\available_seat_img.gif" />
     <Content Include="Images\booked_seat_img.gif" />
     <Content Include="Images\contact-bg.jpg" />
@@ -396,8 +399,11 @@
     <Content Include="Images\logo_tnt.png" />
     <Content Include="Images\logo_yg.jpg" />
     <Content Include="Images\map-icon.png" />
+    <Content Include="Images\pagosnet.png" />
     <Content Include="Images\performar-bg.jpg" />
     <Content Include="Images\selected_seat_img.gif" />
+    <Content Include="Images\sintesis.jpg" />
+    <Content Include="Images\sintesis.png" />
     <Content Include="Images\slider\bg1.jpg" />
     <Content Include="Images\slider\bg2.jpg" />
     <Content Include="Images\slider\bg3.jpg" />
@@ -413,6 +419,7 @@
     <Content Include="Images\sponsor\sponsor4.png" />
     <Content Include="Images\sponsor\sponsor5.png" />
     <Content Include="Images\sponsor\sponsor6.png" />
+    <Content Include="Images\tigo-money.png" />
     <Content Include="Images\twit.png" />
     <Content Include="Images\twitter-bg.jpg" />
     <Content Include="Images\twitter\twitter1.png" />
@@ -451,6 +458,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\coundown-timer.js" />
+    <Content Include="Scripts\dataTables.bootstrap.js" />
     <Content Include="Scripts\gmaps.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -459,6 +467,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
+    <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\jquery.nav.js" />
     <Content Include="Scripts\jquery.parallax.js" />
@@ -600,6 +609,8 @@
     <Content Include="Views\Account\ReiniciarPassword.cshtml" />
     <Content Include="Views\Account\RecuperarPassword.cshtml" />
     <Content Include="Views\Shared\_Layout_usuario.cshtml" />
+    <Content Include="Views\Ticket\VerificarDetalleCompra.cshtml" />
+    <Content Include="Views\Ticket\EditorTemplates\req_tickets_multiple.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

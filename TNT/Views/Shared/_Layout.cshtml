@@ -1,11 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")    
+    @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     <link href="~/Content/bootstrap.css" rel="stylesheet">
@@ -24,9 +24,34 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-    </head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        #overlay {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            background: #000;
+            opacity: 0.8;
+            filter: alpha(opacity=80);
+            z-index:9999;
+        }
+
+        #loading {
+            width: 100px;
+            height: 25px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -28px 0 0 -25px;
+        }
+    </style>
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <body>
+    <div id="overlay" style="display:none;">
+        <img id="loading" src="~/Images/ajax-loader.gif" />
+    </div>
     <header id="header" role="banner">
         <div class="main-nav">
             <div class="container">
@@ -46,15 +71,15 @@
 
                         <ul class="nav navbar-nav navbar-right">
 
-                            
+                            <li class="scroll"><a href="@Url.Action("Index", "Home")">Inicio</a></li>
                             @if (Request.IsAuthenticated)
                             {
-                                if(User.IsInRole("usuario"))
+                                if (User.IsInRole("usuario"))
                                 {
                                     <li><a class="no-scroll" href="@Url.Action("VerEventosUsuario", "Event")">Eventos</a></li>
-                                    
+
                                 }
-                                if(User.IsInRole("empresa"))
+                                if (User.IsInRole("empresa"))
                                 {
                                     <li><a class="no-scroll" href="@Url.Action("Index", "Event")">Eventos</a></li>
                                     <li><a class="no-scroll" href="@Url.Action("Index", "Sector")">Sectores</a></li>
@@ -78,55 +103,56 @@
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Empresas<span class="caret"></span></a>
                                         <ul class="dropdown-menu">
                                             <li><a class="no-scroll" href="@Url.Action("Index", "Empresas")">Empresas</a></li>
-                                            <li><a class="no-scroll" href="@Url.Action("Index", "Compra")">Compra</a></li>      
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "Compra")">Compra</a></li>
                                             <li><a class="no-scroll" href="@Url.Action("BuscarTicket", "Ticket")">Validar Ticket</a></li>
-                                            <li><a class="no-scroll" href="@Url.Action("SimuladorPago", "Compra")">Simulador de Pago</a></li>  
+                                            <li><a class="no-scroll" href="@Url.Action("SimuladorPago", "Compra")">Simulador de Pago</a></li>
                                         </ul>
                                     </li>
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin<span class="caret"></span></a>
                                         <ul class="dropdown-menu">
-                                            
+
                                             <li><a class="no-scroll" href="@Url.Action("Index", "Comisiones")">Comisiones</a></li>
                                             <li><a class="no-scroll" href="@Url.Action("Index", "TiposEvento")">Tipos de Evento</a></li>
                                             <li><a class="no-scroll" href="@Url.Action("Index", "PuntosPagos")">Puntos de Pago</a></li>
                                             <li><a class="no-scroll" href="@Url.Action("Index", "Help")">API</a></li>
                                         </ul>
                                     </li>
-                                
-                                   
-                                                                      
+
+
+
                                 }
                                 <li class="scroll">
                                     @if (User.IsInRole("empresa"))
                                     {
-                                        @Html.ActionLink( User.Identity.Name, "edit", "empresas", routeValues: new { id = Session["empresa_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })
+                                        @Html.ActionLink(User.Identity.Name, "edit", "empresas", routeValues: new { id = Session["empresa_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })
                                     }
                                     @if (User.IsInRole("usuario"))
                                     {
-                                        @Html.ActionLink( User.Identity.Name, "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })
-                                    }                                    
+                                        @Html.ActionLink(User.Identity.Name, "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })
+                                    }
                                     @if (User.IsInRole("admin"))
                                     {
                                         <div class="username">@User.Identity.Name</div>
                                     }
 
                                 </li>
-                                <li class="scroll"> 
-                                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-                                            {
-                                                @Html.AntiForgeryToken()
-                                                <a style="float:right" class="scroll" href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a>
-                                            }
-                                        
+                                <li class="scroll">
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <a style="float:right" class="scroll" href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a>
+                                    }
+
                                 </li>
                             }
                             else
                             {
-                                <li class="scroll active"><a href="#home">Inicio</a></li>
+                                @*<li class="scroll active"><a href="@Url.Action("Index", "Home")">Inicio</a></li>*@
                                 <li><a class="no-scroll" href="@Url.Action("Register", "Account")">REGISTRARSE</a></li>
-                                <li><a class="no-scroll" href="@Url.Action("Login","Account")">LOGIN</a></li>
-                                <li class="scroll"><a href="#contact">Contactar</a></li>
+                                @*<li><a class="no-scroll" href="@Url.Action("Login","Account")">LOGIN</a></li>*@
+
+                                @*<li class="scroll"><a href="#contact">Contactar</a></li>*@
 
                             }
                         </ul>
@@ -149,7 +175,21 @@
         </div>
 
     </div>
-   
+    <script>
+        $(function () {
+            $(document).ajaxSend(function () {
+                $('#overlay').show();
+            });
+
+            $(document).ajaxComplete(function () {
+                $('#overlay').hide();
+            })
+
+            window.onbeforeunload = function () {
+                $('#overlay').show();
+            }
+        })
+    </script>
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

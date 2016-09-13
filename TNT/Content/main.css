@@ -106,7 +106,7 @@ h2 {
   height: 90px;
   margin-bottom: 20px;
   position: relative;
-  width: 297px;
+  width: 200px;
 }
 
 .navbar-brand img {
@@ -179,7 +179,7 @@ h2 {
 
 #home {
   position: relative;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 #main-slider img {
@@ -800,5 +800,9 @@ list-style: none outside none;
 padding-left:35px;
 height:35px;
 float:left;
-}ft;
 }
+
+.btn-primary{
+    background-color: #8C1213;
+}
+
