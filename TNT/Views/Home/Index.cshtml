@@ -267,12 +267,72 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
+<<<<<<< HEAD
                     <div class="row">
                         <div class="col-md-12">
                             @carousel(ViewBag.eventosConciertos, "myCarouselConciertos")
+=======
+                    <!-- thumb navigation carousel -->
+                    <div class="col-md-12 hidden-sm hidden-xs" id="slider-thumbs">
+
+                        <!-- thumb navigation carousel items -->
+                        <ul class="list-inline">
+                            @{
+                                var i = 0;
+                                var index = 0;
+                                foreach (var item in ViewBag.eventosConciertos)
+                                {
+                                    index = i;
+                                    var itemClass = i++ == 0 ? "active" : " ";
+                                    var carouselSelId = "carousel-selector-"+i;
+                                    <li>
+                                        <a id="@carouselSelId" class="selected">
+                                            <img src="@item.img_url" style="max-height:80px;max-width:100px;width:auto;height:auto" class="img-responsive">
+                                        </a>
+                                    </li>
+                                    
+                                }
+                            }
+                            
+                        </ul>
+
+                    </div>
+
+
+                    <!-- main slider carousel -->
+                    <div class="row">
+                        <div class="col-md-12" id="slider">
+
+                            <div class="col-md-12" id="carousel-bounding-box">
+                                <div id="myCarouselConciertos" class="carousel slide">
+                                    <!-- main slider carousel items -->
+                                    <div class="carousel-inner">
+                                    @{
+                                    i = 0;
+                                    foreach (var item in ViewBag.eventosConciertos)
+                                    {
+                                        var itemClass = i++ == 0 ? "item active" : "item";
+                                        <div class="@itemClass" data-slide-number="@i">
+                                            <img src="@item.img_url" class="img-responsive">
+                                        </div>
+                                    }
+                                    }
+                                    </div>
+                                    <a class="carousel-control left" href="#myCarouselConciertos" data-slide="prev">‹</a>
+
+                                    <a class="carousel-control right" href="#myCarouselConciertos" data-slide="next">›</a>
+                                </div>
+                            </div>
+
+>>>>>>> 4f1be61626ed30209517bec8440c0c0148d69079
                         </div>
                     </div>
+                    <!--/main slider carousel-->
+                    
+
+                    
                 </div>
+               
                 <div class="modal-footer">
                     <div class="row">
                         <div class="col-md-12">
@@ -383,6 +443,7 @@
             $('#myCarouselConciertos').carousel(id);
             $('[id^=carousel-selector-]').removeClass('selected');
             $(this).addClass('selected');
+
         });
 
         // when the carousel slides, auto update
