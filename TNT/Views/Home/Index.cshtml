@@ -3,6 +3,100 @@
     ViewBag.Title = "Login";
     Layout = "";
 }
+@helper carousel(List<TNT.Models.Eventos> events, string carouselName)
+{
+    <div id="@carouselName" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            @{
+                var i = 0;
+                var index = 0;
+                foreach (var item in events)
+                {
+                    index = i;
+                    var itemClass = i++ == 0 ? "active" : " ";
+                    <li data-target="#@carouselName" data-slide-to="@index" class="@itemClass">
+                    </li>
+                }
+            }
+        </ol>
+        <!-- Images-->
+        <div class="carousel-inner" role="listbox">
+            @{
+                i = 0;
+                foreach (var item in events)
+                {
+                    var itemClass = i++ == 0 ? "item active" : "item";
+                    <div class="@itemClass" id="item-@item.id">
+                        <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px" /></a>
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Left Right Arrows -->
+        <a class="left carousel-control" href="#@carouselName" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#@carouselName" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+}
+
+@helper colage(List<TNT.Models.Eventos> events, string carouselName, string carouselNameTarget)
+{
+    var i = events.Count;
+    <div id="@carouselName" class="carousel slide">
+
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+            @if (i > 6)
+            {
+                for (var c = 0; c < i / 6 + 1; c++)
+                {
+                    var itemClass = c == 0 ? "item active" : "item";
+                    <div class="@itemClass">
+                        <div class="row">
+                            @for (var d = c * 6; d < (c + 1) * 6 && d < i; d++)
+                            {
+                                var el = events[d];
+                                <a href="#item-@el.id" class="" data-target="#@carouselNameTarget" data-slide-to="@d"><img class="col-xs-2" src="@el.img_url" alt="Image"></a>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="item active">
+                    <div class="row">
+                        @for (var d = 0; d < i; d++)
+                        {
+                            var el = events[d];
+                            <a href="#item-@el.id" class="" data-target="#@carouselNameTarget" data-slide-to="@d"><img class="col-xs-2" src="@el.img_url" alt="Image"></a>
+                        }
+                    </div>
+                </div>
+            }
+
+        </div>
+        @if (i > 6)
+        {
+            <a class="left carousel-control" href="#@carouselName" data-slide="prev" style="width:5%;">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true" style="font-size: 20px;"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#@carouselName" data-slide="next" style="width:5%;">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="font-size: 20px;"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+        }
+    </div>
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -106,7 +200,7 @@
                     </div>
                 </div>
                 <ul class="col-md-3 list-unstyled" style="margin-left: 30px;">
-                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalConciertos" class="" href="#"><img class="" src="~/images/icon_conciertos.png" alt="logo" style="width: 70px;"><span style="color:#69D2D3;display:none;">Conciertos</span></a></li>                    
+                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalConciertos" class="" href="#"><img class="" src="~/images/icon_conciertos.png" alt="logo" style="width: 70px;"><span style="color:#69D2D3;display:none;">Conciertos</span></a></li>
                     <li class="iconos-home"><a data-toggle="modal" data-target="#modalDeportes" class="" href="#"><img class="" src="~/images/icon_deporte.png" alt="logo" style="width: 70px;"><span style="color:#02016C;display:none;">Deportes</span></a></li>
                     <li class="iconos-home"><a data-toggle="modal" data-target="#modalViajesTurismo" class="" href="#"><img class="" src="~/images/icon_viajes_turismo.png" alt="logo" style="width: 70px;"><span style="color:#FC8C1C;display:none;">Viajes</span></a></li>
                     <li class="iconos-home"><a data-toggle="modal" data-target="#modalCultura" class="" href="#"><img class="" src="~/images/icon_cultura.png" alt="logo" style="width: 70px;"><span style="color:#7CE34F;display:none;">Cultura</span></a></li>
@@ -173,68 +267,18 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <!-- thumb navigation carousel -->
-                    <div class="col-md-12 hidden-sm hidden-xs" id="slider-thumbs">
-
-                        <!-- thumb navigation carousel items -->
-                        <ul class="list-inline">
-                            @{
-                                var i = 0;
-                                var index = 0;
-                                foreach (var item in ViewBag.eventosConciertos)
-                                {
-                                    index = i;
-                                    var itemClass = i++ == 0 ? "active" : " ";
-                                    var carouselSelId = "carousel-selector-" + i;
-                                    <li>
-                                        <a id="@carouselSelId" class="selected">
-                                            <img src="@item.img_url" style="max-height:80px;max-width:100px;width:auto;height:auto" class="img-responsive">
-                                        </a>
-                                    </li>
-
-                                }
-                            }
-
-                        </ul>
-
-                    </div>
-
-
-                    <!-- main slider carousel -->
                     <div class="row">
-                        <div class="col-md-12" id="slider">
-
-                            <div class="col-md-12" id="carousel-bounding-box">
-                                <div id="myCarouselConciertos" class="carousel slide">
-                                    <!-- main slider carousel items -->
-                                    <div class="carousel-inner">
-                                        @{
-                                            i = 0;
-                                            foreach (var item in ViewBag.eventosConciertos)
-                                            {
-                                                var itemClass = i++ == 0 ? "item active" : "item";
-                                                <div class="@itemClass" data-slide-number="@i">
-                                                    <img src="@item.img_url" class="img-responsive">
-                                                </div>
-                                            }
-                                        }
-                                    </div>
-                                    <a class="carousel-control left" href="#myCarouselConciertos" data-slide="prev">‹</a>
-
-                                    <a class="carousel-control right" href="#myCarouselConciertos" data-slide="next">›</a>
-                                </div>
-                            </div>
-
+                        <div class="col-md-12">
+                            @carousel(ViewBag.eventosConciertos, "myCarouselConciertos")
                         </div>
                     </div>
-                    <!--/main slider carousel-->
-
-
-
                 </div>
-
                 <div class="modal-footer">
-
+                    <div class="row">
+                        <div class="col-md-12">
+                            @colage(ViewBag.eventosConciertos, "myColageConciertos", "myCarouselConciertos")
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -243,51 +287,18 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div class="col-md-12">
-                        <div id="myCarouselVarios" class="carousel slide" data-ride="carousel">
-                            <!-- Indicators -->
-                            <ol class="carousel-indicators">
-                                @{
-                                    i = 0;
-                                    index = 0;
-                                    foreach (var item in ViewBag.eventosVarios)
-                                    {
-                                        index = i;
-                                        var itemClass = i++ == 0 ? "active" : " ";
-                                        <li data-target="#myCarouselVarios" data-slide-to="@index" class="@itemClass">
-                                        </li>
-                                    }
-                                }
-                            </ol>
-                            <!-- Images-->
-                            <div class="carousel-inner" role="listbox">
-                                @{
-                                    i = 0;
-                                    foreach (var item in ViewBag.eventosVarios)
-                                    {
-                                        var itemClass = i++ == 0 ? "item active" : "item";
-                                        <div class="@itemClass">
-                                            <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px;width:100%;" /></a>
-                                        </div>
-                                    }
-                                }
-                            </div>
-
-                            <!-- Left Right Arrows -->
-                            <a class="left carousel-control" href="#myCarouselVarios" role="button" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right carousel-control" href="#myCarouselVarios" role="button" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @carousel(ViewBag.eventosVarios, "myCarouselVarios")
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">
-
+                    <div class="row">
+                        <div class="col-md-12">
+                            @colage(ViewBag.eventosVarios, "myColageVarios", "myCarouselVarios")
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -296,51 +307,18 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div class="col-md-12">
-                        <div id="myCarouselDeportes" class="carousel slide" data-ride="carousel">
-                            <!-- Indicators -->
-                            <ol class="carousel-indicators">
-                                @{
-                                    i = 0;
-                                    index = 0;
-                                    foreach (var item in ViewBag.eventosDeportes)
-                                    {
-                                        index = i;
-                                        var itemClass = i++ == 0 ? "active" : " ";
-                                        <li data-target="#myCarouselDeportes" data-slide-to="@index" class="@itemClass">
-                                        </li>
-                                    }
-                                }
-                            </ol>
-                            <!-- Images-->
-                            <div class="carousel-inner" role="listbox">
-                                @{
-                                    i = 0;
-                                    foreach (var item in ViewBag.eventosDeportes)
-                                    {
-                                        var itemClass = i++ == 0 ? "item active" : "item";
-                                        <div class="@itemClass">
-                                            <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px;width:100%;" /></a>
-                                        </div>
-                                    }
-                                }
-                            </div>
-
-                            <!-- Left Right Arrows -->
-                            <a class="left carousel-control" href="#myCarouselDeportes" role="button" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right carousel-control" href="#myCarouselDeportes" role="button" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @carousel(ViewBag.eventosDeportes, "myCarouselDeportes")
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">
-
+                    <div class="row">
+                        <div class="col-md-12">
+                            @colage(ViewBag.eventosDeportes, "myColageDeportes", "myCarouselDeportes")
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -349,51 +327,18 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div class="col-md-12">
-                        <div id="myCarouselViajes" class="carousel slide" data-ride="carousel">
-                            <!-- Indicators -->
-                            <ol class="carousel-indicators">
-                                @{
-                                    i = 0;
-                                    index = 0;
-                                    foreach (var item in ViewBag.eventosViajesTurismo)
-                                    {
-                                        index = i;
-                                        var itemClass = i++ == 0 ? "active" : " ";
-                                        <li data-target="#myCarouselViajes" data-slide-to="@index" class="@itemClass">
-                                        </li>
-                                    }
-                                }
-                            </ol>
-                            <!-- Images-->
-                            <div class="carousel-inner" role="listbox">
-                                @{
-                                    i = 0;
-                                    foreach (var item in ViewBag.eventosViajesTurismo)
-                                    {
-                                        var itemClass = i++ == 0 ? "item active" : "item";
-                                        <div class="@itemClass">
-                                            <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px;width:100%;" /></a>
-                                        </div>
-                                    }
-                                }
-                            </div>
-
-                            <!-- Left Right Arrows -->
-                            <a class="left carousel-control" href="#myCarouselViajes" role="button" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right carousel-control" href="#myCarouselViajes" role="button" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @carousel(ViewBag.eventosViajesTurismo, "myCarouselTurismo")
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">
-
+                    <div class="row">
+                        <div class="col-md-12">
+                            @colage(ViewBag.eventosViajesTurismo, "myColageTurismo", "myCarouselTurismo")
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -402,62 +347,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div class="col-md-12">
-                        <div id="myCarouselCultura" class="carousel slide" data-ride="carousel">
-                            <!-- Indicators -->
-                            <ol class="carousel-indicators">
-                                @{
-                                    i = 0;
-                                    index = 0;
-                                    foreach (var item in ViewBag.eventosCultura)
-                                    {
-                                        index = i;
-                                        var itemClass = i++ == 0 ? "active" : " ";
-                                        <li data-target="#myCarouselCultura" data-slide-to="@index" class="@itemClass">
-                                        </li>
-                                    }
-                                }
-                            </ol>
-                            <!-- Images-->
-                            <div class="carousel-inner" role="listbox">
-                                @{
-                                    i = 0;
-                                    foreach (var item in ViewBag.eventosCultura)
-                                    {
-                                        var itemClass = i++ == 0 ? "item active" : "item";
-                                        <div class="@itemClass">
-                                            <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px;width:100%;" /></a>
-                                        </div>
-                                    }
-                                }
-                            </div>
-
-                            <!-- Left Right Arrows -->
-                            <a class="left carousel-control" href="#myCarouselCultura" role="button" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right carousel-control" href="#myCarouselCultura" role="button" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @carousel(ViewBag.eventosConciertos, "myCarouselCultura")
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">
-
+                    <div class="row">
+                        <div class="col-md-12">
+                            @colage(ViewBag.eventosConciertos, "myColageCultura", "myCarouselCultura")
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
     <!--/#footer-->
 
     <script type="text/javascript" src="~/Scripts/jquery.js"></script>
@@ -508,6 +413,13 @@
             window.onbeforeunload = function () {
                 $('#overlay').show();
             }
+
+            $('.link-collage').click(function (e) {
+                e.preventDefault();
+                var $this = $(this);
+                $('.item').removeClass('active');
+                $($this.attr('href')).addClass('active');
+            });
         })
         //$('#btn_login').click(function () {
         //    var data = { email: $('#userName').val(),password:$('#userPassword').val()};
