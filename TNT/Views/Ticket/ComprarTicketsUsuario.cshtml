@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     DateTime fechaEvento = ViewBag.fecha_evento;
+    TimeSpan horaEvento = ViewBag.hora_evento;
+    var horaEventoFormat = string.Format("{0}:{1}", horaEvento.Hours, horaEvento.Minutes);
+    //var horaEventoFormat = horaEvento.ToString("hh:mm:ss");
 }
 <script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
 <script type="text/javascript" src="~/Scripts/gmaps.js"></script>
@@ -80,6 +83,7 @@
 
         CargaMapa($('.mapa_evento').attr('xLocationLat'), $('.mapa_evento').attr('xLocationLong'));
 
+        $('.gmap').height($('.ref-map').height());
         //setInterval(function () { CargarDatosSector(idSectorElegido); }, 60000);
         var settings = {
             rows: 10,
@@ -312,24 +316,40 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <table class="table table-bordered">
-                                    <tr>
-                                        <td>Fecha</td>
-                                        <td><input type="text" class="form-control" readonly="readonly" id="exampleInputAmount" placeholder="Amount" value="@fechaEvento.ToString("dd/MM/yyyy")"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Hora</td>
-                                        <td><input type="text" class="form-control" readonly="readonly" id="exampleInputAmount" placeholder="Amount" value="@ViewBag.hora_evento"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Descripcion</td>
-                                        <td><input type="text" class="form-control" readonly="readonly" id="exampleInputAmount" placeholder="Amount" value="@ViewBag.descripcion"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Lugar</td>
-                                        <td><input type="text" class="form-control" readonly="readonly" id="exampleInputAmount" placeholder="Amount" value="@ViewBag.nombre_lugar"></td>
-                                    </tr>
+                                    <tbody class="ref-map">
+                                        <tr>
+                                            <td>Fecha</td>
+                                            <td><input type="text" class="form-control" readonly="readonly" id="exampleInputAmount" placeholder="Amount" value="@fechaEvento.ToString("dd/MM/yyyy")"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Hora</td>
+                                            <td><input type="text" class="form-control" readonly="readonly" id="exampleInputAmount" placeholder="Amount" value="@horaEventoFormat"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Descripcion</td>
+                                            <td><input type="text" class="form-control" readonly="readonly" id="exampleInputAmount" placeholder="Amount" value="@ViewBag.descripcion"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lugar</td>
+                                            <td><input type="text" class="form-control" readonly="readonly" id="exampleInputAmount" placeholder="Amount" value="@ViewBag.nombre_lugar"></td>
+                                        </tr>
+                                    </tbody>
                                 </table>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mapa_evento col-md-12" style="margin-top:0.75em" xlocationlat="@ViewBag.latitud" xlocationlong="@ViewBag.longitud" xeventdate="@ViewBag.fecha_evento.Add(ViewBag.hora_evento).ToString("yyyy-MM-dd hh:mm:ss", System.Globalization.CultureInfo.InvariantCulture)">
+                                    <div id="map">
+                                        <div id="gmap-wrap">
+                                            <div id="gmap" class="gmap">
+                                            </div>
 
+                                        </div>
+                                    </div><!--/#map-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
                                 <h4>Sectores</h4>
                                 <table class="table table-bordered">
                                     @{foreach (var item in ViewBag.sectores)
@@ -342,17 +362,6 @@
                                     }
                                     }
                                 </table>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mapa_evento col-md-12" xlocationlat="@ViewBag.latitud" xlocationlong="@ViewBag.longitud" xeventdate="@ViewBag.fecha_evento.Add(ViewBag.hora_evento).ToString("yyyy-MM-dd hh:mm:ss", System.Globalization.CultureInfo.InvariantCulture)">
-                                    <div id="map">
-                                        <div id="gmap-wrap">
-                                            <div id="gmap" class="gmap">
-                                            </div>
-
-                                        </div>
-                                    </div><!--/#map-->
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -414,7 +423,8 @@
         </div>
     </div>
     <div>
-        @Html.ActionLink("Volver a la lista", "VerEventosUsuario", "Event", new { @class = "btn btn-primary" })
+        @*@Html.ActionLink("Volver a la lista", "VerEventosUsuario", "Event", null, new { @class = "btn btn-primary" })*@
+        <button class="btn btn-primary" onclick="window.history.back();">Volver</button>
     </div>
 </div>
 <div class="modal fade" id="confirma-reserva" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

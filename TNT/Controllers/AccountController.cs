@@ -11,6 +11,7 @@ namespace TNT.Controllers
     public class AccountController : Controller
     {
         private TNTEntities db = new TNTEntities();
+
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -39,7 +40,7 @@ namespace TNT.Controllers
                     FormsAuthentication.SetAuthCookie(username, false);
                     RedirectToAction("Index", "Home");
                     return Json(true);
-                    
+
                 }
                 else
                 {
@@ -63,7 +64,7 @@ namespace TNT.Controllers
                     // same operation on the user entered password here, But for now
                     // since the password is in plain text lets just authenticate directly
 
-                    bool userValid = entities.Usuarios.Any(user => user.email== username && user.password == password);
+                    bool userValid = entities.Usuarios.Any(user => user.email == username && user.password == password);
 
                     // User found in the database
                     if (userValid)
@@ -74,7 +75,7 @@ namespace TNT.Controllers
                         Session.Add("persona_id", persona.id);
                         Session.Add("id", usuario.id);
                         FormsAuthentication.SetAuthCookie(username, false);
-                      
+
                         if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                             && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
                         {
@@ -82,6 +83,7 @@ namespace TNT.Controllers
                         }
                         else
                         {
+                            TempData["IsWelcome"] = true;
                             return RedirectToAction("Index", "Home");
                         }
                     }
@@ -110,19 +112,19 @@ namespace TNT.Controllers
                 // Intento de registrar al usuario
                 try
                 {
-                    Usuarios usuario=new Usuarios();
+                    Usuarios usuario = new Usuarios();
                     usuario.email = model.email;
                     usuario.password = model.password;
                     usuario.rol = "usuario";
                     db.Usuarios.Add(usuario);
                     db.SaveChanges();
-                    Personas persona=new Personas();
-                    persona.apellidos="";
-                    persona.cedula_identidad=model.nit;
-                    persona.direccion="";
-                    persona.id_usuario=usuario.id;
-                    persona.nombre="";
-                    persona.numero_celular=model.numero_celular;
+                    Personas persona = new Personas();
+                    persona.apellidos = model.apellidos;
+                    persona.cedula_identidad = model.nit;
+                    persona.direccion = model.direccion;
+                    persona.id_usuario = usuario.id;
+                    persona.nombre = model.nombre;
+                    persona.numero_celular = model.numero_celular;
                     persona.fecha_modificacion = DateTime.Now;
                     persona.fecha_registro = DateTime.Now;
                     //persona.fecha_nacimiento = DateTime.Now;                     
@@ -179,7 +181,7 @@ namespace TNT.Controllers
                     empresa.representante_legal = model.representante_legal;
                     empresa.telefono = model.telefono;
                     db.Empresas.Add(empresa);
-                    db.SaveChanges(); 
+                    db.SaveChanges();
                     return RedirectToAction("IndexEmpresas", "Home");
                 }
                 catch (Exception e)
@@ -195,51 +197,52 @@ namespace TNT.Controllers
         {
             return View();
         }
-         [HttpPost]
+        [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ReiniciarPassword(ReinicioPassword model)
         {
-             //generar token 
-             string token = helpers.Helpers.Generar_token(32, new Random());
-             //guardar token con el email enviado
-             Usuarios usuario = db.Usuarios.Where(us=>us.email == model.email).First();
-             if(usuario!=null){
-                 usuario.reiniciar_contraseña = true;
-                 usuario.token_reinicio = token;
-                 db.Entry(usuario).State = System.Data.EntityState.Modified;
-                 db.SaveChanges();
-                 UrlHelper u = new UrlHelper(this.ControllerContext.RequestContext);
-                 string url = u.Action("RecuperarPassword", "Account", new{token=token},Request.Url.Scheme);
-                 string contenido_email = String.Format("Por favor ingrese al siguiente link para reiniciar su contraseña en TNT.:<a href=\"{0}\">{0}</a>",url);
-                 helpers.Helpers.EnviarMail("admin@tnt.com", "administrador", model.email, model.email, "reinicio de password", contenido_email, null);
-             }
-             ModelState.AddModelError("email", "correo enviado a:" + model.email);
+            //generar token 
+            string token = helpers.Helpers.Generar_token(32, new Random());
+            //guardar token con el email enviado
+            Usuarios usuario = db.Usuarios.Where(us => us.email == model.email).First();
+            if (usuario != null)
+            {
+                usuario.reiniciar_contraseña = true;
+                usuario.token_reinicio = token;
+                db.Entry(usuario).State = System.Data.EntityState.Modified;
+                db.SaveChanges();
+                UrlHelper u = new UrlHelper(this.ControllerContext.RequestContext);
+                string url = u.Action("RecuperarPassword", "Account", new { token = token }, Request.Url.Scheme);
+                string contenido_email = String.Format("Por favor ingrese al siguiente link para reiniciar su contraseña en TNT.:<a href=\"{0}\">{0}</a>", url);
+                helpers.Helpers.EnviarMail("admin@tnt.com", "administrador", model.email, model.email, "reinicio de password", contenido_email, null);
+            }
+            ModelState.AddModelError("email", "correo enviado a: " + model.email);
             return View(model);
         }
-         public ActionResult RecuperarPassword(string token)
-         {
-             ViewBag.token = token;
-             return View();
-         }
-         [HttpPost]
-         [AllowAnonymous]
-         [ValidateAntiForgeryToken]
-         public ActionResult RecuperarPassword(string token,NuevoPassword model)
-         {
+        public ActionResult RecuperarPassword(string token)
+        {
+            ViewBag.token = token;
+            return View();
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult RecuperarPassword(string token, NuevoPassword model)
+        {
 
-             Usuarios usuario = db.Usuarios.FirstOrDefault(us => us.token_reinicio == model.token);
-             if (usuario != null)
-             {
-                 usuario.reiniciar_contraseña = false;
-                 usuario.token_reinicio = "";
-                 usuario.password = model.password;
-                 db.Entry(usuario).State = System.Data.EntityState.Modified;
-                 db.SaveChanges();
-                 return RedirectToAction("Login", "Account");
-             }
-             ModelState.AddModelError("password", "error al reiniciar password, por favor intente de nuevo");
-             return View(model);
-         }
+            Usuarios usuario = db.Usuarios.FirstOrDefault(us => us.token_reinicio == model.token);
+            if (usuario != null)
+            {
+                usuario.reiniciar_contraseña = false;
+                usuario.token_reinicio = "";
+                usuario.password = model.password;
+                db.Entry(usuario).State = System.Data.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Login", "Account");
+            }
+            ModelState.AddModelError("password", "error al reiniciar password, por favor intente de nuevo");
+            return View(model);
+        }
     }
 }

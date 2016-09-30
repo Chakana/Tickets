@@ -32,7 +32,7 @@ namespace TNT.Models
         public string email { get; set; }
 
         [Required(ErrorMessage = "El password es requerido")]
-        [StringLength(30, MinimumLength = 8, ErrorMessage = "El password debe tener entre 8 y 30 caracteres")]
+        [StringLength(30, ErrorMessage = "El número de caracteres de {0} debe ser al menos {2}.", MinimumLength = 6)]
         public string password { get; set; }
         public string rol { get; set; }
         public bool reiniciar_contraseña { get; set; }

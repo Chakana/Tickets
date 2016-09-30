@@ -28,7 +28,7 @@
                 {
                     var itemClass = i++ == 0 ? "item active" : "item";
                     <div class="@itemClass" id="item-@item.id">
-                        <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" style="height:300px" /></a>
+                        <a href="@Url.Action("ComprarTicketsUsuario", "Ticket", new {id=@item.id })"><img src="@item.img_url" onerror="this.src='/Images/sponsor-bg.jpg'" style="height:300px" /></a>
                     </div>
                 }
             }
@@ -63,7 +63,7 @@
                             @for (var d = c * 6; d < (c + 1) * 6 && d < i; d++)
                             {
                                 var el = events[d];
-                                <a href="#item-@el.id" class="" data-target="#@carouselNameTarget" data-slide-to="@d"><img class="col-xs-2" src="@el.img_url" alt="Image"></a>
+                                <a href="#item-@el.id" class="" data-target="#@carouselNameTarget" data-slide-to="@d"><img class="col-xs-2" src="@el.img_url" onerror="this.src='/Images/sponsor-bg.jpg'" alt="Image"></a>
                             }
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                         @for (var d = 0; d < i; d++)
                         {
                             var el = events[d];
-                            <a href="#item-@el.id" class="" data-target="#@carouselNameTarget" data-slide-to="@d"><img class="col-xs-2" src="@el.img_url" alt="Image"></a>
+                            <a href="#item-@el.id" class="" data-target="#@carouselNameTarget" data-slide-to="@d"><img class="col-xs-2" src="@el.img_url" onerror="this.src='/Images/sponsor-bg.jpg'" alt="Image"></a>
                         }
                     </div>
                 </div>
@@ -141,6 +141,24 @@
             left: 50%;
             margin: -28px 0 0 -25px;
         }
+
+        html, body, #home, #main-slider, #main-slider .carousel-inner, #main-slider .carousel-inner .item {
+            max-height: 100%;
+            height: 100%;
+        }
+
+        .modal-content {
+            background-color: #222222;
+        }
+
+        .close {
+            color: #fff;
+            opacity: 1;
+        }
+
+            .close:hover, .close:focus {
+                color: #fff;
+            }
     </style>
 </head><!--/head-->
 
@@ -162,6 +180,21 @@
     <div id="overlay" style="display:none;">
         <img id="loading" src="~/Images/ajax-loader.gif" />
     </div>
+    @{
+        bool isWelcome = TempData["IsWelcome"] != null && bool.Parse(TempData["IsWelcome"].ToString());
+    }
+    @if (isWelcome)
+    {
+        <div id="modal-welcome" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Bienvenido @User.Identity.Name</p>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    }
     <header id="header" role="banner">
         <div class="main-nav">
             <div class="container">
@@ -194,7 +227,7 @@
                                 <li><a class="no-scroll" href="@Url.Action("login", "account")">LOGIN</a></li>
                                 @*<li><a data-toggle="modal" data-target="#myLogin" class="no-scroll" href="#">LOGIN</a></li>*@
                             }
-                            <li class="scroll"><a href="@Url.Action("VerEventosUsuario", "Event")">Eventos</a></li>
+                            <li class="scroll"><a href="@Url.Action("VerEventosUsuario", "Event")">Búsqueda avanzada</a></li>
                             <li class="scroll"><a href="@Url.Action("", "")">Contactar</a></li>
                         </ul>
                     </div>
@@ -215,23 +248,23 @@
         <div id="main-slider" class="carousel slide" data-ride="carousel" data-pause="false">
             <div class="carousel-inner">
                 <div class="item active">
-                    <img class="" src="~/images/slider/concert.jpg" style="max-height:639px;" alt="slider">
+                    <img class="img" src="~/images/slider/concert.jpg" style="height:100%;" alt="slider">
 
                 </div>
                 <div class="item">
-                    <img class="img" src="~/images/slider/sport.jpg" style="max-height:639px;" alt="slider">
+                    <img class="img" src="~/images/slider/sport.jpg" style="height:100%;" alt="slider">
 
                 </div>
                 <div class="item">
-                    <img class="img" src="~/images/slider/gift.jpg" style="max-height:639px;" alt="slider">
+                    <img class="img" src="~/images/slider/gift.jpg" style="height:100%;" alt="slider">
 
                 </div>
                 <div class="item">
-                    <img class="img" src="~/images/slider/voyage.jpg" style="max-height:639px;" alt="slider">
+                    <img class="img" src="~/images/slider/voyage.jpg" style="height:100%;" alt="slider">
 
                 </div>
                 <div class="item">
-                    <img class="img" src="~/images/slider/trip.jpg" style="max-height:639px;" alt="slider">
+                    <img class="img" src="~/images/slider/trip.jpg" style="height:100%;" alt="slider">
 
                 </div>
             </div>
@@ -266,6 +299,10 @@
     <div class="modal fade bs-example-modal-lg" id="modalConciertos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">CONCIERTOS</h4>
+                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -286,6 +323,10 @@
     <div class="modal fade bs-example-modal-lg" id="modalVarios" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">VARIOS</h4>
+                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -306,6 +347,10 @@
     <div class="modal fade bs-example-modal-lg" id="modalDeportes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">DEPORTES</h4>
+                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -326,6 +371,10 @@
     <div class="modal fade bs-example-modal-lg" id="modalViajesTurismo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">TURISMO</h4>
+                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -346,6 +395,10 @@
     <div class="modal fade bs-example-modal-lg" id="modalCultura" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">CULTURA</h4>
+                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -421,6 +474,13 @@
                 $('.item').removeClass('active');
                 $($this.attr('href')).addClass('active');
             });
+
+            if ($('#modal-welcome').length > 0) {
+                $('#modal-welcome').modal('show');
+                setTimeout(function () {
+                    $('#modal-welcome').modal('hide');
+                }, 3000);
+            }
         })
         //$('#btn_login').click(function () {
         //    var data = { email: $('#userName').val(),password:$('#userPassword').val()};

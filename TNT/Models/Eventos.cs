@@ -46,6 +46,14 @@ namespace TNT.Models
         public bool habilitado { get; set; }
 
         [DisplayName("Hora")]
+        public string hora_evento_format
+        {
+            get
+            {
+                return this.hora_evento.ToString(@"hh\:mm");
+            }
+        }
+
         public System.TimeSpan hora_evento { get; set; }
         public string nit_facturacion { get; set; }
         public string nombre_empresa_facturacion { get; set; }

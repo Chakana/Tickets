@@ -11,7 +11,7 @@ namespace TNT.Controllers
     public class HomeController : Controller
     {
        
-        
+        [HttpGet]
         public ActionResult Index()
         {
             TNT.Models.TNTEntities entities = new Models.TNTEntities();
