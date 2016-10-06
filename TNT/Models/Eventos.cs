@@ -11,7 +11,6 @@ namespace TNT.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     
     public partial class Eventos
     {
@@ -22,38 +21,14 @@ namespace TNT.Models
         }
     
         public int id { get; set; }
-
-        [DisplayName("Evento")]
         public string nombre_evento { get; set; }
         public int id_lugar { get; set; }
         public int id_empresa { get; set; }
         public int id_tipo_evento { get; set; }
         public string img_url { get; set; }
-
-        [DisplayName("Fecha")]
-        public string fecha_evento_format
-        {
-            get
-            {
-                return this.fecha_evento.ToString("dd/MM/yyyy");
-            }
-        }
-
         public System.DateTime fecha_evento { get; set; }
-
-        [DisplayName("Descripción")]
         public string descripcion { get; set; }
         public bool habilitado { get; set; }
-
-        [DisplayName("Hora")]
-        public string hora_evento_format
-        {
-            get
-            {
-                return this.hora_evento.ToString(@"hh\:mm");
-            }
-        }
-
         public System.TimeSpan hora_evento { get; set; }
         public string nit_facturacion { get; set; }
         public string nombre_empresa_facturacion { get; set; }

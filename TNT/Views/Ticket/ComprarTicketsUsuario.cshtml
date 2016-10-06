@@ -9,7 +9,7 @@
     var horaEventoFormat = string.Format("{0}:{1}", horaEvento.Hours, horaEvento.Minutes);
     //var horaEventoFormat = horaEvento.ToString("hh:mm:ss");
 }
-<script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAvkQ_MKQSk02eTdBv9FVAsoPQkGKOylL0"></script>
 <script type="text/javascript" src="~/Scripts/gmaps.js"></script>
 <script type="text/javascript" src="~/Scripts/smoothscroll.js"></script>
 <script type="text/javascript" src="~/Scripts/jquery.parallax.js"></script>
@@ -240,6 +240,8 @@
             if (ticketsReservados.length <= 0) {
                 alert('Debe reservar algun ticket');
             } else {
+                $('#confirma-reserva .modal-body #verificacion').html('');
+                $('#confirmar-reserva').show();
                 var data = { req: ticketsReservados };
                 $.ajax({
                     url: '/Ticket/VerificarDetalleCompra',
@@ -255,12 +257,16 @@
                         $('#reservado').hide();
                         $('#confirma-reserva .modal-body #verificacion').html(response);
                         $('#confirma-reserva').modal('show');
+
                     },
                     error: function () {
 
                     }
                 });
             }
+        });
+        $('#cerrar-reserva').click(function () {
+            ticketsReservados = [];
         });
         $('#confirmar-reserva').click(function () {
             var $this = $(this);
@@ -275,11 +281,18 @@
                     dataType: "JSON",
                     contentType: "application/json",
                     success: function (response) {
-                        $('#confirmacion_codigo_recaudacion').html(response.codigo_recaudacion);
-                        $('#confirmacion_costo_total').html(response.costo_total);
-                        $('#ayuda-forma-pago').html($this.data('ayuda'));
-                        $('#verificacion').hide();
-                        $('#reservado').show();
+
+                        if (response.mensaje == 'OK') {
+                            $('#confirmacion_codigo_recaudacion').html(response.codigo_recaudacion);
+                            $('#confirmacion_costo_total').html(response.costo_total);
+                            $('#ayuda-forma-pago').html($this.data('ayuda'));
+                            $('#verificacion').hide();
+                            $('#reservado').show();
+                            $('#confirmar-reserva').hide();
+                        } else {
+                            alert(response.mensaje);
+                        }
+                        
                         //$('#confirma-reserva').modal('show');
 
                         ticketsReservados = [];
@@ -456,7 +469,7 @@
 
             <div class="modal-footer">
                 <a id="confirmar-reserva" href="#" class="btn btn-primary">Confirmar</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button id="cerrar-reserva" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

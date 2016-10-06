@@ -27,10 +27,10 @@
                         @Html.DisplayNameFor(model => model.Lugares.nombre_lugar)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.fecha_evento_format)
+                        @Html.DisplayNameFor(model => model.fecha_evento)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.hora_evento_format)
+                        @Html.DisplayNameFor(model => model.hora_evento)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Tipos_evento.descripcion)
@@ -49,10 +49,10 @@
                             @Html.DisplayFor(modelItem => item.Lugares.nombre_lugar)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.fecha_evento_format)
+                           @item.fecha_evento.ToString("dd/MM/yyyy")
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.hora_evento_format)
+                            @item.hora_evento.ToString(@"hh\:mm\:ss")
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Tipos_evento.descripcion)
