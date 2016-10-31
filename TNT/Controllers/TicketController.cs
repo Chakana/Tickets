@@ -269,8 +269,9 @@ namespace TNT.Controllers
 
         }
 
-        public ActionResult VerificarDetalleCompra(List<req_tickets_multiple> req)
+        public ActionResult VerificarDetalleCompra(List<req_tickets_multiple> req, string metodo)
         {
+            ViewBag.Metodo = metodo;
             Usuarios datos_usuario = db.Usuarios.FirstOrDefault(us => us.email == User.Identity.Name);
             ViewBag.Nombre = datos_usuario.Personas.FirstOrDefault().nombre_completo;
             ViewBag.NIT = datos_usuario.Personas.FirstOrDefault().cedula_identidad;
@@ -322,9 +323,7 @@ namespace TNT.Controllers
             ViewBag.id_sector = new SelectList(sectores, "id", "descripcion");
             ViewBag.nombre_evento = eventos.First().nombre_evento;
 
-            ViewBag.fecha_evento = DateTime.Now;
-            //eventos.First().fecha_evento;
-            //.ToString("dd/MM/yyyy");             
+            ViewBag.fecha_evento = eventos.First().fecha_evento;             
             ViewBag.hora_evento = eventos.First().hora_evento;
             ViewBag.longitud = eventos.First().Lugares.longitud;
             ViewBag.latitud = eventos.First().Lugares.latitud;

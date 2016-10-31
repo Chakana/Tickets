@@ -23,7 +23,7 @@ namespace TNT.Controllers
                 {
                     user_id = (int)Session["id"];
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     if (Request.IsAuthenticated)
                     {
@@ -55,7 +55,7 @@ namespace TNT.Controllers
                     ViewBag.eventosDeportes = eventosDeportes;
                     ViewBag.eventosViajesTurismo = eventosViajesTurismo;
                     ViewBag.eventosCultura = eventosCultura;
-                    
+                    ViewBag.nombreUsuario = entities.Usuarios.Find(user_id).Personas.First().nombre_completo;
 
                     var eventos = entities.Eventos.Where(ev => ev.sectores.Count > 0 && ev.habilitado == true && ev.fecha_evento >= DateTime.Now);
                     //return View("UserIndex", eventos.ToList());

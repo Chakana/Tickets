@@ -38,13 +38,6 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(m => m.nit, new { @class = "col-sm-3 control-label" })
-            <div class="col-sm-6">
-                @Html.TextBoxFor(m => m.nit, new { @class = "form-control" })
-                <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.nit)</span>
-            </div>
-        </div>
-        <div class="form-group">
             @Html.LabelFor(m => m.numero_celular, new { @class = "col-sm-3 control-label" })
             <div class="col-sm-6">
                 @Html.TextBoxFor(m => m.numero_celular, new { @class = "form-control" })
@@ -95,6 +88,11 @@
                     new SelectListItem() {  Text = "SANTA CRUZ", Value = "SANTA CRUZ"}
                 }, new { @class = "form-control" })
                 <span id="helpBlock" class="help-block">@Html.ValidationMessageFor(m => m.departamento)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-6">
+                <a href="#">Terminos y condiciones</a>
             </div>
         </div>
         <div class="form-group">

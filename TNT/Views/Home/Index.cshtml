@@ -166,6 +166,9 @@
     <style>
         .iconos-home {
             transition: all .2s ease-in-out;
+            opacity: 0;
+            left: 100%;
+            position: relative;
         }
 
             .iconos-home:hover {
@@ -189,7 +192,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <p>Bienvenido @User.Identity.Name</p>
+                        <p>Bienvenido @ViewBag.nombreUsuario</p>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -228,16 +231,17 @@
                                 @*<li><a data-toggle="modal" data-target="#myLogin" class="no-scroll" href="#">LOGIN</a></li>*@
                             }
                             <li class="scroll"><a href="@Url.Action("VerEventosUsuario", "Event")">Búsqueda avanzada</a></li>
-                            <li class="scroll"><a href="@Url.Action("", "")">Contactar</a></li>
+                            <li class="scroll"><a href="@Url.Action("Index", "PuntosPagos")">Puntos de pago</a></li>
+                            <li class="scroll"><a href="@Url.Action("Index", "Home")">Terminos y condiciones</a></li>
                         </ul>
                     </div>
                 </div>
-                <ul class="col-md-3 list-unstyled" style="margin-left: 30px;">
-                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalConciertos" class="" href="#"><img class="" src="~/images/icon_conciertos.png" alt="logo" style="width: 70px;"><span style="color:#69D2D3;display:none;">Conciertos</span></a></li>
-                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalDeportes" class="" href="#"><img class="" src="~/images/icon_deporte.png" alt="logo" style="width: 70px;"><span style="color:#02016C;display:none;">Deportes</span></a></li>
-                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalViajesTurismo" class="" href="#"><img class="" src="~/images/icon_viajes_turismo.png" alt="logo" style="width: 70px;"><span style="color:#FC8C1C;display:none;">Viajes</span></a></li>
-                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalCultura" class="" href="#"><img class="" src="~/images/icon_cultura.png" alt="logo" style="width: 70px;"><span style="color:#7CE34F;display:none;">Cultura</span></a></li>
-                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalVarios" class="" href="#"><img class="" src="~/images/icon_articulos.png" alt="logo" style="width: 70px;"><span style="color:#FEE400;display:none;">Varios</span></a></li>
+                <ul id="menu-interactive" class="col-md-3 list-unstyled" style="margin-left: 30px;">
+                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalConciertos" class="" href="#"><img class="" src="~/images/icon_conciertos.png" alt="logo" style="width: 70px;"><span style="color:#69D2D3;display:inline-block;">Conciertos</span></a></li>
+                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalDeportes" class="" href="#"><img class="" src="~/images/icon_deporte.png" alt="logo" style="width: 70px;"><span style="color:#02016C;display:inline-block;">Deportes</span></a></li>
+                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalViajesTurismo" class="" href="#"><img class="" src="~/images/icon_viajes_turismo.png" alt="logo" style="width: 70px;"><span style="color:#FC8C1C;display:inline-block;">Viajes</span></a></li>
+                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalCultura" class="" href="#"><img class="" src="~/images/icon_cultura.png" alt="logo" style="width: 70px;"><span style="color:#7CE34F;display:inline-block;">Cultura</span></a></li>
+                    <li class="iconos-home"><a data-toggle="modal" data-target="#modalVarios" class="" href="#"><img class="" src="~/images/icon_articulos.png" alt="logo" style="width: 70px;"><span style="color:#FEE400;display:inline-block;">Varios</span></a></li>
                 </ul>
             </div>
         </div>
@@ -447,15 +451,16 @@
             $('[id=carousel-selector-' + id + ']').addClass('selected');
         });
 
-        $('.iconos-home').hover(function () {
-            var $this = $(this);
-            $this.find('span').show();
-        }, function () {
-            var $this = $(this);
-            $this.find('span').hide();
-        })
+
         $(function () {
-            console.info('loading ajax')
+            $('.iconos-home').hover(function () {
+                var $this = $(this);
+                $this.find('span').show();
+            }, function () {
+                var $this = $(this);
+                $this.find('span').hide();
+            })
+
             $(document).ajaxSend(function () {
                 $('#overlay').show();
             });
@@ -480,6 +485,21 @@
                 setTimeout(function () {
                     $('#modal-welcome').modal('hide');
                 }, 3000);
+            }
+            var i = 0;
+            $('.iconos-home').each(function (e) {
+                $(this)
+                .delay(++i * 1000)
+                .animate({ left: 0, opacity: 1 })
+            }).promise().done(function () {
+                //setInterval(parpa(), 1000);
+                //setTimeout("$('.iconos-home').stop(true,true).css('opacity', 1);$('.iconos-home').find('span').hide('slow');", 5000);
+                $('.iconos-home').find('span').hide('slow');
+            });
+
+            function parpa() {
+                $('.iconos-home').fadeTo(100, 0.1).fadeTo(200, 1, parpa);
+                //setTimeout("$('.iconos-home').stop(true,true).css('opacity', 1);$('.iconos-home').find('span').hide('slow');", 5000);
             }
         })
         //$('#btn_login').click(function () {

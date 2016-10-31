@@ -11,6 +11,8 @@ namespace TNT.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
 
     public partial class Personas
     {
@@ -20,7 +22,11 @@ namespace TNT.Models
         }
 
         public int id { get; set; }
+
+        [Display(Name = "Nombre")]
         public string nombre { get; set; }
+
+        [Display(Name = "Apellidos")]
         public string apellidos { get; set; }
 
         public string nombre_completo
@@ -30,10 +36,22 @@ namespace TNT.Models
                 return string.Format("{0} {1}", this.nombre, this.apellidos);
             }
         }
-        public string cedula_identidad { get; set; }
+        //public string cedula_identidad { get; set; }
+        
+        private string _cedula_identidad;
+        [Display(Name = "Cedula de identidad")]
+        public string cedula_identidad
+        {
+            get { return _cedula_identidad; }
+            set { _cedula_identidad = value.Trim(); }
+        }
+
+        [Display(Name = "Direccion")]
         public string direccion { get; set; }
         public System.DateTime fecha_registro { get; set; }
         public System.DateTime fecha_modificacion { get; set; }
+
+        [Display(Name = "Numero de celular")]
         public string numero_celular { get; set; }
         public Nullable<int> id_usuario { get; set; }
 

@@ -240,7 +240,7 @@
             if (ticketsReservados.length <= 0) {
                 alert('Debe reservar algun ticket');
             } else {
-                var data = { req: ticketsReservados };
+                var data = { req: ticketsReservados, metodo: $this.data('descripcion') };
                 $.ajax({
                     url: '/Ticket/VerificarDetalleCompra',
                     type: "POST",
@@ -401,16 +401,16 @@
                             <div class="col-md-2">Elija metodo de pago:</div>
                             <div class="col-md-10">
                                 <div class="row">
-                                    <a href="#" class="btn btn-default col-md-3 btn_pagar_punto" data-ayuda="Usted podrá aproximarse a cualquiera de los puntos de pago SINTESIS, indicando su código de recaudación y presentando su CI.">
+                                    <a href="#" class="btn btn-default col-md-3 btn_pagar_punto" data-descripcion="Sintesis" data-ayuda="Usted podrá aproximarse a cualquiera de los puntos de pago SINTESIS, indicando su código de recaudación y presentando su CI.">
                                         <img class="col-md-12" src="~/Images/sintesis.png" />
                                     </a>
-                                    <a href="#" class="btn btn-default col-md-3 btn_pagar_punto" data-ayuda="Usted podrá aproximarse a cualquiera de los puntos de pago PAGOSNET, indicando su código de recaudación y presentando su CI.">
+                                    <a href="#" class="btn btn-default col-md-3 btn_pagar_punto" data-descripcion="Pagos Net" data-ayuda="Usted podrá aproximarse a cualquiera de los puntos de pago PAGOSNET, indicando su código de recaudación y presentando su CI.">
                                         <img class="col-md-12" src="~/Images/pagosnet.png" />
                                     </a>
-                                    <a href="#" class="btn btn-default col-md-3 btn_pagar_punto" data-ayuda="Usted podrá aproximarse a cualquiera de los puntos de pago TIGO MONEY, indicando su código de recaudación y presentando su CI.">
+                                    <a href="#" class="btn btn-default col-md-3 btn_pagar_punto" data-descripcion="Tigo Money" data-ayuda="Usted podrá aproximarse a cualquiera de los puntos de pago TIGO MONEY, indicando su código de recaudación y presentando su CI.">
                                         <img class="col-md-12" src="~/Images/tigo-money.png" />
                                     </a>
-                                    <a href="#" class="btn btn-default col-md-3 btn_pagar_punto" data-ayuda="Usted podrá aproximarse a cualquiera de los puntos de pago con TARJETA DE CREDITO, indicando su código de recaudación y presentando su CI.">
+                                    <a href="#" class="btn btn-default col-md-3 btn_pagar_punto" data-descripcion="ATC" data-ayuda="Usted podrá aproximarse a cualquiera de los puntos de pago con TARJETA DE CREDITO, indicando su código de recaudación y presentando su CI.">
                                         <img class="col-md-12" src="~/Images/atc.jpg" />
                                     </a>
                                 </div>

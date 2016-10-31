@@ -3,80 +3,164 @@
 @{
     ViewBag.Title = "Index";
 }
-
-<div class="page-header">
-    <h1>Lugares <small>Listado de lugares</small></h1>
-</div>
-<div class="container">
+@if (User.IsInRole("usuario"))
+{
+    <link href="~/Content/dataTables.bootstrap.css" rel="stylesheet" />
+    <style>
+        html {
+            min-height: 100%;
+            height: 100%;
+            background-color: #222;
+        }
+    </style>
     <div class="row">
-        <p>
-            @Html.ActionLink("Crear Punto de Pago", "Create", new { id = 1 }, htmlAttributes: new { @class = "btn btn-success" })
-        </p>
-        <input id="search" placeholder="Buscar..." />
-        <table class="table table-hover">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.nombre)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.direccion)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.departamento)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.latitud)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.longitud)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                <tr data-state="ticket">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.direccion)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.departamento)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.latitud)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.longitud)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Editar", "Edit", new { id = item.id }, htmlAttributes: new { @class = "btn btn-success" })
-                        @Html.ActionLink("Borrar", "Delete", new { id = item.id }, htmlAttributes: new { @class = "btn btn-danger" })
-                    </td>
-                </tr>
-            }
-
-        </table>
-
+        <div class="col-md-12">
+            <table id="tbl-puntospago" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Direccion</th>
+                        <th>Departamento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.nombre
+                            </td>
+                            <td>
+                                @item.direccion
+                            </td>
+                            <td>@item.departamento</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-<script>
-    $("input#search").keyup(function () {
-        var filter = $(this).val();
-        var regExPattern = "gi";
-        var regEx = new RegExp(filter, regExPattern);
-        $("table tr").each(function () {
-            if ($(this).data('state'))
-                if (
-                    $(this).text().search(new RegExp(filter, "i")) < 0
-                    && $(this).data('state').search(regEx) < 0
-                ) {
-                    $(this).hide();
-                } else {
-                    $(this).show();
+
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.js"></script>
+    <script>
+        $(function () {
+            $('#tbl-puntospago').DataTable({
+                //"columns": [
+                //    null,
+                //    null,
+                //    null,
+                //    { "orderable": false },
+                //    { "orderable": false },
+                //    { "orderable": false }
+                //],
+                "dom": '<"row"<"col-xs-6"f><"col-xs-6"l>tp>' +
+                        "<'row'4<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "No se hallaron datos disponibles",
+                    "info": "Viendo _START_ a _END_ de _TOTAL_ registross",
+                    "infoEmpty": "Viendo 0 a 0 de 0 registros",
+                    "infoFiltered": "(encontrados desde _MAX_ registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Viendo _MENU_ registros",
+                    "loadingRecords": "Loading...",
+                    "processing": "Processing...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se hallaron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activate to sort column ascending",
+                        "sortDescending": ": activate to sort column descending"
+                    }
                 }
+            });
+        })
+    </script>
+}
+else
+{
+    <div class="page-header">
+        <h1>Lugares <small>Listado de lugares</small></h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <p>
+                @Html.ActionLink("Crear Punto de Pago", "Create", new { id = 1 }, htmlAttributes: new { @class = "btn btn-success" })
+            </p>
+            <input id="search" placeholder="Buscar..." />
+            <table class="table table-hover">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.nombre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.direccion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.departamento)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.latitud)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.longitud)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr data-state="ticket">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.direccion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.departamento)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.latitud)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.longitud)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Editar", "Edit", new { id = item.id }, htmlAttributes: new { @class = "btn btn-success" })
+                            @Html.ActionLink("Borrar", "Delete", new { id = item.id }, htmlAttributes: new { @class = "btn btn-danger" })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+        </div>
+    </div>
+    <script>
+        $("input#search").keyup(function () {
+            var filter = $(this).val();
+            var regExPattern = "gi";
+            var regEx = new RegExp(filter, regExPattern);
+            $("table tr").each(function () {
+                if ($(this).data('state'))
+                    if (
+                        $(this).text().search(new RegExp(filter, "i")) < 0
+                        && $(this).data('state').search(regEx) < 0
+                    ) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+            });
         });
-    });
-</script>
+    </script>
+}

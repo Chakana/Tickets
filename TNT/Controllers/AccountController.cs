@@ -120,7 +120,7 @@ namespace TNT.Controllers
                     db.SaveChanges();
                     Personas persona = new Personas();
                     persona.apellidos = model.apellidos;
-                    persona.cedula_identidad = model.nit;
+                    persona.cedula_identidad = model.carnet_identidad;
                     persona.direccion = model.direccion;
                     persona.id_usuario = usuario.id;
                     persona.nombre = model.nombre;
@@ -130,7 +130,11 @@ namespace TNT.Controllers
                     //persona.fecha_nacimiento = DateTime.Now;                     
                     db.Personas.Add(persona);
                     db.SaveChanges();
-                    return RedirectToAction("Index", "Home");
+                    //return RedirectToAction("Index", "Home");
+                    return this.Login(new Usuarios(){
+                        email = model.email,
+                        password = model.password
+                    }, Url.Action("Index", "Home"));
                 }
                 catch (Exception e)
                 {

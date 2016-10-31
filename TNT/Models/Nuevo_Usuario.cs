@@ -11,11 +11,13 @@ namespace TNT.Models
     {
         [Required(ErrorMessage = "El email es requerido")]
         [Display(Name = "Email")]
+        [EmailAddress(ErrorMessage = "El email es invalido")]
         [DataType(DataType.EmailAddress)]
         public string email { get; set; }
         [Required(ErrorMessage = "El password es requerido")]
         [StringLength(30, ErrorMessage = "El número de caracteres de {0} debe ser al menos {2}.", MinimumLength = 6)]
         [DataType(DataType.Password)]
+        [RegularExpression(@"((?=.*\d)(?=.*[a-zA-Z]).{6,30})", ErrorMessage = "El password debe tener al menos un número y una letra y seis caracteres como mínimo")]
         [Display(Name = "Contraseña")]
         public string password { get; set; }
 
@@ -23,9 +25,9 @@ namespace TNT.Models
         [Compare("password", ErrorMessage="La confirmacion de password no coincide con el password")]
         public string password_confimacion { get; set; }
 
-        [Required(ErrorMessage = "El nit es requerido")]
-        [Display(Name = "NIT")]
-        public string nit { get; set; }
+        //[Required(ErrorMessage = "El nit es requerido")]
+        //[Display(Name = "NIT")]
+        //public string nit { get; set; }
         [Required(ErrorMessage = "El numero de celular es requerido")]
         [Display(Name = "Celular")]
         public string numero_celular { get; set; }
