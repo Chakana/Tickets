@@ -85,6 +85,12 @@ namespace TNT.Controllers
         public string codigo_recaudacion { get; set; }
         public decimal costo_total { get; set; }
     }
+    public class response_compra_tickets_multiple
+    {
+        public string codigo_recaudacion { get; set; }
+        public decimal costo_total { get; set; }
+        public string mensaje { get; set; }
+    }
     public class request_verifica_ticket
     {
         public int id_usuario { get; set; }

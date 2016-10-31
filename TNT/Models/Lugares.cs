@@ -11,7 +11,6 @@ namespace TNT.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     
     public partial class Lugares
     {
@@ -21,8 +20,6 @@ namespace TNT.Models
         }
     
         public int id { get; set; }
-
-        [DisplayName("Lugar")]
         public string nombre_lugar { get; set; }
         public string direccion { get; set; }
         public int capacidad_maxima { get; set; }

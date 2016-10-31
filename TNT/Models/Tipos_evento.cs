@@ -11,7 +11,6 @@ namespace TNT.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     
     public partial class Tipos_evento
     {
@@ -22,8 +21,6 @@ namespace TNT.Models
         }
     
         public int id { get; set; }
-
-        [DisplayName("Descripción")]
         public string descripcion { get; set; }
         public string img_url { get; set; }
     
