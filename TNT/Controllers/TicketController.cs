@@ -146,7 +146,7 @@ namespace TNT.Controllers
             }
         }
 
-        public JsonResult ComprarTicketsMultiple(List<req_tickets_multiple> req)
+        public JsonResult ComprarTicketsMultiple(List<req_tickets_multiple> req, string metodo)
         {
             response_compra_tickets_multiple respuesta = new response_compra_tickets_multiple();
             try
@@ -198,7 +198,8 @@ namespace TNT.Controllers
 
                         CompraIndividualTicket(ticket);
                     }
-                    respuesta.codigo_recaudacion = Session["codigo_recaudacion"].ToString();
+                    respuesta.metodo_pago = metodo;
+                    respuesta.codigo_recaudacion = Session["codigo_recaudacion"].ToString().Substring(0, 2) + "XXXXXXXX" + Session["codigo_recaudacion"].ToString().Substring(10, Session["codigo_recaudacion"].ToString().Length - 10);
                     respuesta.costo_total = Decimal.Parse(Session["monto_pagar"].ToString());
                     respuesta.mensaje = "OK";
                 }

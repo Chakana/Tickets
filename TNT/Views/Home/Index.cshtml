@@ -221,7 +221,7 @@
                             {
                                 if (User.IsInRole("usuario"))
                                 {
-                                    <li>@Html.ActionLink(User.Identity.Name, "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })</li>
+                                    <li>@Html.ActionLink(Session["full_name"].ToString(), "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })</li>
                                 }
 
                             }
@@ -232,7 +232,18 @@
                             }
                             <li class="scroll"><a href="@Url.Action("VerEventosUsuario", "Event")">Búsqueda avanzada</a></li>
                             <li class="scroll"><a href="@Url.Action("Index", "PuntosPagos")">Puntos de pago</a></li>
-                            <li class="scroll"><a href="@Url.Action("Index", "Home")">Terminos y condiciones</a></li>
+                            <li class="scroll"><a href="@Url.Content("~/Content/terminos.pdf")" target="_blank">Terminos y condiciones</a></li>
+                            @if (Request.IsAuthenticated)
+                            {
+                                <li class="scroll">
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <a style="float:right" class="scroll" href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a>
+                                    }
+
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>
@@ -406,14 +417,14 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-                            @carousel(ViewBag.eventosConciertos, "myCarouselCultura")
+                            @carousel(ViewBag.eventosCultura, "myCarouselCultura")
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div class="row">
                         <div class="col-md-12">
-                            @colage(ViewBag.eventosConciertos, "myColageCultura", "myCarouselCultura")
+                            @colage(ViewBag.eventosCultura, "myColageCultura", "myCarouselCultura")
                         </div>
                     </div>
                 </div>

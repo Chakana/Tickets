@@ -103,7 +103,7 @@
                             {
                                 if (User.IsInRole("usuario"))
                                 {
-                                    <li>@Html.ActionLink(User.Identity.Name, "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })</li>
+                                    <li>@Html.ActionLink(Session["full_name"].ToString(), "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })</li>
                                 }
 
                             }

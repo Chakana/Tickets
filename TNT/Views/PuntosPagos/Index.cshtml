@@ -1,9 +1,10 @@
 ﻿@model IEnumerable<TNT.Models.Puntos_pago>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "ComprarTicketsUsuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@if (User.IsInRole("usuario"))
+@if (User.IsInRole("usuario") || !User.Identity.IsAuthenticated)
 {
     <link href="~/Content/dataTables.bootstrap.css" rel="stylesheet" />
     <style>

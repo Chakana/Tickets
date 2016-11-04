@@ -90,6 +90,7 @@ namespace TNT.Controllers
         public string codigo_recaudacion { get; set; }
         public decimal costo_total { get; set; }
         public string mensaje { get; set; }
+        public string metodo_pago { get; set; }
     }
     public class request_verifica_ticket
     {

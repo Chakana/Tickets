@@ -242,7 +242,7 @@
             } else {
                 $('#confirma-reserva .modal-body #verificacion').html('');
                 $('#confirmar-reserva').show();
-                var data = { req: ticketsReservados };
+                var data = { req: ticketsReservados, metodo: $this.data('descripcion') };
                 $.ajax({
                     url: '/Ticket/VerificarDetalleCompra',
                     type: "POST",
@@ -256,8 +256,11 @@
                         $('#verificacion').show();
                         $('#reservado').hide();
                         $('#confirma-reserva .modal-body #verificacion').html(response);
+                        $('#confirmar-reserva').data('descripcion', $this.data('descripcion'));
                         $('#confirma-reserva').modal('show');
-
+                        $('#confirmar-reserva').show();
+                        $('#cerrar-reserva').show();
+                        $('#finalizar-reserva').hide();
                     },
                     error: function () {
 
@@ -268,12 +271,13 @@
         $('#cerrar-reserva').click(function () {
             ticketsReservados = [];
         });
-        $('#confirmar-reserva').click(function () {
+        $('#confirmar-reserva').click(function (e) {
+            e.preventDefault();
             var $this = $(this);
             if (ticketsReservados.length <= 0) {
                 alert('Debe reservar algun ticket');
             } else {
-                var data = { req: ticketsReservados };
+                var data = { req: ticketsReservados, metodo: $this.data('descripcion') };
                 $.ajax({
                     url: '/Ticket/ComprarTicketsMultiple',
                     type: "POST",
@@ -283,12 +287,15 @@
                     success: function (response) {
 
                         if (response.mensaje == 'OK') {
+                            $('#metodo_pago').html(response.metodo_pago)
                         $('#confirmacion_codigo_recaudacion').html(response.codigo_recaudacion);
                         $('#confirmacion_costo_total').html(response.costo_total);
                         $('#ayuda-forma-pago').html($this.data('ayuda'));
                         $('#verificacion').hide();
                         $('#reservado').show();
-                            $('#confirmar-reserva').hide();
+                        $('#confirmar-reserva').hide();
+                        $('#cerrar-reserva').hide();
+                        $('#finalizar-reserva').show();
                         } else {
                             alert(response.mensaje);
                         }
@@ -355,7 +362,6 @@
                                         <div id="gmap-wrap">
                                             <div id="gmap" class="gmap">
                                             </div>
-
                                         </div>
                                     </div><!--/#map-->
                                 </div>
@@ -437,10 +443,10 @@
     </div>
     <div>
         @*@Html.ActionLink("Volver a la lista", "VerEventosUsuario", "Event", null, new { @class = "btn btn-primary" })*@
-        <button class="btn btn-primary" onclick="window.history.back();">Volver</button>
+        <a href="@Url.Action("VerEventosUsuario", "Event")" class="btn btn-primary" >Ir a la lista</a>
     </div>
 </div>
-<div class="modal fade" id="confirma-reserva" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirma-reserva" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -451,6 +457,10 @@
                 <div id="reservado" style="display:none;">
                     Por favor acuda al mas proximo punto de pago con la siguiente informacion:
                     <table class="table">
+                        <tr>
+                            <th>Método de pago</th>
+                            <td id="metodo_pago"></td>
+                        </tr>
                         <tr>
                             <th>Codigo de recaudacion</th>
                             <td id="confirmacion_codigo_recaudacion"></td>
@@ -470,6 +480,7 @@
             <div class="modal-footer">
                 <a id="confirmar-reserva" href="#" class="btn btn-primary">Confirmar</a>
                 <button id="cerrar-reserva" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <a id="finalizar-reserva" href="@Url.Action("Index", "Home")" class="btn btn-primary" style="display:none;">Finalizar</a>
             </div>
         </div>
     </div>

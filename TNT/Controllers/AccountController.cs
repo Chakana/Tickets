@@ -74,6 +74,7 @@ namespace TNT.Controllers
                         Personas persona = entities.Personas.FirstOrDefault(per => per.id_usuario == usuario.id);
                         Session.Add("persona_id", persona.id);
                         Session.Add("id", usuario.id);
+                        Session.Add("full_name", persona.nombre_completo);
                         FormsAuthentication.SetAuthCookie(username, false);
 
                         if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")

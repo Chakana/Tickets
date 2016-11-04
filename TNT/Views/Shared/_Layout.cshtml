@@ -125,20 +125,20 @@
                                 <li class="scroll">
                                     @if (User.IsInRole("empresa"))
                                     {
-                                    @Html.ActionLink(User.Identity.Name, "edit", "empresas", routeValues: new { id = Session["empresa_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })
+                                    @Html.ActionLink(Session["full_name"].ToString(), "edit", "empresas", routeValues: new { id = Session["empresa_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })
                                     }
                                     @if (User.IsInRole("usuario"))
                                     {
-                                        @Html.ActionLink(User.Identity.Name, "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })
+                                        @Html.ActionLink(Session["full_name"].ToString(), "edit", "Personas", routeValues: new { id = Session["persona_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })
                                     }
                                     @if (User.IsInRole("admin"))
                                     {
-                                        <div class="username">@User.Identity.Name</div>
+                                        <div class="username">@Session["full_name"].ToString()</div>
                                     }
 
                                 </li>
                                 <li class="scroll"><a href="@Url.Action("Index", "PuntosPagos")">Puntos de pago</a></li>
-                                <li class="scroll"><a href="@Url.Action("Index", "Home")">Terminos y condiciones</a></li>
+                                <li class="scroll"><a href="@Url.Content("~/Content/terminos.pdf")" target="_blank">Terminos y condiciones</a></li>
                                 <li class="scroll">
                                     @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                                     {
@@ -151,6 +151,9 @@
                             else
                             {
                                 @*<li class="scroll active"><a href="@Url.Action("Index", "Home")">Inicio</a></li>*@
+                                <li class="scroll"><a href="@Url.Action("VerEventosUsuario", "Event")">Búsqueda avanzada</a></li>
+                                <li class="scroll"><a href="@Url.Action("Index", "PuntosPagos")">Puntos de pago</a></li>
+                                <li class="scroll"><a href="@Url.Content("~/Content/terminos.pdf")" target="_blank">Terminos y condiciones</a></li>
                                 <li><a class="no-scroll" href="@Url.Action("Register", "Account")">REGISTRARSE</a></li>
                                 @*<li><a class="no-scroll" href="@Url.Action("Login","Account")">LOGIN</a></li>*@
 
