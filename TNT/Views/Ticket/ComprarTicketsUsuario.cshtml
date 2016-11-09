@@ -6,7 +6,7 @@
 
     DateTime fechaEvento = ViewBag.fecha_evento;
     TimeSpan horaEvento = ViewBag.hora_evento;
-    var horaEventoFormat = string.Format("{0}:{1}", horaEvento.Hours, horaEvento.Minutes);
+    var horaEventoFormat = horaEvento.ToString(@"hh\:mm");//string.Format("{0}:{1}", horaEvento.Hours, horaEvento.Minutes);
     //var horaEventoFormat = horaEvento.ToString("hh:mm:ss");
 }
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAvkQ_MKQSk02eTdBv9FVAsoPQkGKOylL0"></script>
@@ -42,6 +42,7 @@
             console.log(idSectorElegido);
             CargarDatosSector(idSectorElegido);
             $('#confirma_butacas').data('target-detail', $this.data('target-detail'));
+            $('#confirma_butacas').data('target-clean', $this.data('target-clean'));
             $('#butacas_seleccionar').modal('show');
         });
         jQuery('.cantidad_butacas_no_numeradas').change(function () {
@@ -62,15 +63,19 @@
         $('#confirma_butacas').click(function () {
             var $this = $(this);
             var $detail = $($(this).data('target-detail'));
+            var $clean = $($(this).data('target-clean'));
+            console.info($(this).data('target-clean'));
             console.info('entradas reservadas');
             console.dir(ticketsReservados);
             var ticket = $.grep(ticketsReservados, function (el, index) {
                 return el.id_sector == $detail.data('id');
             });
             $detail.html(ticket.length + ' entradas reservadas');
+            $clean.show();
         });
 
         $('#cancel_butacas').click(function () {
+            
             var newArray = [];
             var ticket = $.each(ticketsReservados, function (i, el) {
                 if (el.id_sector != $detail.data('id')) {
@@ -78,7 +83,7 @@
                 }
             });
 
-            ticketsReservados = newArray;
+            ticketsReservados = newArray;            
         });
 
         CargaMapa($('.mapa_evento').attr('xLocationLat'), $('.mapa_evento').attr('xLocationLong'));
@@ -261,6 +266,7 @@
                         $('#confirmar-reserva').show();
                         $('#cerrar-reserva').show();
                         $('#finalizar-reserva').hide();
+                        ticketsReservados = eval($(response).filter('#new-ticket').val());
                     },
                     error: function () {
 
@@ -270,6 +276,9 @@
         });
         $('#cerrar-reserva').click(function () {
             ticketsReservados = [];
+            $('.cantidad_butacas_no_numeradas').val(0);
+            $('.detail').html('');
+            $('.clean').hide();
         });
         $('#confirmar-reserva').click(function (e) {
             e.preventDefault();
@@ -309,6 +318,18 @@
                     }
                 });
             }
+        });
+
+        $('.clean').click(function (e) {
+            e.preventDefault();
+            var $this = $(this);
+            console.log(ticketsReservados);
+            ticketsReservados = $.grep(ticketsReservados, function (n, i) {
+                return n.id_sector != $this.data('id');
+            });
+            $('#detalle-' + $this.data('id')).html('');
+            $this.hide();
+            console.log(ticketsReservados);
         });
     });
 
@@ -363,7 +384,7 @@
                                             <div id="gmap" class="gmap">
                                             </div>
                                         </div>
-                                    </div><!--/#map-->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -396,8 +417,9 @@
                                     <td>@sector.precio_unitario Bs.</td>
                                     @if (sector.es_sector_numerado)
                                     {
-                                        <td><button id="sel_butacas" class="sel_butacas btn-primary" data-target-detail="#detalle-@sector.id" data-id="@sector.id" data-target="#butacas_seleccionar">Seleccionar butacas</button> </td>
-                                        <td id="detalle-@sector.id" data-id="@sector.id"></td>
+                                        <td><button id="sel_butacas" class="sel_butacas btn-primary" data-target-clean="#clean-@sector.id" data-target-detail="#detalle-@sector.id" data-id="@sector.id" data-target="#butacas_seleccionar">Seleccionar butacas</button> </td>
+                                        <td id="detalle-@sector.id" class="detail" data-id="@sector.id"></td>
+                                        <td><button id="clean-@sector.id" class="clean btn btn-primary" data-id="@sector.id" style="display:none;">Limpiar</button></td>
                                     }
                                     else
                                     {
@@ -405,11 +427,11 @@
                                             Seleccionar cantidad:
                                             <select id="cantidad_butacas_no_numeradas" class="cantidad_butacas_no_numeradas">
                                                 <option value="0">0</option>
-                                                <option value="0">1</option>
-                                                <option value="0">2</option>
-                                                <option value="0">3</option>
-                                                <option value="0">4</option>
-                                                <option value="0">5</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
                                             </select>
                                         </td>
                                     }

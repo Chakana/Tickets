@@ -22,6 +22,7 @@
                         <th>Nombre</th>
                         <th>Direccion</th>
                         <th>Departamento</th>
+                        <th>Mapa</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,15 +36,48 @@
                                 @item.direccion
                             </td>
                             <td>@item.departamento</td>
+                            <td><button class="btn btn-primary view-map" data-lat="@item.latitud" data-lon="@item.longitud">Ver mapa</button></td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
+        <div class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="mapa_evento col-md-12" style="margin-top:0.75em">
+                                <div id="map">
+                                    <div id="gmap-wrap">
+                                        <div id="gmap-punto" class="gmap" style="height:300px; width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     </div>
 
     <script src="~/Scripts/jquery.dataTables.js"></script>
     <script src="~/Scripts/dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAvkQ_MKQSk02eTdBv9FVAsoPQkGKOylL0"></script>
+    <script type="text/javascript" src="~/Scripts/gmaps.js"></script>
+    <script type="text/javascript" src="~/Scripts/smoothscroll.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.parallax.js"></script>
+    <script type="text/javascript" src="~/Scripts/coundown-timer.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.scrollTo.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.nav.js"></script>
     <script>
         $(function () {
             $('#tbl-puntospago').DataTable({
@@ -83,7 +117,101 @@
                     }
                 }
             });
+
+            var lat;
+            var lon;
+            $('.view-map').click(function (e) {
+                e.preventDefault();
+                var $this = $(this);
+                lat = $this.data('lat');
+                lon = $this.data('lon');
+                $('#gmap-punto').html('');
+                $('.modal').modal('show');
+            });
+
+            $('.modal').on('shown.bs.modal', function () {
+                CargaMapa(lat, lon);
+                $('#gmap-punto').css('height', '300px').css('width', '100%');
+            });
         })
+
+        function CargaMapa(lat, lng) {
+            console.log(lat);
+            console.log(lng);
+            var map;
+            map = new GMaps({
+                el: '#gmap-punto',
+                lat: lat,
+                lng: lng,
+                scrollwheel: false,
+                zoom: 16,
+                zoomControl: false,
+                panControl: false,
+                streetViewControl: false,
+                mapTypeControl: false,
+                overviewMapControl: false,
+                clickable: false
+            });
+
+            var image = '../../images/map-icon.png';
+            map.addMarker({
+                lat: lat,
+                lng: lng,
+                icon: image,
+                animation: google.maps.Animation.DROP,
+                verticalAlign: 'bottom',
+                horizontalAlign: 'center',
+                backgroundColor: '#3e8bff',
+            });
+
+
+            var styles = [
+
+            {
+                "featureType": "road",
+                "stylers": [
+                { "color": "#b4b4b4" }
+                ]
+            }, {
+                "featureType": "water",
+                "stylers": [
+                { "color": "#d8d8d8" }
+                ]
+            }, {
+                "featureType": "landscape",
+                "stylers": [
+                { "color": "#f1f1f1" }
+                ]
+            }, {
+                "elementType": "labels.text.fill",
+                "stylers": [
+                { "color": "#000000" }
+                ]
+            }, {
+                "featureType": "poi",
+                "stylers": [
+                { "color": "#d9d9d9" }
+                ]
+            }, {
+                "elementType": "labels.text",
+                "stylers": [
+                { "saturation": 1 },
+                { "weight": 0.1 },
+                { "color": "#000000" }
+                ]
+            }
+
+            ];
+
+            map.addStyle({
+                styledMapName: "Styled Map",
+                styles: styles,
+                mapTypeId: "map_style"
+            });
+
+            map.setStyle("map_style");
+
+        }
     </script>
 }
 else

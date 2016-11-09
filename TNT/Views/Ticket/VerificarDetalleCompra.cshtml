@@ -1,4 +1,5 @@
 ﻿@model List<TNT.Controllers.TicketController.req_tickets_multiple>
+<input id="new-ticket" type="hidden" value="@ViewBag.NewTickets">
 <div class="row">
 	<div class="col-md-4">Metodo de pago</div>
 	<div class="col-md-4">@ViewBag.Metodo</div>
@@ -21,9 +22,11 @@
 </div>
 <table class="table col-md-12">
     <thead>
-    <th>Cantidad</th>
-    <th>Sector</th>
-    <th>Precio</th>
+        <tr>
+            <th>Cantidad</th>
+            <th>Sector</th>
+            <th>Precio</th>
+        </tr>
     </thead>
     <tbody>
         @Html.EditorFor(m => m)

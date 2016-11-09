@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -122,7 +123,9 @@ namespace TNT.Controllers
             public string id_sector { get; set; }
             public string butaca { get; set; }
             public string cantidad { get; set; }
+            [JsonIgnore]
             public sectores sector { get; set; }
+            [JsonIgnore]
             public decimal costo_sector
             {
                 get
@@ -135,13 +138,13 @@ namespace TNT.Controllers
                     return 0M;
                 }
             }
+            [JsonIgnore]
             public string SubTotal
             {
                 get
                 {
-                    //sectores sector = db.sectores.Find(id_sector);
-
-                    return this.costo_sector.ToString("N2");
+                    return sector == null ? "0" : sector.precio_unitario.ToString("N2");
+                    //return this.costo_sector.ToString("N2");
                 }
             }
         }
@@ -160,7 +163,7 @@ namespace TNT.Controllers
                     string nit_usuario = db.Usuarios.Where(us => us.email == User.Identity.Name).FirstOrDefault().Personas.First().cedula_identidad;
                     Ticket ticket = new Ticket() { id_evento = id_evento, butaca = ticket_reserva.butaca, id_sector = Int32.Parse(ticket_reserva.id_sector), nit_usuario = nit_usuario };
                     //validar si usuario ya hizo mas de 5 compras para este evento
-                    var datos_usuario = db.Usuarios.Where(us=>us.email==User.Identity.Name);
+                    var datos_usuario = db.Usuarios.Where(us => us.email == User.Identity.Name);
                     var datos_usuario_actual = db.Personas.Where(per => per.id_usuario == datos_usuario.FirstOrDefault().id);
                     var tickets_comprados_usuario = db.Ticket.Where(tick => tick.nombre_usuario == datos_usuario_actual.FirstOrDefault().nombre && tick.id_evento == id_evento);
                     if (tickets_comprados_usuario.Count() > 5)
@@ -186,24 +189,27 @@ namespace TNT.Controllers
                         if (butacas.Length > 1)
                         {
                             CompraMultiplesTicketMismoSector(ticket);
-
+                            respuesta.costo_total = Decimal.Parse(Session["monto_pagar"].ToString());
                         }
                         else
                         {
-                            CompraIndividualTicket(ticket);
+                            sector.asientos_disponibles = sector.asientos_disponibles - int.Parse(ticket_reserva.cantidad);
+                            CompraIndividualTicket(ticket, int.Parse(ticket_reserva.cantidad));
+
+                            respuesta.costo_total = Decimal.Parse(Session["monto_pagar"].ToString()) * int.Parse(ticket_reserva.cantidad);
                         }
                     }
                     else
                     {
-
-                        CompraIndividualTicket(ticket);
+                        sector.asientos_disponibles = sector.asientos_disponibles - int.Parse(ticket_reserva.cantidad);
+                        CompraIndividualTicket(ticket, int.Parse(ticket_reserva.cantidad));
+                        respuesta.costo_total = Decimal.Parse(Session["monto_pagar"].ToString()) * int.Parse(ticket_reserva.cantidad);
                     }
                     respuesta.metodo_pago = metodo;
                     respuesta.codigo_recaudacion = Session["codigo_recaudacion"].ToString().Substring(0, 2) + "XXXXXXXX" + Session["codigo_recaudacion"].ToString().Substring(10, Session["codigo_recaudacion"].ToString().Length - 10);
-                    respuesta.costo_total = Decimal.Parse(Session["monto_pagar"].ToString());
                     respuesta.mensaje = "OK";
                 }
-                    
+
 
             }
             catch (Exception ex)
@@ -227,6 +233,7 @@ namespace TNT.Controllers
             ViewBag.Evento = evento.descripcion;
             decimal total_comision = 0m;
             decimal costo_total = 0m;
+            var verify = new List<TNT.Controllers.TicketController.req_tickets_multiple>();
             foreach (var ticket in req)
             {
                 id_sector = Int32.Parse(ticket.id_sector);
@@ -251,9 +258,26 @@ namespace TNT.Controllers
                 ViewBag.Total = costo_total;
                 //sectores sector = db.sectores.Find(Int32.Parse(ticket.id_sector));
 
+                if (verify.Exists(m => m.id_sector == ticket.id_sector))
+                {
+                    var _ticket = verify.Find(m => m.id_sector == ticket.id_sector);
+                    _ticket.cantidad = (int.Parse(_ticket.cantidad) + 1).ToString();
+                }
+                else
+                {
+                    verify.Add(new req_tickets_multiple()
+                    {
+                        butaca = ticket.butaca,
+                        cantidad = ticket.cantidad,
+                        id_sector = ticket.id_sector,
+                        sector = ticket.sector
+                    });
+                }
             }
 
-            return this.PartialView(req);
+            ViewBag.NewTickets = JsonConvert.SerializeObject(verify);
+
+            return this.PartialView(verify);
         }
 
         //
@@ -269,7 +293,7 @@ namespace TNT.Controllers
             ViewBag.id_sector = new SelectList(sectores, "id", "descripcion");
             ViewBag.nombre_evento = eventos.First().nombre_evento;
 
-            ViewBag.fecha_evento = eventos.First().fecha_evento;             
+            ViewBag.fecha_evento = eventos.First().fecha_evento;
             ViewBag.hora_evento = eventos.First().hora_evento;
             ViewBag.longitud = eventos.First().Lugares.longitud;
             ViewBag.latitud = eventos.First().Lugares.latitud;
@@ -388,7 +412,7 @@ namespace TNT.Controllers
 
             }
         }
-        public void CompraIndividualTicket(Ticket ticket)
+        public void CompraIndividualTicket(Ticket ticket, int cantidad = 1)
         {
             Eventos evento = db.Eventos.Find(ticket.id_evento);
             Empresas empresa = db.Empresas.Find(evento.id_empresa);
@@ -439,15 +463,15 @@ namespace TNT.Controllers
                     helpers.Helpers.EnviarMail("admin@tnt.com", "admin", "eisenob@gmail.com", "admin", "CODIGO RECAUDACION NO ENVIADO SINTESIS - PENDIENTE", "<h1>Codigo de recaudacion no enviado y pendiente de envio</h1><h2>" + codigo_recaudacion + "</h2>", null);
 
                 }
-              
+
                 Compra compra = new Compra();
                 compra.codigo_recaudacion = codigo_recaudacion;
                 compra.fecha_compra = DateTime.Now;
                 compra.id_usuario_compra = (int)Session["id"];
-                compra.monto_cobrar = costo_total + comision.monto_comision;
+                compra.monto_cobrar = (costo_total + comision.monto_comision) * cantidad;
                 compra.pagado = 0;
-                compra.monto_comision = comision.monto_comision;
-                compra.monto_parcial = costo_total;
+                compra.monto_comision = (comision.monto_comision) * cantidad;
+                compra.monto_parcial = costo_total * cantidad;
                 db.Compra.Add(compra);
                 ticket.codigo_recaudacion = codigo_recaudacion;
                 ticket.utilizada = false;
@@ -457,7 +481,11 @@ namespace TNT.Controllers
                 ticket.nit_usuario = datos_usuario_actual.cedula_identidad;
                 ticket.costo_sin_comision = costo_total;
                 ticket.fecha_modificacion = DateTime.Now;
-                db.Ticket.Add(ticket);
+                for (var i = 0; i < cantidad; i++)
+                {
+                    db.Ticket.Add(ticket);
+                }
+
                 try
                 {
                     db.SaveChanges();
@@ -490,7 +518,7 @@ namespace TNT.Controllers
                 ViewBag.message = "Error en la compra, por favor reintente";
             }
 
-            
+
         }
         public bool AsientoDisponible(int id_sector, string butaca)
         {
