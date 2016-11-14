@@ -25,7 +25,7 @@
         <tr>
             <th>Cantidad</th>
             <th>Sector</th>
-            <th>Precio</th>
+            <th>Precio Unitario</th>
         </tr>
     </thead>
     <tbody>
@@ -33,10 +33,14 @@
     </tbody>
 </table>
 <div class="row">
+    <div class="col-md-4">Total</div>
+    <div class="col-md-4">@ViewBag.Total Bs</div>
+</div>
+<div class="row">
     <div class="col-md-4">Comision</div>
     <div class="col-md-4">@ViewBag.Comision Bs</div>
 </div>
 <div class="row">
-    <div class="col-md-4">Precio Total</div>
-    <div class="col-md-4">@ViewBag.Total Bs</div>
+    <div class="col-md-4">Total a pagar</div>
+    <div class="col-md-4">@ViewBag.PayTotal Bs</div>
 </div>

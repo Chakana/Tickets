@@ -18,7 +18,7 @@
         <div class="col-md-12">
             <table id="tbl-puntospago" class="table table-hover">
                 <thead>
-                    <tr>
+                    <tr class="list-events">
                         <th>Nombre</th>
                         <th>Direccion</th>
                         <th>Departamento</th>
@@ -36,7 +36,7 @@
                                 @item.direccion
                             </td>
                             <td>@item.departamento</td>
-                            <td><button class="btn btn-primary view-map" data-lat="@item.latitud" data-lon="@item.longitud">Ver mapa</button></td>
+                            <td><button class="btn btn-primary view-map" data-name="@item.nombre" data-lat="@item.latitud" data-lon="@item.longitud">Ver mapa</button></td>
                         </tr>
                     }
                 </tbody>
@@ -81,14 +81,14 @@
     <script>
         $(function () {
             $('#tbl-puntospago').DataTable({
-                //"columns": [
-                //    null,
-                //    null,
-                //    null,
-                //    { "orderable": false },
+                "columns": [
+                    null,
+                    null,
+                    null,
+                    { "orderable": false },
                 //    { "orderable": false },
                 //    { "orderable": false }
-                //],
+                ],
                 "dom": '<"row"<"col-xs-6"f><"col-xs-6"l>tp>' +
                         "<'row'4<'col-sm-12'tr>>" +
                         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -126,6 +126,7 @@
                 lat = $this.data('lat');
                 lon = $this.data('lon');
                 $('#gmap-punto').html('');
+                $('.modal .modal-title').html($this.data('name'));
                 $('.modal').modal('show');
             });
 
