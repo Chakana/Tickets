@@ -4,7 +4,7 @@
     ViewBag.Title = "VerEventosUsuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="~/Content/dataTables.bootstrap.css" rel="stylesheet" />
+
 <style>
     html {
         min-height: 100%;
@@ -49,7 +49,7 @@
                             @Html.DisplayFor(modelItem => item.Lugares.nombre_lugar)
                         </td>
                         <td>
-                           @item.fecha_evento.ToString("dd/MM/yyyy")
+                            @item.fecha_evento.ToString("dd/MM/yyyy")
                         </td>
                         <td>
                             @item.hora_evento.ToString(@"hh\:mm")
@@ -66,49 +66,58 @@
         </table>
     </div>
 </div>
-<script src="~/Scripts/jquery.dataTables.js"></script>
-<script src="~/Scripts/dataTables.bootstrap.js"></script>
 @section scripts
 {
     <script>
+        $.extend(true, $.fn.dataTable.defaults, {
+            "columns": [
+                null,
+                null,
+                null,
+                { "orderable": false },
+                { "orderable": false },
+                { "orderable": false }
+            ]
+        });
         $(function () {
-            $('#tbl-events').DataTable({
-                "columns": [
-                    null,
-                    null,
-                    null,
-                    { "orderable": false },
-                    { "orderable": false },
-                    { "orderable": false }
-                ],
-                "dom": '<"row"<"col-xs-6"f><"col-xs-6"l>tp>' +
-                        "<'row'4<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                "language": {
-                    "decimal": "",
-                    "emptyTable": "No se hallaron datos disponibles",
-                    "info": "Viendo _START_ a _END_ de _TOTAL_ registross",
-                    "infoEmpty": "Viendo 0 a 0 de 0 registros",
-                    "infoFiltered": "(encontrados desde _MAX_ registros)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Viendo _MENU_ registros",
-                    "loadingRecords": "Loading...",
-                    "processing": "Processing...",
-                    "search": "Buscar:",
-                    "zeroRecords": "No se hallaron coincidencias",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Último",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    },
-                    "aria": {
-                        "sortAscending": ": activate to sort column ascending",
-                        "sortDescending": ": activate to sort column descending"
-                    }
-                }
-            });
+            
+            //$('#tbl-events').DataTable({
+            //    "columns": [
+            //        null,
+            //        null,
+            //        null,
+            //        { "orderable": false },
+            //        { "orderable": false },
+            //        { "orderable": false }
+            //    ],
+            //    "dom": '<"row"<"col-xs-6"f><"col-xs-6"l>tp>' +
+            //            "<'row'4<'col-sm-12'tr>>" +
+            //            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            //    "language": {
+            //        "decimal": "",
+            //        "emptyTable": "No se hallaron datos disponibles",
+            //        "info": "Viendo _START_ a _END_ de _TOTAL_ registross",
+            //        "infoEmpty": "Viendo 0 a 0 de 0 registros",
+            //        "infoFiltered": "(encontrados desde _MAX_ registros)",
+            //        "infoPostFix": "",
+            //        "thousands": ",",
+            //        "lengthMenu": "Viendo _MENU_ registros",
+            //        "loadingRecords": "Loading...",
+            //        "processing": "Processing...",
+            //        "search": "Buscar:",
+            //        "zeroRecords": "No se hallaron coincidencias",
+            //        "paginate": {
+            //            "first": "Primero",
+            //            "last": "Último",
+            //            "next": "Siguiente",
+            //            "previous": "Anterior"
+            //        },
+            //        "aria": {
+            //            "sortAscending": ": activate to sort column ascending",
+            //            "sortDescending": ": activate to sort column descending"
+            //        }
+            //    }
+            //});
         });
     </script>
 }

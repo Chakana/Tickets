@@ -12,52 +12,53 @@
         <p>
             @Html.ActionLink("Crear Lugar", "Create", new { id = 1 }, htmlAttributes: new { @class = "btn btn-success" })
         </p>
-        <input id="search" placeholder="Buscar..." />
         <table class="table table-hover">
-            <tr>
-                <th>
-                    Nombre Lugar
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.direccion)
-                </th>
-                <th>
-                    Capacidad Maxima
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.latitud)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.longitud)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                <tr data-state="lugar">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.nombre_lugar)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.direccion)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.capacidad_maxima)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.latitud)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.longitud)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Editar", "Edit", new { id = item.id }, htmlAttributes: new { @class = "btn btn-success" })
-                        @Html.ActionLink("Borrar", "Delete", new { id = item.id }, htmlAttributes: new { @class = "btn btn-danger" })
-                    </td>
+            <thead>
+                <tr>
+                    <th>
+                        Nombre Lugar
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.direccion)
+                    </th>
+                    <th>
+                        Capacidad Maxima
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.latitud)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.longitud)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr data-state="lugar">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nombre_lugar)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.direccion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.capacidad_maxima)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.latitud)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.longitud)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Editar", "Edit", new { id = item.id }, htmlAttributes: new { @class = "btn btn-success" })
+                            @Html.ActionLink("Borrar", "Delete", new { id = item.id }, htmlAttributes: new { @class = "btn btn-danger" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
         </table>
 
     </div>

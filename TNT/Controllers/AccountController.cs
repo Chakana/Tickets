@@ -71,10 +71,21 @@ namespace TNT.Controllers
                     {
                         //obtenemos su id
                         Usuarios usuario = entities.Usuarios.FirstOrDefault(user => user.email == username);
-                        Personas persona = entities.Personas.FirstOrDefault(per => per.id_usuario == usuario.id);
-                        Session.Add("persona_id", persona.id);
+                        
+                        if(usuario.rol == "usuario")
+                        {
+                            Personas persona = entities.Personas.FirstOrDefault(per => per.id_usuario == usuario.id);
+                            Session.Add("persona_id", persona.id);
+                            Session.Add("full_name", persona.nombre_completo);
+                        }else if(usuario.rol == "empresa")
+                        {
+                            Empresas empresa = entities.Empresas.FirstOrDefault(e => e.id_usuario == usuario.id);
+                            Session.Add("persona_id", empresa.id);
+                            Session.Add("full_name", empresa.nombre_empresa);
+                        }
+                        
                         Session.Add("id", usuario.id);
-                        Session.Add("full_name", persona.nombre_completo);
+                        
                         FormsAuthentication.SetAuthCookie(username, false);
 
                         if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")

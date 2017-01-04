@@ -11,52 +11,53 @@
 <p>
     @Html.ActionLink("Crear nueva Empresa", "Create", new { id = 1 }, htmlAttributes: new { @class = "btn btn-success" })
 </p>
-<input id="search" placeholder="Buscar..." />
 <table class="table table-hover">
-    <tr>
-        <th>
-            Nombre
-        </th>
-        <th>
-            NIT
-        </th>
-        <th>
-            Direccion
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.fecha_registro)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.departamento)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model)
-{
-    <tr data-state="lugar">
-        <td>
-            @Html.DisplayFor(modelItem => item.nombre_empresa)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.nit)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.direccion)
-        </td>
-        <td>
-            @item.fecha_registro.Value.ToString("yyyy-MM-dd hh:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.departamento)
-        </td>
-        <td>
-            @Html.ActionLink("Editar", "Edit", new { id = item.id }, htmlAttributes: new { @class = "btn btn-success" })
-            @Html.ActionLink("Borrar", "Delete", new { id = item.id }, htmlAttributes: new { @class = "btn btn-danger" })
-        </td>
-    </tr>
-}
-
+    <thead>
+        <tr>
+            <th>
+                Nombre
+            </th>
+            <th>
+                NIT
+            </th>
+            <th>
+                Direccion
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.fecha_registro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.departamento)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr data-state="lugar">
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre_empresa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.direccion)
+                </td>
+                <td>
+                    @item.fecha_registro.Value.ToString("yyyy-MM-dd hh:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.departamento)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.id }, htmlAttributes: new { @class = "btn btn-success" })
+                    @Html.ActionLink("Borrar", "Delete", new { id = item.id }, htmlAttributes: new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 <script>
     $("input#search").keyup(function () {

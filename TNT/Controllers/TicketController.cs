@@ -166,6 +166,7 @@ namespace TNT.Controllers
                     var datos_usuario = db.Usuarios.Where(us => us.email == User.Identity.Name);
                     var datos_usuario_actual = db.Personas.Where(per => per.id_usuario == datos_usuario.FirstOrDefault().id);
                     var tickets_comprados_usuario = db.Ticket.Where(tick => tick.nombre_usuario == datos_usuario_actual.FirstOrDefault().nombre && tick.id_evento == id_evento);
+                    
                     if (tickets_comprados_usuario.Count() > 5)
                     {
                         ModelState.AddModelError("id_evento", "Usted ya compro 5 tickets para este evento, no puede comprar más");
@@ -174,11 +175,13 @@ namespace TNT.Controllers
                     }
                     if (ticket.butaca != null)
                     {
-                        string[] butacas = ticket.butaca.Split(',');
+                        //string[] butacas = ticket.butaca.Split(',');
+                        
                         var asientosOcupados = db.Ticket.Where(tick => tick.id_sector == ticket.id_sector);
                         foreach (var asiento in asientosOcupados)
                         {
-                            if (butacas.Contains(asiento.butaca))
+                            //if (butacas.Contains(asiento.butaca))
+                            if(ticket.butaca == asiento.butaca)
                             {
                                 ViewBag.message = "Asientos ocupados,por favor elija otros.";
                                 respuesta.mensaje = "Asientos ocupados,por favor elija otros.";
@@ -186,7 +189,7 @@ namespace TNT.Controllers
                             }
                         }
 
-                        if (butacas.Length > 1)
+                        if (ticket.butaca.Length > 1)
                         {
                             CompraMultiplesTicketMismoSector(ticket);
                             respuesta.costo_total = Decimal.Parse(Session["monto_pagar"].ToString());
@@ -256,6 +259,7 @@ namespace TNT.Controllers
                 ViewBag.Comision = total_comision;
                 costo_total += ticket.costo_sector;
                 ViewBag.Total = costo_total;
+                
                 //sectores sector = db.sectores.Find(Int32.Parse(ticket.id_sector));
 
                 if (verify.Exists(m => m.id_sector == ticket.id_sector))
@@ -274,7 +278,8 @@ namespace TNT.Controllers
                     });
                 }
             }
-
+            ViewBag.PayTotal = total_comision + costo_total;
+            
             ViewBag.NewTickets = JsonConvert.SerializeObject(verify);
 
             return this.PartialView(verify);
@@ -332,7 +337,7 @@ namespace TNT.Controllers
             try
             {
 
-                foreach (string butaca in butacas)
+                foreach (string butaca in butacas)                
                 {
                     string codigo_ticket = Helpers.Generar_codigo_ticket(30, new Random());
                     Ticket ticket_nuevo = new Ticket();

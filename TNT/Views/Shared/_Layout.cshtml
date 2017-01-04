@@ -13,7 +13,7 @@
     <link href="~/Content/main.css" rel="stylesheet">
     <link href="~/Content/animate.css" rel="stylesheet">
     <link href="~/Content/responsive.css" rel="stylesheet">
-
+    <link href="~/Content/dataTables.bootstrap.css" rel="stylesheet" />
 
     <!--[if lt IE 9]>
         <script src="js/html5shiv.js"></script>
@@ -34,7 +34,7 @@
             background: #000;
             opacity: 0.8;
             filter: alpha(opacity=80);
-            z-index:9999;
+            z-index: 9999;
         }
 
         #loading {
@@ -45,7 +45,6 @@
             left: 50%;
             margin: -28px 0 0 -25px;
         }
-        
     </style>
 </head>
 <body>
@@ -76,48 +75,48 @@
                             {
                                 if (User.IsInRole("usuario"))
                                 {
-                                <li><a class="no-scroll" href="@Url.Action("VerEventosUsuario", "Event")">Busqueda avanzada</a></li>
+                                    <li><a class="no-scroll" href="@Url.Action("VerEventosUsuario", "Event")">Busqueda avanzada</a></li>
 
                                 }
                                 if (User.IsInRole("empresa"))
                                 {
-                                <li><a class="no-scroll" href="@Url.Action("Index", "Event")">Busqueda avanzada</a></li>
-                                <li><a class="no-scroll" href="@Url.Action("Index", "Sector")">Sectores</a></li>
-                                <li><a class="no-scroll" href="@Url.Action("Index", "Ticket")">Tickets</a></li>
-                                <li><a class="no-scroll" href="@Url.Action("Index", "Lugar")">Lugares</a></li>
+                                    <li><a class="no-scroll" href="@Url.Action("Index", "Event")">Eventos</a></li>
+                                    <li><a class="no-scroll" href="@Url.Action("Index", "Sector")">Sectores</a></li>
+                                    <li><a class="no-scroll" href="@Url.Action("Index", "Ticket")">Tickets</a></li>
+                                    <li><a class="no-scroll" href="@Url.Action("Index", "Lugar")">Lugares</a></li>
                                 }
                                 if (User.IsInRole("admin"))
                                 {
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Busqueda avanzada<span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="no-scroll" href="@Url.Action("Index", "Event")">Eventos Activos</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("PendientesHabilitacion", "Event")">Pendientes</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("VerTodosEventos", "Event")">Todos los eventos</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("Index", "Sector")">Sectores</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("Index", "Lugar")">Lugares</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("Index", "Ticket")">Tickets</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Empresas<span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="no-scroll" href="@Url.Action("Index", "Empresas")">Empresas</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("Index", "Compra")">Compra</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("BuscarTicket", "Ticket")">Validar Ticket</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("SimuladorPago", "Compra")">Simulador de Pago</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin<span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Busqueda avanzada<span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "Event")">Eventos Activos</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("PendientesHabilitacion", "Event")">Pendientes</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("VerTodosEventos", "Event")">Todos los eventos</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "Sector")">Sectores</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "Lugar")">Lugares</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "Ticket")">Tickets</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Empresas<span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "Empresas")">Empresas</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "Compra")">Compra</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("BuscarTicket", "Ticket")">Validar Ticket</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("SimuladorPago", "Compra")">Simulador de Pago</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin<span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
 
-                                        <li><a class="no-scroll" href="@Url.Action("Index", "Comisiones")">Comisiones</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("Index", "TiposEvento")">Tipos de Evento</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("Index", "PuntosPagos")">Puntos de Pago</a></li>
-                                        <li><a class="no-scroll" href="@Url.Action("Index", "Help")">API</a></li>
-                                    </ul>
-                                </li>
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "Comisiones")">Comisiones</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "TiposEvento")">Tipos de Evento</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "PuntosPagos")">Puntos de Pago</a></li>
+                                            <li><a class="no-scroll" href="@Url.Action("Index", "Help")">API</a></li>
+                                        </ul>
+                                    </li>
 
 
 
@@ -125,7 +124,7 @@
                                 <li class="scroll">
                                     @if (User.IsInRole("empresa"))
                                     {
-                                    @Html.ActionLink(Session["full_name"].ToString(), "edit", "empresas", routeValues: new { id = Session["empresa_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })
+                                        @Html.ActionLink(Session["full_name"].ToString(), "edit", "empresas", routeValues: new { id = Session["empresa_id"] }, htmlAttributes: new { @class = "username", title = "Administrar" })
                                     }
                                     @if (User.IsInRole("usuario"))
                                     {
@@ -160,7 +159,7 @@
                                 @*<li class="scroll"><a href="#contact">Contactar</a></li>*@
 
                             }
-                            
+
                         </ul>
                     </div>
                 </div>
@@ -169,18 +168,17 @@
     </header>
     <div id="body">
         <div class="container-fluid">
-            <div class="row-fluid">
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                @RenderBody()
-            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            @RenderBody()
         </div>
-
     </div>
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.js"></script>
     <script>
         $(function () {
             $(document).ajaxSend(function () {
@@ -194,6 +192,36 @@
             window.onbeforeunload = function () {
                 $('#overlay').show();
             }
+
+            $('table').DataTable({                
+                "dom": '<"row"<"col-xs-6"f><"col-xs-6"l>>' +
+                        '<"row"<"col-sm-12"tr>>' +
+                        '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "No se hallaron datos disponibles",
+                    "info": "Viendo _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Viendo 0 a 0 de 0 registros",
+                    "infoFiltered": "(encontrados desde _MAX_ registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Viendo _MENU_ registros",
+                    "loadingRecords": "Loading...",
+                    "processing": "Processing...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se hallaron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activate to sort column ascending",
+                        "sortDescending": ": activate to sort column descending"
+                    }
+                }
+            });
         })
     </script>
     @Scripts.Render("~/bundles/bootstrap")

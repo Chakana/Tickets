@@ -218,63 +218,69 @@
 else
 {
     <div class="page-header">
-        <h1>Lugares <small>Listado de lugares</small></h1>
+        <h1>Puntos de pago <small>Listado</small></h1>
     </div>
-    <div class="container">
+    if (User.IsInRole("admin"))
+    {
         <div class="row">
-            <p>
+            <div class="col-xs-12">
                 @Html.ActionLink("Crear Punto de Pago", "Create", new { id = 1 }, htmlAttributes: new { @class = "btn btn-success" })
-            </p>
-            <input id="search" placeholder="Buscar..." />
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-md-12">
             <table class="table table-hover">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.nombre)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.direccion)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.departamento)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.latitud)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.longitud)
-                    </th>
-                    <th></th>
-                </tr>
-
-                @foreach (var item in Model)
-                {
-                    <tr data-state="ticket">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.nombre)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.direccion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.departamento)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.latitud)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.longitud)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Editar", "Edit", new { id = item.id }, htmlAttributes: new { @class = "btn btn-success" })
-                            @Html.ActionLink("Borrar", "Delete", new { id = item.id }, htmlAttributes: new { @class = "btn btn-danger" })
-                        </td>
+                <thead>
+                    <tr class="list-events">
+                        <th>
+                            @Html.DisplayNameFor(model => model.nombre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.direccion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.departamento)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.latitud)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.longitud)
+                        </th>
+                        <th></th>
                     </tr>
-                }
-
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.direccion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.departamento)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.latitud)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.longitud)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Editar", "Edit", new { id = item.id }, htmlAttributes: new { @class = "btn btn-success" })
+                                @Html.ActionLink("Borrar", "Delete", new { id = item.id }, htmlAttributes: new { @class = "btn btn-danger" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
             </table>
-
         </div>
     </div>
+
     <script>
         $("input#search").keyup(function () {
             var filter = $(this).val();
